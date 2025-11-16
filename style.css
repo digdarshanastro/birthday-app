@@ -1,0 +1,118 @@
+body {
+  margin: 0;
+  background: #fff8ef;
+  font-family: Arial, sans-serif;
+  overflow-x: hidden; /* হরাইজন্টাল স্ক্রলবার বন্ধ */
+}
+
+.container {
+  max-width: 650px;
+  background: #ffffff;
+  margin: 25px auto;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  /* আপনার আপলোড করা ফাইল rashichakra 000.jpg ব্যবহার করা হয়েছে */
+  background-image: url("rashichakra 000.jpg"); 
+  background-size: 95%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-blend-mode: lighten;
+}
+
+h1 {
+  text-align: center;
+  color: #d84315;
+  margin-bottom: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ffa366;
+  border-radius: 6px;
+  margin-top: 5px;
+  /* ✅ ফিক্স: বক্স সাইজিং ঠিক করা হয়েছে */
+  box-sizing: border-box; 
+}
+
+label {
+  font-weight: bold;
+  margin-top: 15px;
+  display: block;
+  color: #e65100;
+}
+
+button {
+  width: 100%;
+  background: #ff4500;
+  border: none;
+  padding: 14px;
+  color: white;
+  font-size: 18px;
+  border-radius: 6px;
+  margin-top: 25px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #d63a00;
+}
+
+.table-box {
+  width: 100%;
+  overflow-x: auto; 
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+th, td {
+  border: 1px solid #ffab76;
+  padding: 10px;
+  text-align: center;
+  font-size: 0.9em; 
+  vertical-align: middle; 
+  white-space: nowrap; 
+}
+
+th {
+  background: #ffe5d0;
+  color: #d84315;
+  font-weight: bold;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Admin Panel Actions Button Styles */
+.action-btn {
+  display: inline-block;
+  padding: 5px 8px;
+  margin: 2px 1px;
+  text-decoration: none;
+  font-size: 11px;
+  border-radius: 4px;
+  color: white;
+  text-align: center;
+  min-width: 40px; 
+}
+
+.card-btn {
+  background: #ff4500; 
+}
+
+.whatsapp-btn {
+  background: #25d366; 
+}
+
+.action-btn:hover {
+  opacity: 0.9;
+}

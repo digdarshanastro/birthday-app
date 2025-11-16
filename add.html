@@ -1,0 +1,59 @@
+<script type="module">
+import { db } from "./firebase-config.js";
+import { collection, addDoc, serverTimestamp } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+window.save = async function () {
+  // ✅ সংশোধন: ইনপুট এলিমেন্টগুলিকে প্রথমে ভেরিয়েবলে নিন
+  const nameInput = document.getElementById("name");
+  const phoneInput = document.getElementById("phone");
+  const dobInput = document.getElementById("dob");
+  const tobInput = document.getElementById("tob");
+  const placeInput = document.getElementById("place");
+  const annivInput = document.getElementById("anniv");
+  const gotraInput = document.getElementById("gotra");
+  const msgElement = document.getElementById("msg");
+
+  // তাদের ভ্যালু পড়ুন
+  let name_v = nameInput.value.trim();
+  let phone_v = phoneInput.value.trim();
+  let dob_v = dobInput.value;
+  let tob_v = tobInput.value;
+  let place_v = placeInput.value.trim();
+  let anniv_v = annivInput.value;
+  let gotra_v = gotraInput.value.trim();
+
+  if (!name_v || !phone_v || !dob_v) {
+    msgElement.innerText = "Name, Phone, DOB required!";
+    msgElement.style.color = "red";
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "birth_details"), {
+      name: name_v, phone: phone_v,
+      dob: dob_v, time: tob_v,
+      place: place_v, anniv: anniv_v,
+      gotra: gotra_v,
+      createdAt: serverTimestamp()
+    });
+
+    msgElement.style.color = "green";
+    msgElement.innerText = "Details Saved Successfully!";
+    
+    // সফলভাবে সেভ হলে ইনপুট ফিল্ড খালি করুন
+    nameInput.value = "";
+    phoneInput.value = "";
+    dobInput.value = "";
+    tobInput.value = "";
+    placeInput.value = "";
+    annivInput.value = "";
+    gotraInput.value = "";
+  } 
+  catch (err) {
+    msgElement.innerText = "Error saving! Check console for Firebase Security Rules error.";
+    msgElement.style.color = "red";
+    console.error("Firebase Error:", err);
+  }
+};
+</script>
