@@ -1,50 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Greeting Card</title>
+
 <style>
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #fff7f0;
+    padding: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: #fff7ef;
     display: flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
 #card {
-    width: 90%;
+    width: 92%;
     max-width: 900px;
     background: white;
-    padding: 40px;
-    border-radius: 14px;
-    box-shadow: 0 0 25px rgba(0,0,0,0.1);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 0 35px rgba(0,0,0,0.15);
+    overflow: hidden;
 }
 
 .card-content {
     display: flex;
-    gap: 20px;
+    gap: 25px;
 }
 
 .left-section img {
     width: 380px;
     border-radius: 12px;
+    box-shadow: 0 0 18px rgba(0,0,0,0.15);
 }
 
-h1 {
-    color: #ff5e00;
+.right-section h1 {
+    font-size: 32px;
+    color: #ff4d00;
+    margin-bottom: 10px;
 }
 
-p {
+.right-section p {
     font-size: 17px;
     line-height: 1.6;
+    color: #444;
 }
 
 .brand {
-    margin-top: 22px;
-    text-align: right;
+    margin-top: 25px;
+    text-align: left;
+}
+
+.brand-title {
+    color: #0045d1;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.brand-sub {
+    color: #ba0000;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .card-content {
+        flex-direction: column;
+    }
+    .left-section img {
+        width: 100%;
+    }
+    .right-section h1 {
+        text-align: center;
+    }
+    .brand {
+        text-align: center;
+    }
 }
 </style>
 </head>
@@ -53,7 +87,7 @@ p {
 
 <div id="card">
     <div class="card-content">
-        
+
         <div class="left-section">
             <img id="cardImage" src="">
         </div>
@@ -63,40 +97,46 @@ p {
             <p id="message"></p>
 
             <div class="brand">
-                <b style="color:#0047FF; font-size:20px;">Digdarshan Astro</b><br>
-                <span>Jyotish Devagya Amitsree</span><br>
-                <span>Call : 8697190840 / 9830637766</span>
+                <div class="brand-title">Digdarshan Astro</div>
+                <div class="brand-sub">
+                    Jyotish Devagya Amitsree <br>
+                    Call : 8697190840 / 9830637766
+                </div>
             </div>
         </div>
 
     </div>
 </div>
 
-
 <script>
+// Read URL Parameters
 const url = new URL(window.location.href);
-const type = url.searchParams.get("type");   // birthday / anniversary
+const type = url.searchParams.get("type");
 const name = url.searchParams.get("name");
 
-// Image fix — use Vercel public folder path
+// HTML Elements
 let img = document.getElementById("cardImage");
 let title = document.getElementById("title");
 let message = document.getElementById("message");
 
+// Card Logic
 if (type === "birthday") {
-    img.src = "/birthday.png";                 // ← FIXED
+    img.src = "/birthday.png";    // <-- PNG FILE
     title.innerHTML = `Happy Birthday, ${name}! 🎉`;
-    message.innerHTML = `May Maa Kali bless you with joy, peace and success...`;
-}
-
-if (type === "anniversary") {
-    img.src = "/anniversary.png";              // ← FIXED
-    title.innerHTML = `Happy Anniversary, ${name}! 💝`;
     message.innerHTML = `
-    May the stars bring you immense joy and success this year.
-    Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.
+        May Maa Kali bless you with joy, peace, success and prosperity.
+        Start your new year with divine blessings and cosmic guidance.
     `;
 }
+
+else if (type === "anniversary") {
+    img.src = "/anniversary.png";   // <-- PNG FILE (YOUR IMAGE)
+    title.innerHTML = `Happy Anniversary, ${name}! 💖`;
+    message.innerHTML = `
+        May Maa Kali bring harmony, happiness and endless blessings in your life.
+        Celebrate your special day with divine protection and cosmic love.
+    `;
+} 
 </script>
 
 </body>
