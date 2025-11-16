@@ -1,87 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wish Card</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Greeting Card</title>
 
 <style>
-body {
-  margin:0;
-  background:#000;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  overflow:hidden;
-}
+    body {
+        margin: 0;
+        padding: 0;
+        background: #fff7ef;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
 
-#card {
-  width:1080px;
-  height:1080px;
-  position:relative;
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-  color:white;
-  font-family:Arial, sans-serif;
-}
+    #card {
+        background: #ffffff;
+        width: 90%;
+        max-width: 850px;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 0 18px rgba(0,0,0,0.15);
+    }
 
-.nameBox {
-  position:absolute;
-  top:60%;
-  width:100%;
-  text-align:center;
-  font-size:60px;
-  font-weight:bold;
-  text-shadow:4px 4px 12px #000;
-  line-height:70px;
-}
+    .card-row {
+        display: flex;
+        gap: 25px;
+        align-items: center;
+    }
 
-.footer {
-  position:absolute;
-  bottom:80px;
-  width:100%;
-  text-align:center;
-  font-size:36px;
-  color:#ffe9c9;
-  line-height:48px;
-  font-weight:bold;
-  text-shadow:3px 3px 10px #000;
-}
+    .card-left img {
+        width: 320px;
+        border-radius: 12px;
+    }
+
+    .title {
+        font-size: 32px;
+        color: #ff4500;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .message {
+        font-size: 17px;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    .brand {
+        margin-top: 20px;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .brand strong {
+        color: #0046c7;
+        font-size: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .card-row {
+            flex-direction: column;
+            text-align: center;
+        }
+        .card-left img {
+            width: 100%;
+        }
+        .title {
+            font-size: 26px;
+        }
+    }
 </style>
 </head>
+
 <body>
 
 <div id="card">
-  <div class="nameBox" id="wishText"></div>
-  <div class="footer" id="footerText"></div>
+    <div class="card-row">
+        <div class="card-left">
+            <img id="cardImage" src="">
+        </div>
+
+        <div class="card-right">
+            <div id="title" class="title"></div>
+            <div id="message" class="message"></div>
+
+            <div class="brand">
+                <strong>Digdarshan Astro</strong><br>
+                Jyotish Devagya Amitsree<br>
+                Call : 8697190840 / 9830637766
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-// GET URL PARAMETERS
-const q = new URLSearchParams(window.location.search);
-let type = q.get("type");       // birthday or anniv
-let name = q.get("name");       // name
-name = decodeURIComponent(name || "");
+    const url = new URL(window.location.href);
+    const type = url.searchParams.get("type");   // birthday or anniversary
+    const name = url.searchParams.get("name");   // name
 
-// BACKGROUND SET
-if (type === "birthday") {
-    document.getElementById("card").style.backgroundImage = "url('birthday.png')";
-    document.getElementById("wishText").innerHTML =
-        `Happy Birthday<br>${name}<br>May Maa Kali Bless You`;
-} else {
-    document.getElementById("card").style.backgroundImage = "url('anniversary.png')";
-    document.getElementById("wishText").innerHTML =
-        `Happy Anniversary<br>${name}<br>May Maa Kali Bless You`;
-}
+    let img = document.getElementById("cardImage");
+    let title = document.getElementById("title");
+    let message = document.getElementById("message");
 
-// SIGNATURE
-document.getElementById("footerText").innerHTML = 
-`From : Jyotish Devagya Amitsree<br>
-For : Digdarshan Astro<br>
-Your Astrological Guide<br>
-Call : 8697190840 / 9830637766`;
+    // ✔ correct image loading
+    if (type === "birthday") {
+        img.src = "/birthday.png";    // keep file name EXACT
+        title.innerHTML = `Happy Birthday, ${name}! 🎉`;
+        message.innerHTML = `
+            May Maa Kali bless you with joy, success, and divine protection.
+            Wishing you a bright and prosperous year ahead.
+        `;
+    }
+
+    if (type === "anniversary") {
+        img.src = "/anniversary.png";   // IMPORTANT: .png (not .jpg)
+        title.innerHTML = `Happy Anniversary, ${name}! 💖`;
+        message.innerHTML = `
+            May Maa Kali bless your relationship with harmony,  
+            prosperity, and endless happiness. Stay blessed always.
+        `;
+    }
 </script>
 
 </body>
