@@ -3,152 +3,85 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Greeting Card</title>
+<title>Wish Card</title>
 
 <style>
 body {
-    margin: 0;
-    padding: 0;
-    background: #fff7ef;
-    font-family: "Segoe UI", sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+  margin:0;
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  overflow:hidden;
 }
 
 #card {
-    width: 92%;
-    max-width: 900px;
-    background: white;
-    border-radius: 16px;
-    padding: 25px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.15);
+  width:1080px;
+  height:1080px;
+  position:relative;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  color:white;
+  font-family:Arial, sans-serif;
 }
 
-.card-content {
-    display: flex;
-    gap: 25px;
+.nameBox {
+  position:absolute;
+  top:60%;
+  width:100%;
+  text-align:center;
+  font-size:60px;
+  font-weight:bold;
+  text-shadow:4px 4px 12px #000;
+  line-height:70px;
 }
 
-.left-section img {
-    width: 380px;
-    border-radius: 14px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.18);
-}
-
-.right-section h1 {
-    font-size: 32px;
-    color: #ff4d00;
-    margin-bottom: 10px;
-}
-
-.right-section p {
-    font-size: 17px;
-    color: #333;
-    line-height: 1.6;
-}
-
-.brand {
-    margin-top: 25px;
-}
-
-.brand-title {
-    color: #0045d1;
-    font-size: 22px;
-    font-weight: 700;
-}
-
-.brand-sub {
-    color: #ba0000;
-    font-size: 16px;
-}
-
-@media (max-width: 768px) {
-    .card-content {
-        flex-direction: column;
-    }
-    .left-section img {
-        width: 100%;
-    }
-    .right-section h1 {
-        text-align: center;
-    }
-    .brand {
-        text-align: center;
-    }
+.footer {
+  position:absolute;
+  bottom:80px;
+  width:100%;
+  text-align:center;
+  font-size:36px;
+  color:#ffe9c9;
+  line-height:48px;
+  font-weight:bold;
+  text-shadow:3px 3px 10px #000;
 }
 </style>
-
 </head>
-
 <body>
 
 <div id="card">
-    <div class="card-content">
-
-        <div class="left-section">
-            <img id="cardImage">
-        </div>
-
-        <div class="right-section">
-            <h1 id="title"></h1>
-            <p id="message"></p>
-
-            <div class="brand">
-                <div class="brand-title">Digdarshan Astro</div>
-                <div class="brand-sub">
-                    Jyotish Devagya Amitsree <br>
-                    Call : 8697190840 / 9830637766
-                </div>
-            </div>
-        </div>
-
-    </div>
+  <div class="nameBox" id="wishText"></div>
+  <div class="footer" id="footerText"></div>
 </div>
 
 <script>
-const url = new URL(window.location.href);
-const type = url.searchParams.get("type"); 
-const name = url.searchParams.get("name");
-const theme = url.searchParams.get("theme"); // 1,2,3,4
+// GET URL PARAMETERS
+const q = new URLSearchParams(window.location.search);
+let type = q.get("type");       // birthday or anniv
+let name = q.get("name");       // name
+name = decodeURIComponent(name || "");
 
-let img = document.getElementById("cardImage");
-let title = document.getElementById("title");
-let message = document.getElementById("message");
-
-// TEMPLATE SELECTOR
-function getTemplate(type, theme) {
-    if (type === "birthday") {
-        if (theme == "1") return "/birthday1.png";
-        if (theme == "2") return "/birthday2.png";
-        return "/birthday1.png";
-    }
-    if (type === "anniv") {
-        if (theme == "1") return "/anniversary1.png";
-        if (theme == "2") return "/anniversary2.png";
-        return "/anniversary1.png";
-    }
-}
-
-img.src = getTemplate(type, theme);
-
-// TEXT CONTENT
+// BACKGROUND SET
 if (type === "birthday") {
-    title.innerHTML = `Happy Birthday ${name}! 🎉`;
-    message.innerHTML = `
-        May Maa Kali bless your life with happiness, peace and success.
-        Begin this new year of your life with divine cosmic energies.
-    `;
+    document.getElementById("card").style.backgroundImage = "url('birthday.png')";
+    document.getElementById("wishText").innerHTML =
+        `Happy Birthday<br>${name}<br>May Maa Kali Bless You`;
+} else {
+    document.getElementById("card").style.backgroundImage = "url('anniversary.png')";
+    document.getElementById("wishText").innerHTML =
+        `Happy Anniversary<br>${name}<br>May Maa Kali Bless You`;
 }
 
-if (type === "anniv") {
-    title.innerHTML = `Happy Anniversary ${name}! 💖`;
-    message.innerHTML = `
-        May Maa Kali shower your relationship with harmony,
-        prosperity and eternal happiness. Stay blessed always.
-    `;
-}
+// SIGNATURE
+document.getElementById("footerText").innerHTML = 
+`From : Jyotish Devagya Amitsree<br>
+For : Digdarshan Astro<br>
+Your Astrological Guide<br>
+Call : 8697190840 / 9830637766`;
 </script>
 
 </body>
