@@ -2,17 +2,18 @@ body {
   margin: 0;
   background: #fff8ef;
   font-family: Arial, sans-serif;
-  overflow-x: hidden; /* হরাইজন্টাল স্ক্রলবার বন্ধ */
+  overflow-x: hidden; /* মোবাইলে অনাকাঙ্ক্ষিত হরাইজন্টাল স্ক্রলবার বন্ধ */
 }
 
 .container {
+  /* ✅ ফিক্স: স্ক্রিনের 90% প্রস্থ ব্যবহার করে এবং 650px-এর বেশি হতে দেবে না */
+  width: 90%; 
   max-width: 650px;
   background: #ffffff;
-  margin: 25px auto;
+  margin: 25px auto; /* কেন্দ্রে আনার জন্য */
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0,0,0,0.1);
-  /* আপনার আপলোড করা ফাইল rashichakra 000.jpg ব্যবহার করা হয়েছে */
   background-image: url("rashichakra 000.jpg"); 
   background-size: 95%;
   background-repeat: no-repeat;
@@ -32,7 +33,7 @@ input {
   border: 1px solid #ffa366;
   border-radius: 6px;
   margin-top: 5px;
-  /* ✅ ফিক্স: বক্স সাইজিং ঠিক করা হয়েছে */
+  /* ✅ ফিক্স: ইনপুট ফিল্ডে হরাইজন্টাল স্ক্রলবার বন্ধ করার জন্য */
   box-sizing: border-box; 
 }
 
@@ -61,6 +62,7 @@ button:hover {
 
 .table-box {
   width: 100%;
+  /* ✅ ফিক্স: টেবিল কন্টেন্ট বেশি হলে মোবাইলে হরাইজন্টাল স্ক্রল করার সুবিধা */
   overflow-x: auto; 
 }
 
@@ -76,6 +78,7 @@ th, td {
   text-align: center;
   font-size: 0.9em; 
   vertical-align: middle; 
+  /* ✅ ফিক্স: টেবিল কলামের টেক্সট যেন না ভাঙে, একটি কলামে সব টেক্সট থাকবে */
   white-space: nowrap; 
 }
 
