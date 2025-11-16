@@ -1,10 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Add Your Birth Details</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+<h1>Add Your Birth Details</h1>
+<p style="text-align:center;color:#555;margin-top:-10px;">Digdarshan Astro</p>
+
+<label>Name</label>
+<input id="name">
+
+<label>Phone</label>
+<input id="phone">
+
+<label>Date of Birth</label>
+<input id="dob" type="date">
+
+<label>Time of Birth</label>
+<input id="tob" type="time">
+
+<label>Birth Place</label>
+<input id="place">
+
+<label>Anniversary Date</label>
+<input id="anniv" type="date">
+
+<label>Gotra</label>
+<input id="gotra">
+
+<button onclick="save()">Submit</button>
+<p id="msg" class="error"></p>
+
+</div>
+
 <script type="module">
 import { db } from "./firebase-config.js";
 import { collection, addDoc, serverTimestamp } 
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 window.save = async function () {
-  // ✅ সংশোধন: ইনপুট এলিমেন্টগুলিকে প্রথমে ভেরিয়েবলে নিন
+  // ✅ ফিক্স: ইনপুট এলিমেন্টগুলিকে প্রথমে ভেরিয়েবলে নিন
   const nameInput = document.getElementById("name");
   const phoneInput = document.getElementById("phone");
   const dobInput = document.getElementById("dob");
@@ -14,7 +53,7 @@ window.save = async function () {
   const gotraInput = document.getElementById("gotra");
   const msgElement = document.getElementById("msg");
 
-  // তাদের ভ্যালু পড়ুন
+  // ✅ ফিক্স: তাদের ভ্যালু পড়ুন
   let name_v = nameInput.value.trim();
   let phone_v = phoneInput.value.trim();
   let dob_v = dobInput.value;
@@ -57,3 +96,6 @@ window.save = async function () {
   }
 };
 </script>
+
+</body>
+</html>
