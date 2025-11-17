@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  background: #fff8ef; /* ফর্ম/টেবিলের ব্যাকগ্রাউন্ড */
+  background: #fff8ef; 
   font-family: Arial, sans-serif;
   overflow-x: hidden;
 }
@@ -14,7 +14,6 @@ body {
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0,0,0,0.1);
-  /* ব্যাকগ্রাউন্ড ইমেজ (যদি থাকে) */
   background-image: url("rashichakra 000.jpg"); 
   background-size: 95%;
   background-repeat: no-repeat;
@@ -58,7 +57,7 @@ button {
 
 .table-box {
   width: 100%;
-  overflow-x: auto; 
+  overflow-x: auto; /* মোবাইলে টেবিলের স্ক্রলিং */
 }
 
 table {
@@ -93,7 +92,7 @@ th, td {
 
 /* --- CARD DESIGN STYLES --- */
 body.card-page {
-  background: #EBEBEB; /* কার্ডের বাইরের ব্যাকগ্রাউন্ড হালকা ধুসর */
+  background: #EBEBEB; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,15 +104,14 @@ body.card-page {
   max-width: 900px; 
   aspect-ratio: 3 / 2; 
   position: relative;
-  font-family: 'Times New Roman', serif;
+  font-family: Arial, sans-serif;
   box-sizing: border-box; 
 }
 
 .card-border {
     width: 100%;
     height: 100%;
-    /* বর্ডার স্টাইল: 15px solid, রঙ জাভাস্ক্রিপ্ট থেকে আসবে */
-    border: 15px solid; 
+    border: 15px solid; /* আকর্ষণীয় বর্ডার */
     border-radius: 15px; 
     padding: 10px; 
     box-sizing: border-box;
@@ -158,7 +156,6 @@ body.card-page {
     font-size: 4vmin; 
     font-weight: 800;
     margin-bottom: 2vmin;
-    /* ফিক্সড টেক্সট "Happy Birthday / Anniversary" এর স্টাইল */
     font-style: italic; 
     border-bottom: 2px solid; 
     padding-bottom: 0.5vmin;
@@ -180,7 +177,7 @@ body.card-page {
 .footer-signature .company-name {
     font-size: 3.2vmin; 
     font-weight: bold; 
-    color: #a04000; /* ডার্ক অরেঞ্জ/ব্রাউন */
+    color: #007bff; /* নীল রঙ */
 }
 
 .footer-signature .call-number {
@@ -189,7 +186,7 @@ body.card-page {
     color: #555;
 }
 
-/* মোবাইলের জন্য রেসপনসিভ অ্যাডজাস্টমেন্ট */
+/* ✅ মোবাইল রেসপনসিভ ফিক্স: কলাম পরিবর্তন ও ফন্ট সাইজ অ্যাডজাস্টমেন্ট */
 @media (max-width: 600px) {
   .card-content {
       grid-template-columns: 1fr; /* মোবাইল স্ক্রিনে ছবি উপরে, লেখা নিচে */
@@ -200,16 +197,16 @@ body.card-page {
       justify-content: flex-start;
   }
   .header-text {
-      font-size: 5vmin; 
+      font-size: 5.5vmin; /* মোবাইল স্ক্রিনের জন্য ফন্ট সাইজ বড় করা হয়েছে */
   }
   .main-message {
       font-size: 3vmin;
   }
   .footer-signature {
-      font-size: 2.5vmin;
+      font-size: 2.8vmin;
       margin-top: 10px;
   }
   .footer-signature .company-name {
-      font-size: 3.5vmin;
+      font-size: 3.8vmin;
   }
 }
