@@ -82,6 +82,91 @@ if (type === "birthday") {
     headerText = `Happy Anniversary! ${name} 🎉`;
 }
 
+if (currentTheme) {<!DOCTYPE html>
+<html>
+<head>
+<title>Wish Card</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css"> 
+</head>
+<body class="card-page"> 
+
+<div id="card">
+  <div class="card-border"> 
+      <div class="card-content">
+          <div class="left-section">
+              <img id="cardImage" src="">
+          </div>
+          <div class="right-section">
+              <div class="header-text" id="headerTxt"></div>
+              <div class="main-message" id="msgTxt"></div>
+              <div class="footer-signature" id="footerTxt"></div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<script>
+const url = new URLSearchParams(window.location.search);
+const type = url.get("type"); 
+const cardType = url.get("cardType"); 
+let name = url.get("name");
+
+name = name ? decodeURIComponent(name) : "[Client's Name]";
+
+const cardBorderElement = document.querySelector(".card-border");
+const cardImage = document.getElementById("cardImage");
+const headerTxtElement = document.getElementById("headerTxt");
+const msgTxtElement = document.getElementById("msgTxt");
+const footerTxtElement = document.getElementById("footerTxt");
+
+let imageURL = "";
+let headerText = "";
+let discountText = "";
+let theme = {};
+
+// --- কার্ড থিম এবং কালার কম্বিনেশন (আপনার ফাইল অনুযায়ী) ---
+const themes = {
+    // Birthday Card 1: ফুলের ডিজাইন (Happy Brithday 66.jpg)
+    'birthday_floral': { 
+        img: 'Happy Brithday 66.jpg', 
+        borderColor: '#8A2BE2', // বেগুনি বর্ডার
+        headerColor: '#A377D6', // হালকা বেগুনি হেডার
+        discount: "a special birthday discount on a birth chart reading & Gemstone!"
+    },
+    // Birthday Card 2: সাধারণ ডিজাইন (birthday77.png)
+    'birthday_simple': { 
+        img: 'birthday77.png', 
+        borderColor: '#FFCC00', // হলুদ বর্ডার
+        headerColor: '#FF8C00', // কমলা হেডার
+        discount: "a special birthday discount on a birth chart reading & Gemstone!"
+    },
+    // Anniversary Card 1: কেক ডিজাইন (Anniversary88.jpg)
+    'anniversary_cake': { 
+        img: 'Anniversary88.jpg', 
+        borderColor: '#C2185B', // ডিপ রোজ বর্ডার
+        headerColor: '#E91E63', // গোলাপী হেডার
+        discount: "a special anniversary discount on a birth chart reading & Gemstone!"
+    },
+    // Anniversary Card 2: হার্ট ডিজাইন (Anniversary99.jpg)
+    'anniversary_heart': { 
+        img: 'Anniversary99.jpg', 
+        borderColor: '#8B0000', // মেরুন বর্ডার
+        headerColor: '#DC3545', // উজ্জ্বল লাল হেডার
+        discount: "a special anniversary discount on a birth chart reading & Gemstone!"
+    }
+};
+
+let currentTheme = null;
+
+if (type === "birthday") {
+    currentTheme = cardType === 'floral' ? themes.birthday_floral : themes.birthday_simple;
+    headerText = `Happy Birthday! ${name} 🎉`;
+} else if (type === "anniversary") {
+    currentTheme = cardType === 'cake' ? themes.anniversary_cake : themes.anniversary_heart;
+    headerText = `Happy Anniversary! ${name} 🎉`;
+}
+
 if (currentTheme) {
     imageURL = currentTheme.img;
     discountText = currentTheme.discount;
