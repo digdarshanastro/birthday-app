@@ -55,7 +55,6 @@ window.login = function () {
 };
 
 async function loadData() {
-  // টেবিলের হেডার রিসেট করা
   tbl.innerHTML = `
     <tr>
       <th>Name</th>
@@ -77,12 +76,15 @@ async function loadData() {
       
       const baseURL = window.location.origin + window.location.pathname.replace('admin.html', 'card.html');
 
-      const birthdayCardURL = `${baseURL}?type=birthday&name=${encodedName}`;
+      // ✅ নতুন: দুটি জন্মদিনের কার্ডের লিঙ্ক (সাধারণ এবং ফ্লোরাল)
+      const birthdayCardURL_simple = `${baseURL}?type=birthday&cardType=simple&name=${encodedName}`;
+      const birthdayCardURL_floral = `${baseURL}?type=birthday&cardType=floral&name=${encodedName}`;
       const anniversaryCardURL = `${baseURL}?type=anniversary&name=${encodedName}`;
 
       const whatsappText = encodeURIComponent(`Here is your special wish card from Digdarshan Astro, ${x.name}:`);
       
-      const birthdayShareLink = `https://wa.me/?text=${whatsappText}%0A${birthdayCardURL}`;
+      const birthdayShareLink_simple = `https://wa.me/?text=${whatsappText}%0A${birthdayCardURL_simple}`;
+      const birthdayShareLink_floral = `https://wa.me/?text=${whatsappText}%0A${birthdayCardURL_floral}`;
       const anniversaryShareLink = `https://wa.me/?text=${whatsappText}%0A${anniversaryCardURL}`;
 
 
@@ -96,10 +98,12 @@ async function loadData() {
           <td>${x.anniv || "-"}</td>
           <td>${x.gotra || "-"}</td>
           <td>
-            <a href="${birthdayCardURL}" target="_blank" class="action-btn card-btn">B-Card</a>
+            <a href="${birthdayCardURL_simple}" target="_blank" class="action-btn card-btn">B-Card (Simple)</a>
+            <a href="${birthdayCardURL_floral}" target="_blank" class="action-btn card-btn">B-Card (Floral)</a>
             <a href="${anniversaryCardURL}" target="_blank" class="action-btn card-btn">A-Card</a>
             <br>
-            <a href="${birthdayShareLink}" target="_blank" class="action-btn whatsapp-btn">B-WA</a>
+            <a href="${birthdayShareLink_simple}" target="_blank" class="action-btn whatsapp-btn">B-WA (Simple)</a>
+            <a href="${birthdayShareLink_floral}" target="_blank" class="action-btn whatsapp-btn">B-WA (Floral)</a>
             <a href="${anniversaryShareLink}" target="_blank" class="action-btn whatsapp-btn">A-WA</a>
           </td>
         </tr>`;
