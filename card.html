@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="style.css"> 
 </head>
-<body>
-
-<div id="card">
+<body class="card-page"> <div id="card">
   <div class="card-border"> 
       <div class="card-content">
           <div class="left-section">
@@ -24,8 +22,8 @@
 
 <script>
 const url = new URLSearchParams(window.location.search);
-let type = url.get("type"); // birthday or anniversary
-let cardType = url.get("cardType"); // (optional) for different birthday designs
+const type = url.get("type"); 
+const cardType = url.get("cardType"); 
 let name = url.get("name");
 
 name = name ? decodeURIComponent(name) : "[Client's Name]";
@@ -38,61 +36,86 @@ const msgTxtElement = document.getElementById("msgTxt");
 const footerTxtElement = document.getElementById("footerTxt");
 
 let imageURL = "";
-let discountText = "";
 let headerText = "";
-let borderColor = "#FFB300"; // Default border color (warm yellow/orange)
-let headerColor = "#D84315"; // Default header color (orange-red)
+let discountText = "";
+let theme = {}; // {borderColor, headerColor}
 
-// --- CARD TYPE LOGIC ---
-if (type === "birthday") {
-    if (cardType === "floral") { // Birthday Card (ফুলের ডিজাইন) - Image 2
-        imageURL = "birthday_floral.png"; // আপনার Image 2 এর জন্য নতুন ফাইল নাম
-        headerText = `Happy Birthday, ${name}! 🎉`;
-        discountText = "a special birthday discount on a birth chart reading!";
-        borderColor = "#800080"; // পার্পল বর্ডার
-        headerColor = "#800080"; // পার্পল হেডার
-    } else { // Birthday Card (সাধারণ) - Image 1 (ডিফল্ট)
-        imageURL = "birthday_simple.png"; // আপনার Image 1 এর জন্য নতুন ফাইল নাম
-        headerText = `Happy Birthday, ${name}! 🎉`;
-        discountText = "a special birthday discount on a birth chart reading!";
-        borderColor = "#FFCC00"; // কেকের মতো হালকা হলুদ বর্ডার
-        headerColor = "#D84315"; // কমলা-লাল হেডার
+// --- CARD THEMES ---
+const themes = {
+    'birthday_floral': { 
+        // Happy Brithday 66.jpg (বেগুনি/ফুলের কেক)
+        img: 'birthday66.jpg', 
+        borderColor: '#5D2F6D', // গাঢ় বেগুনি
+        headerColor: '#8C4697', // হালকা বেগুনি
+        discount: "a special birthday discount on a birth chart reading & Gemstone!"
+    },
+    'birthday_simple': { 
+        // Happy Brithday 77.jpg (সাধারণ বার্থডে কেক)
+        img: 'Happy Brithday 77.jpg', 
+        borderColor: '#E8A342', // কমলা/হলুদ বর্ডার
+        headerColor: '#D84315', // কমলা-লাল হেডার
+        discount: "a special birthday discount on a birth chart reading & Gemstone!"
+    },
+    'anniversary_cake': { 
+        // Anniversary88.jpg (গোলাপ ফুলের কেক)
+        img: 'Anniversary88.jpg', 
+        borderColor: '#AF4259', // গোলাপী-লাল বর্ডার
+        headerColor: '#C4626D', // লালচে-গোলাপী হেডার
+        discount: "a special anniversary discount on a birth chart reading & Gemstone!"
+    },
+    'anniversary_heart': { 
+        // anniversary99.jpg (লাল হার্ট)
+        img: 'anniversary99.jpg', 
+        borderColor: '#B90000', // গাঢ় লাল বর্ডার
+        headerColor: '#DC3545', // উজ্জ্বল লাল হেডার
+        discount: "a special anniversary discount on a birth chart reading & Gemstone!"
     }
-} else if (type === "anniversary") { // Anniversary Card - Image 4
-    imageURL = "anniversary_cake.png"; // আপনার Image 4 এর জন্য নতুন ফাইল নাম
-    headerText = `Happy Anniversary, ${name}! 🎉`;
-    discountText = "a special anniversary discount on a birth chart reading!";
-    borderColor = "#F28B82"; // গোলাপী-লাল বর্ডার
-    headerColor = "#D84315"; // কমলা-লাল হেডার
+};
+
+let currentTheme = null;
+
+if (type === "birthday") {
+    currentTheme = cardType === 'floral' ? themes.birthday_floral : themes.birthday_simple;
+    headerText = `Happy Birthday! ${name} 🎉`;
+} else if (type === "anniversary") {
+    currentTheme = cardType === 'cake' ? themes.anniversary_cake : themes.anniversary_heart;
+    headerText = `Happy Anniversary! ${name} 🎉`;
+}
+
+if (currentTheme) {
+    imageURL = currentTheme.img;
+    discountText = currentTheme.discount;
+    
+    // থিম রঙ সেট করা
+    cardBorderElement.style.borderColor = currentTheme.borderColor;
+    headerTxtElement.style.color = currentTheme.headerColor;
+    headerTxtElement.style.borderColor = currentTheme.headerColor; // বর্ডার কালার
 } else {
-    // Fallback if type is not recognized
-    imageURL = ""; // No image or default placeholder
+    // ফলব্যাক
+    imageURL = "placeholder.png"; 
     headerText = `Hello, ${name}!`;
     discountText = "a special discount on a reading!";
-    borderColor = "#CCCCCC";
-    headerColor = "#333333";
-    msgTxtElement.innerHTML = `Error: Invalid Card Type.`; // Display error message
+    cardBorderElement.style.borderColor = "#CCCCCC";
+    headerTxtElement.style.color = "#333333";
+    headerTxtElement.style.borderColor = "#333333";
+    msgTxtElement.innerHTML = `Error: Invalid Card Type.`;
 }
 
 const mainMessage = 
-    `May the stars bring you immense joy and success this year. ` +
-    `Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. ` +
-    `Get ${discountText}!`;
+    `May the stars bring you immense joy and success this year. Start your new personal year ` +
+    `with cosmic guidance from Jyotish Devagya Amitsree. Get ${discountText}`;
 
 // ইমেজ এবং টেক্সট সেট করা
 cardImage.src = imageURL;
 headerTxtElement.innerHTML = headerText;
 msgTxtElement.innerHTML = mainMessage;
-headerTxtElement.style.color = headerColor; // হেডার কালার সেট করা
+
 
 // ফুটার টেক্সট
 footerTxtElement.innerHTML =
   `<span class="company-name">Digdarshan Astro</span><br>` +
   `Jyotish Devagya Amitsree<br>` +
   `<span class="call-number">Call : 8697190840 / 9830637766</span>`;
-
-// ✅ বর্ডার কালার সেট করা
-cardBorderElement.style.borderColor = borderColor;
 </script>
 
 </body>
