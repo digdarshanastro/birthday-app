@@ -9,14 +9,15 @@
 
 <div id="card">
   <div class="card-border"> 
-      <div class="card-content">
-          <div class="left-section">
-              <img id="cardImage" src="">
-          </div>
-          <div class="right-section">
-              <div class="header-text" id="headerTxt"></div>
-              <div class="main-message" id="msgTxt"></div>
-              <div class="footer-signature" id="footerTxt"></div>
+      <div class="colored-frame"> <div class="card-content">
+              <div class="left-section">
+                  <img id="cardImage" src="">
+              </div>
+              <div class="right-section">
+                  <div class="header-text" id="headerTxt"></div>
+                  <div class="main-message" id="msgTxt"></div>
+                  <div class="footer-signature" id="footerTxt"></div>
+              </div>
           </div>
       </div>
   </div>
@@ -30,7 +31,7 @@ let name = url.get("name");
 
 name = name ? decodeURIComponent(name) : "[Client's Name]";
 
-const cardBorderElement = document.querySelector(".card-border");
+const coloredFrameElement = document.querySelector(".colored-frame"); // ✅ নতুন এলিমেন্ট সিলেক্ট করা হয়েছে
 const cardImage = document.getElementById("cardImage");
 const headerTxtElement = document.getElementById("headerTxt");
 const msgTxtElement = document.getElementById("msgTxt");
@@ -39,40 +40,35 @@ const footerTxtElement = document.getElementById("footerTxt");
 let imageURL = "";
 let headerText = "";
 let discountText = "";
-let theme = {};
 
 // --- কার্ড থিম এবং কালার কম্বিনেশন (আপনার ফাইল অনুযায়ী) ---
 const themes = {
-    // Birthday Card 1 (Image 2 - বেগুনি কেক)
+    // Birthday Card 1: ফুলের ডিজাইন (বেগুনি থিম)
     'birthday_floral': { 
-        img: 'Image 8.png', // আপনার Image 8.png
-        borderColor: '#5D2F6D', // বেগুনি বর্ডার
-        headerColor: '#8C4697', // হালকা বেগুনি হেডার
-        borderBackground: 'url("Image 2.png")', // Image 2.png ব্যবহার করে বর্ডার ব্যাকগ্রাউন্ড
+        img: 'birthday66.jpg', // Image 8
+        borderColor: '#8A2BE2', // বেগুনি বর্ডার (Blue Violet)
+        headerColor: '#A377D6', // হালকা বেগুনি হেডার
         discount: "a special birthday discount on a birth chart reading & Gemstone!"
     },
-    // Birthday Card 2 (Image 1 - সাধারণ কেক)
+    // Birthday Card 2: সাধারণ ডিজাইন (হলুদ/কমলা থিম)
     'birthday_simple': { 
-        img: 'Image 7.png', // আপনার Image 7.png
-        borderColor: '#FFCC00', // হলুদ বর্ডার
-        headerColor: '#D84315', // কমলা-লাল হেডার
-        borderBackground: 'url("Image 1.png")', // Image 1.png ব্যবহার করে বর্ডার ব্যাকগ্রাউন্ড
+        img: 'birthday77.png', // Image 7
+        borderColor: '#FFCC00', // হলুদ বর্ডার (Gold)
+        headerColor: '#FF8C00', // কমলা হেডার (Dark Orange)
         discount: "a special birthday discount on a birth chart reading & Gemstone!"
     },
-    // Anniversary Card 1 (Image 4 - কেক ডিজাইন)
+    // Anniversary Card 1: কেক ডিজাইন (রোজ থিম)
     'anniversary_cake': { 
-        img: 'Image 5.png', // আপনার Image 5.png
-        borderColor: '#C2185B', // ডিপ রোজ বর্ডার
-        headerColor: '#E91E63', // গোলাপী হেডার
-        borderBackground: 'url("Image 4.png")', // Image 4.png ব্যবহার করে বর্ডার ব্যাকগ্রাউন্ড
+        img: 'anniversary88.jpg', // Image 5
+        borderColor: '#C2185B', // ডিপ রোজ বর্ডার (Deep Rose)
+        headerColor: '#E91E63', // গোলাপী হেডার (Pink)
         discount: "a special anniversary discount on a birth chart reading & Gemstone!"
     },
-    // Anniversary Card 2 (Image 3 - হার্ট ডিজাইন)
+    // Anniversary Card 2: হার্ট ডিজাইন (লাল থিম)
     'anniversary_heart': { 
-        img: 'Image 6.png', // আপনার Image 6.png
-        borderColor: '#8B0000', // মেরুন বর্ডার
-        headerColor: '#DC3545', // উজ্জ্বল লাল হেডার
-        borderBackground: 'url("Image 3.png")', // Image 3.png ব্যবহার করে বর্ডার ব্যাকগ্রাউন্ড
+        img: 'anniversary99.jpg', // Image 6
+        borderColor: '#8B0000', // মেরুন বর্ডার (Dark Red)
+        headerColor: '#DC3545', // উজ্জ্বল লাল হেডার (Crimson)
         discount: "a special anniversary discount on a birth chart reading & Gemstone!"
     }
 };
@@ -91,26 +87,19 @@ if (currentTheme) {
     imageURL = currentTheme.img;
     discountText = currentTheme.discount;
     
-    // থিম রঙ সেট করা
-    cardBorderElement.style.borderColor = currentTheme.borderColor;
+    // ✅ নতুন: স্টাইলিশ বর্ডারের কালার সেট করা
+    coloredFrameElement.style.borderColor = currentTheme.borderColor;
     headerTxtElement.style.color = currentTheme.headerColor;
     headerTxtElement.style.borderColor = currentTheme.headerColor; // হেডার বর্ডার কালার
-
-    // বর্ডার ব্যাকগ্রাউন্ড ইমেজ সেট করা
-    cardBorderElement.style.backgroundImage = currentTheme.borderBackground;
-    cardBorderElement.style.backgroundSize = 'cover';
-    cardBorderElement.style.backgroundPosition = 'center';
-    cardBorderElement.style.backgroundRepeat = 'no-repeat';
 
 } else {
     // ফলব্যাক
     imageURL = "placeholder.png"; 
     headerText = `Hello, ${name}!`;
     discountText = "a special discount on a reading!";
-    cardBorderElement.style.borderColor = "#CCCCCC";
+    coloredFrameElement.style.borderColor = "#CCCCCC";
     headerTxtElement.style.color = "#333333";
     headerTxtElement.style.borderColor = "#333333";
-    cardBorderElement.style.backgroundImage = 'none'; // ফলব্যাক বর্ডার ব্যাকগ্রাউন্ড
     msgTxtElement.innerHTML = `Error: Invalid Card Type.`;
 }
 
