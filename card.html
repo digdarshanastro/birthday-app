@@ -3,124 +3,35 @@
 <head>
 <title>Wish Card</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  margin:0;
-  padding:0;
-  background:#fff8ef; 
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-}
-
-#card {
-  /* কার্ডের অনুপাত এবং বক্স শ্যাডো আপনার আগের ডিজাইনের মতো */
-  width:95vmin;
-  max-width:900px;
-  aspect-ratio: 3 / 2; 
-  position:relative;
-  background-size:cover;
-  background-position:center;
-  color:#333; 
-  font-family:Arial, sans-serif;
-  overflow: hidden; 
-  background-color: white; 
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
-
-.card-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* দুই-কলাম লেআউট */
-    display: grid;
-    grid-template-columns: 40% 60%; 
-    padding: 20px;
-    box-sizing: border-box;
-    color: #333;
-}
-
-.left-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-.left-section img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
-
-.right-section {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.header-text {
-    color: #d84315;
-    font-size: 4vmin; 
-    font-weight: bold;
-    margin-bottom: 2vmin;
-}
-
-.main-message {
-    font-size: 2.5vmin;
-    line-height: 1.5;
-    margin-bottom: 3vmin;
-}
-
-/* --- ফুটার টেক্সট স্টাইল ফিক্স --- */
-.footer-signature {
-    text-align: right;
-    font-size: 2.2vmin; 
-    line-height: 1.4;
-    font-weight: bold;
-    color: #e65100;
-}
-
-/* ✅ Digdarshan Astro ফিক্স: নীল রঙ এবং কম মোটা (bold) */
-.footer-signature .company-name {
-    font-size: 3.2vmin; 
-    font-weight: bold; 
-    color: #007bff; /* নীল রঙ */
-}
-
-/* ✅ Call : ... (ছোট ফন্ট) */
-.footer-signature .call-number {
-    font-size: 1.8vmin;
-    font-weight: normal; 
-    color: #333;
-}
-</style>
+<link rel="stylesheet" href="style.css"> 
 </head>
 <body>
 
 <div id="card">
-  <div class="card-content">
-      <div class="left-section">
-          <img id="cardImage" src="">
-      </div>
-      <div class="right-section">
-          <div class="header-text" id="headerTxt"></div>
-          <div class="main-message" id="msgTxt"></div>
-          <div class="footer-signature" id="footerTxt"></div>
+  <div class="card-border"> 
+      <div class="card-content">
+          <div class="left-section">
+              <img id="cardImage" src="">
+          </div>
+          <div class="right-section">
+              <div class="header-text" id="headerTxt"></div>
+              <div class="main-message" id="msgTxt"></div>
+              <div class="footer-signature" id="footerTxt"></div>
+          </div>
       </div>
   </div>
 </div>
 
 <script>
 const url = new URLSearchParams(window.location.search);
-let type = url.get("type");
+let type = url.get("type"); // birthday or anniversary
+let cardType = url.get("cardType"); // (optional) for different birthday designs
 let name = url.get("name");
 
 name = name ? decodeURIComponent(name) : "[Client's Name]";
 
+const cardElement = document.getElementById("card");
+const cardBorderElement = document.querySelector(".card-border");
 const cardImage = document.getElementById("cardImage");
 const headerTxtElement = document.getElementById("headerTxt");
 const msgTxtElement = document.getElementById("msgTxt");
@@ -129,17 +40,38 @@ const footerTxtElement = document.getElementById("footerTxt");
 let imageURL = "";
 let discountText = "";
 let headerText = "";
+let borderColor = "#FFB300"; // Default border color (warm yellow/orange)
+let headerColor = "#D84315"; // Default header color (orange-red)
 
+// --- CARD TYPE LOGIC ---
 if (type === "birthday") {
-    // ✅ জন্মদিনের ইমেজ পাথ ফিক্স করা হয়েছে
-    imageURL = "birthday.png"; 
-    headerText = `Happy Birthday, ${name}! 🎉`;
-    discountText = "a special birthday discount on a birth chart reading!";
-} else {
-    // ✅ অ্যানিভার্সারি ইমেজ পাথ ফিক্স করা হয়েছে
-    imageURL = "anniversary.jpg"; 
+    if (cardType === "floral") { // Birthday Card (ফুলের ডিজাইন) - Image 2
+        imageURL = "birthday_floral.png"; // আপনার Image 2 এর জন্য নতুন ফাইল নাম
+        headerText = `Happy Birthday, ${name}! 🎉`;
+        discountText = "a special birthday discount on a birth chart reading!";
+        borderColor = "#800080"; // পার্পল বর্ডার
+        headerColor = "#800080"; // পার্পল হেডার
+    } else { // Birthday Card (সাধারণ) - Image 1 (ডিফল্ট)
+        imageURL = "birthday_simple.png"; // আপনার Image 1 এর জন্য নতুন ফাইল নাম
+        headerText = `Happy Birthday, ${name}! 🎉`;
+        discountText = "a special birthday discount on a birth chart reading!";
+        borderColor = "#FFCC00"; // কেকের মতো হালকা হলুদ বর্ডার
+        headerColor = "#D84315"; // কমলা-লাল হেডার
+    }
+} else if (type === "anniversary") { // Anniversary Card - Image 4
+    imageURL = "anniversary_cake.png"; // আপনার Image 4 এর জন্য নতুন ফাইল নাম
     headerText = `Happy Anniversary, ${name}! 🎉`;
     discountText = "a special anniversary discount on a birth chart reading!";
+    borderColor = "#F28B82"; // গোলাপী-লাল বর্ডার
+    headerColor = "#D84315"; // কমলা-লাল হেডার
+} else {
+    // Fallback if type is not recognized
+    imageURL = ""; // No image or default placeholder
+    headerText = `Hello, ${name}!`;
+    discountText = "a special discount on a reading!";
+    borderColor = "#CCCCCC";
+    headerColor = "#333333";
+    msgTxtElement.innerHTML = `Error: Invalid Card Type.`; // Display error message
 }
 
 const mainMessage = 
@@ -147,18 +79,20 @@ const mainMessage =
     `Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. ` +
     `Get ${discountText}!`;
 
-
 // ইমেজ এবং টেক্সট সেট করা
 cardImage.src = imageURL;
 headerTxtElement.innerHTML = headerText;
 msgTxtElement.innerHTML = mainMessage;
+headerTxtElement.style.color = headerColor; // হেডার কালার সেট করা
 
-// চূড়ান্ত ফুটার টেক্সট
+// ফুটার টেক্সট
 footerTxtElement.innerHTML =
   `<span class="company-name">Digdarshan Astro</span><br>` +
   `Jyotish Devagya Amitsree<br>` +
   `<span class="call-number">Call : 8697190840 / 9830637766</span>`;
 
+// ✅ বর্ডার কালার সেট করা
+cardBorderElement.style.borderColor = borderColor;
 </script>
 
 </body>
