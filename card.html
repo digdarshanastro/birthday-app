@@ -31,7 +31,7 @@ let name = url.get("name");
 
 name = name ? decodeURIComponent(name) : "[Client's Name]";
 
-const coloredFrameElement = document.querySelector(".colored-frame"); // ✅ নতুন এলিমেন্ট সিলেক্ট করা হয়েছে
+const coloredFrameElement = document.querySelector(".colored-frame"); 
 const cardImage = document.getElementById("cardImage");
 const headerTxtElement = document.getElementById("headerTxt");
 const msgTxtElement = document.getElementById("msgTxt");
@@ -45,30 +45,30 @@ let discountText = "";
 const themes = {
     // Birthday Card 1: ফুলের ডিজাইন (বেগুনি থিম)
     'birthday_floral': { 
-        img: 'birthday66.png', // Image 8
-        borderColor: '#8A2BE2', // বেগুনি বর্ডার (Blue Violet)
-        headerColor: '#A377D6', // হালকা বেগুনি হেডার
+        img: 'birthday66.jpg', // আপনার আপলোড করা birthday66.jpg ফাইল ব্যবহার করা হয়েছে
+        borderColor: '#8A2BE2', 
+        headerColor: '#A377D6', 
         discount: "a special birthday discount on a birth chart reading & Gemstone!"
     },
     // Birthday Card 2: সাধারণ ডিজাইন (হলুদ/কমলা থিম)
     'birthday_simple': { 
-        img: 'birthday77.png', // Image 7
-        borderColor: '#FFCC00', // হলুদ বর্ডার (Gold)
-        headerColor: '#FF8C00', // কমলা হেডার (Dark Orange)
+        img: 'birthday77.png', // আপনার আপলোড করা birthday77.png ফাইল ব্যবহার করা হয়েছে
+        borderColor: '#FFCC00', 
+        headerColor: '#FF8C00', 
         discount: "a special birthday discount on a birth chart reading & Gemstone!"
     },
     // Anniversary Card 1: কেক ডিজাইন (রোজ থিম)
     'anniversary_cake': { 
-        img: 'anniversary88.png', // Image 5
-        borderColor: '#C2185B', // ডিপ রোজ বর্ডার (Deep Rose)
-        headerColor: '#E91E63', // গোলাপী হেডার (Pink)
+        img: 'anniversary88.jpg', // আপনার আপলোড করা anniversary88.jpg ফাইল ব্যবহার করা হয়েছে
+        borderColor: '#C2185B', 
+        headerColor: '#E91E63', 
         discount: "a special anniversary discount on a birth chart reading & Gemstone!"
     },
     // Anniversary Card 2: হার্ট ডিজাইন (লাল থিম)
     'anniversary_heart': { 
-        img: 'anniversary99.png', // Image 6
-        borderColor: '#8B0000', // মেরুন বর্ডার (Dark Red)
-        headerColor: '#DC3545', // উজ্জ্বল লাল হেডার (Crimson)
+        img: 'anniversary99.jpg', // আপনার আপলোড করা anniversary99.jpg ফাইল ব্যবহার করা হয়েছে
+        borderColor: '#8B0000', 
+        headerColor: '#DC3545', 
         discount: "a special anniversary discount on a birth chart reading & Gemstone!"
     }
 };
@@ -87,10 +87,10 @@ if (currentTheme) {
     imageURL = currentTheme.img;
     discountText = currentTheme.discount;
     
-    // ✅ নতুন: স্টাইলিশ বর্ডারের কালার সেট করা
+    // স্টাইলিশ বর্ডারের কালার সেট করা
     coloredFrameElement.style.borderColor = currentTheme.borderColor;
     headerTxtElement.style.color = currentTheme.headerColor;
-    headerTxtElement.style.borderColor = currentTheme.headerColor; // হেডার বর্ডার কালার
+    headerTxtElement.style.borderColor = currentTheme.headerColor; 
 
 } else {
     // ফলব্যাক
@@ -113,8 +113,9 @@ headerTxtElement.innerHTML = headerText;
 msgTxtElement.innerHTML = mainMessage;
 
 
-// ফুটার টেক্সট
+// ✅ ফুটার টেক্সট আপডেট: "With Best Wishes from" যুক্ত করা হয়েছে
 footerTxtElement.innerHTML =
+  `With Best Wishes from<br>` +
   `<span class="company-name">Digdarshan Astro</span><br>` +
   `Jyotish Devagya Amitsree<br>` +
   `<span class="call-number">Call : 8697190840 / 9830637766</span>`;
