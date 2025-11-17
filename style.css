@@ -1,101 +1,11 @@
 body {
-  margin:0;
-  padding:0;
-  background:#fff8ef; /* কার্ডের বাইরের ব্যাকগ্রাউন্ড */
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-  overflow-x: hidden; /* হরাইজন্টাল স্ক্রলবার বন্ধ */
+  margin: 0;
+  background: #fff8ef; /* ফর্ম/টেবিলের ব্যাকগ্রাউন্ড */
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
 }
 
-#card {
-  width:95vmin; /* স্ক্রিনের 95% প্রস্থ */
-  max-width:900px; /* সর্বোচ্চ 900px */
-  aspect-ratio: 3 / 2; /* 3:2 অনুপাত */
-  position:relative;
-  background-color: transparent; /* সরাসরি কার্ডে ব্যাকগ্রাউন্ড নয় */
-  font-family:Arial, sans-serif;
-  overflow: hidden; 
-  box-sizing: border-box; /* padding/border width এ অন্তর্ভুক্ত হবে */
-}
-
-/* ✅ নতুন বর্ডার স্টাইল */
-.card-border {
-    width: 100%;
-    height: 100%;
-    border: 15px solid; /* বর্ডার চওড়া করা হয়েছে */
-    border-image-slice: 1;
-    border-radius: 15px; /* কোণাগুলো গোলাকার */
-    padding: 10px; /* বর্ডার এবং কন্টেন্টের মাঝে প্যাডিং */
-    box-sizing: border-box;
-    background-color: white; /* কন্টেন্টের ব্যাকগ্রাউন্ড সাদা */
-    display: flex; /* কন্টেন্টকে ফ্লেক্স করে কেন্দ্রে আনার জন্য */
-    justify-content: center;
-    align-items: center;
-}
-
-.card-content {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 40% 60%; /* বামে ছবি, ডানে লেখা */
-    box-sizing: border-box;
-    color: #333;
-}
-
-.left-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-.left-section img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
-
-.right-section {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.header-text {
-    font-size: 4vmin; 
-    font-weight: bold;
-    margin-bottom: 2vmin;
-}
-
-.main-message {
-    font-size: 2.5vmin;
-    line-height: 1.5;
-    margin-bottom: 3vmin;
-}
-
-.footer-signature {
-    text-align: right;
-    font-size: 2.2vmin; 
-    line-height: 1.4;
-    font-weight: bold;
-    color: #e65100;
-}
-
-.footer-signature .company-name {
-    font-size: 3.2vmin; 
-    font-weight: bold; 
-    color: #007bff; /* নীল রঙ */
-}
-
-.footer-signature .call-number {
-    font-size: 1.8vmin;
-    font-weight: normal; 
-    color: #333;
-}
-
-/* --- ADMIN PANEL & ADD FORM STYLES (পূর্বের মতোই থাকবে) --- */
+/* --- Form & Admin Panel Styles --- */
 .container {
   width: 90%; 
   max-width: 650px;
@@ -104,6 +14,7 @@ body {
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  /* ব্যাকগ্রাউন্ড ইমেজ (যদি থাকে) */
   background-image: url("rashichakra 000.jpg"); 
   background-size: 95%;
   background-repeat: no-repeat;
@@ -145,10 +56,6 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  background: #d63a00;
-}
-
 .table-box {
   width: 100%;
   overflow-x: auto; 
@@ -169,19 +76,6 @@ th, td {
   white-space: nowrap; 
 }
 
-th {
-  background: #ffe5d0;
-  color: #d84315;
-  font-weight: bold;
-}
-
-.error {
-  color: red;
-  font-weight: bold;
-  margin-top: 10px;
-  text-align: center;
-}
-
 .action-btn {
   display: inline-block;
   padding: 5px 8px;
@@ -194,14 +88,128 @@ th {
   min-width: 40px; 
 }
 
-.card-btn {
-  background: #ff4500; 
+.card-btn { background: #ff4500; }
+.whatsapp-btn { background: #25d366; }
+
+/* --- CARD DESIGN STYLES --- */
+body.card-page {
+  background: #EBEBEB; /* কার্ডের বাইরের ব্যাকগ্রাউন্ড হালকা ধুসর */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-.whatsapp-btn {
-  background: #25d366; 
+#card {
+  width: 95vmin; 
+  max-width: 900px; 
+  aspect-ratio: 3 / 2; 
+  position: relative;
+  font-family: 'Times New Roman', serif;
+  box-sizing: border-box; 
 }
 
-.action-btn:hover {
-  opacity: 0.9;
+.card-border {
+    width: 100%;
+    height: 100%;
+    /* বর্ডার স্টাইল: 15px solid, রঙ জাভাস্ক্রিপ্ট থেকে আসবে */
+    border: 15px solid; 
+    border-radius: 15px; 
+    padding: 10px; 
+    box-sizing: border-box;
+    background-color: white; 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.card-content {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 40% 60%; 
+    box-sizing: border-box;
+    color: #333;
+    padding: 10px;
+}
+
+.left-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 5px;
+}
+.left-section img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.right-section {
+    padding: 10px 20px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.header-text {
+    font-size: 4vmin; 
+    font-weight: 800;
+    margin-bottom: 2vmin;
+    /* ফিক্সড টেক্সট "Happy Birthday / Anniversary" এর স্টাইল */
+    font-style: italic; 
+    border-bottom: 2px solid; 
+    padding-bottom: 0.5vmin;
+}
+
+.main-message {
+    font-size: 2.5vmin;
+    line-height: 1.5;
+    margin-bottom: 3vmin;
+}
+
+.footer-signature {
+    text-align: right;
+    font-size: 2.2vmin; 
+    line-height: 1.4;
+    font-weight: bold;
+}
+
+.footer-signature .company-name {
+    font-size: 3.2vmin; 
+    font-weight: bold; 
+    color: #a04000; /* ডার্ক অরেঞ্জ/ব্রাউন */
+}
+
+.footer-signature .call-number {
+    font-size: 1.8vmin;
+    font-weight: normal; 
+    color: #555;
+}
+
+/* মোবাইলের জন্য রেসপনসিভ অ্যাডজাস্টমেন্ট */
+@media (max-width: 600px) {
+  .card-content {
+      grid-template-columns: 1fr; /* মোবাইল স্ক্রিনে ছবি উপরে, লেখা নিচে */
+      grid-template-rows: 40% 60%;
+  }
+  .right-section {
+      padding: 10px 15px;
+      justify-content: flex-start;
+  }
+  .header-text {
+      font-size: 5vmin; 
+  }
+  .main-message {
+      font-size: 3vmin;
+  }
+  .footer-signature {
+      font-size: 2.5vmin;
+      margin-top: 10px;
+  }
+  .footer-signature .company-name {
+      font-size: 3.5vmin;
+  }
 }
