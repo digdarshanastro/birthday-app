@@ -120,6 +120,10 @@ body.card-page {
     justify-content: center;
     align-items: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    /* বর্ডারের ব্যাকগ্রাউন্ডে Image 1-4 এর উপরের ও নিচের বর্ডার ছবিগুলো ব্যবহার করা হয়েছে */
+    background-size: cover;
+    background-position: top left, bottom right;
+    background-repeat: no-repeat;
 }
 
 .card-content {
@@ -157,6 +161,7 @@ body.card-page {
     font-weight: 800;
     margin-bottom: 2vmin;
     font-style: italic; 
+    /* হেডার টেক্সটের নিচে বর্ডার কালার জাভাস্ক্রিপ্ট থেকে আসবে */
     border-bottom: 2px solid; 
     padding-bottom: 0.5vmin;
 }
