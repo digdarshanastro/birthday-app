@@ -1,16 +1,106 @@
 body {
-  margin: 0;
-  background: #fff8ef;
-  font-family: Arial, sans-serif;
-  overflow-x: hidden; /* মোবাইলে অনাকাঙ্ক্ষিত হরাইজন্টাল স্ক্রলবার বন্ধ */
+  margin:0;
+  padding:0;
+  background:#fff8ef; /* কার্ডের বাইরের ব্যাকগ্রাউন্ড */
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  overflow-x: hidden; /* হরাইজন্টাল স্ক্রলবার বন্ধ */
 }
 
+#card {
+  width:95vmin; /* স্ক্রিনের 95% প্রস্থ */
+  max-width:900px; /* সর্বোচ্চ 900px */
+  aspect-ratio: 3 / 2; /* 3:2 অনুপাত */
+  position:relative;
+  background-color: transparent; /* সরাসরি কার্ডে ব্যাকগ্রাউন্ড নয় */
+  font-family:Arial, sans-serif;
+  overflow: hidden; 
+  box-sizing: border-box; /* padding/border width এ অন্তর্ভুক্ত হবে */
+}
+
+/* ✅ নতুন বর্ডার স্টাইল */
+.card-border {
+    width: 100%;
+    height: 100%;
+    border: 15px solid; /* বর্ডার চওড়া করা হয়েছে */
+    border-image-slice: 1;
+    border-radius: 15px; /* কোণাগুলো গোলাকার */
+    padding: 10px; /* বর্ডার এবং কন্টেন্টের মাঝে প্যাডিং */
+    box-sizing: border-box;
+    background-color: white; /* কন্টেন্টের ব্যাকগ্রাউন্ড সাদা */
+    display: flex; /* কন্টেন্টকে ফ্লেক্স করে কেন্দ্রে আনার জন্য */
+    justify-content: center;
+    align-items: center;
+}
+
+.card-content {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 40% 60%; /* বামে ছবি, ডানে লেখা */
+    box-sizing: border-box;
+    color: #333;
+}
+
+.left-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.left-section img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.right-section {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.header-text {
+    font-size: 4vmin; 
+    font-weight: bold;
+    margin-bottom: 2vmin;
+}
+
+.main-message {
+    font-size: 2.5vmin;
+    line-height: 1.5;
+    margin-bottom: 3vmin;
+}
+
+.footer-signature {
+    text-align: right;
+    font-size: 2.2vmin; 
+    line-height: 1.4;
+    font-weight: bold;
+    color: #e65100;
+}
+
+.footer-signature .company-name {
+    font-size: 3.2vmin; 
+    font-weight: bold; 
+    color: #007bff; /* নীল রঙ */
+}
+
+.footer-signature .call-number {
+    font-size: 1.8vmin;
+    font-weight: normal; 
+    color: #333;
+}
+
+/* --- ADMIN PANEL & ADD FORM STYLES (পূর্বের মতোই থাকবে) --- */
 .container {
-  /* ✅ ফিক্স: স্ক্রিনের 90% প্রস্থ ব্যবহার করে এবং 650px-এর বেশি হতে দেবে না */
   width: 90%; 
   max-width: 650px;
   background: #ffffff;
-  margin: 25px auto; /* কেন্দ্রে আনার জন্য */
+  margin: 25px auto; 
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0,0,0,0.1);
@@ -33,7 +123,6 @@ input {
   border: 1px solid #ffa366;
   border-radius: 6px;
   margin-top: 5px;
-  /* ✅ ফিক্স: ইনপুট ফিল্ডে হরাইজন্টাল স্ক্রলবার বন্ধ করার জন্য */
   box-sizing: border-box; 
 }
 
@@ -62,7 +151,6 @@ button:hover {
 
 .table-box {
   width: 100%;
-  /* ✅ ফিক্স: টেবিল কন্টেন্ট বেশি হলে মোবাইলে হরাইজন্টাল স্ক্রল করার সুবিধা */
   overflow-x: auto; 
 }
 
@@ -78,7 +166,6 @@ th, td {
   text-align: center;
   font-size: 0.9em; 
   vertical-align: middle; 
-  /* ✅ ফিক্স: টেবিল কলামের টেক্সট যেন না ভাঙে, একটি কলামে সব টেক্সট থাকবে */
   white-space: nowrap; 
 }
 
@@ -95,7 +182,6 @@ th {
   text-align: center;
 }
 
-/* Admin Panel Actions Button Styles */
 .action-btn {
   display: inline-block;
   padding: 5px 8px;
