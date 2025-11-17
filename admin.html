@@ -76,16 +76,21 @@ async function loadData() {
       
       const baseURL = window.location.origin + window.location.pathname.replace('admin.html', 'card.html');
 
-      // ✅ নতুন: দুটি জন্মদিনের কার্ডের লিঙ্ক (সাধারণ এবং ফ্লোরাল)
-      const birthdayCardURL_simple = `${baseURL}?type=birthday&cardType=simple&name=${encodedName}`;
+      // ✅ বার্থডে কার্ড লিঙ্ক
       const birthdayCardURL_floral = `${baseURL}?type=birthday&cardType=floral&name=${encodedName}`;
-      const anniversaryCardURL = `${baseURL}?type=anniversary&name=${encodedName}`;
+      const birthdayCardURL_simple = `${baseURL}?type=birthday&cardType=simple&name=${encodedName}`;
+      
+      // ✅ অ্যানিভার্সারি কার্ড লিঙ্ক
+      const anniversaryCardURL_cake = `${baseURL}?type=anniversary&cardType=cake&name=${encodedName}`;
+      const anniversaryCardURL_heart = `${baseURL}?type=anniversary&cardType=heart&name=${encodedName}`;
 
       const whatsappText = encodeURIComponent(`Here is your special wish card from Digdarshan Astro, ${x.name}:`);
       
-      const birthdayShareLink_simple = `https://wa.me/?text=${whatsappText}%0A${birthdayCardURL_simple}`;
       const birthdayShareLink_floral = `https://wa.me/?text=${whatsappText}%0A${birthdayCardURL_floral}`;
-      const anniversaryShareLink = `https://wa.me/?text=${whatsappText}%0A${anniversaryCardURL}`;
+      const birthdayShareLink_simple = `https://wa.me/?text=${whatsappText}%0A${birthdayCardURL_simple}`;
+      
+      const anniversaryShareLink_cake = `https://wa.me/?text=${whatsappText}%0A${anniversaryCardURL_cake}`;
+      const anniversaryShareLink_heart = `https://wa.me/?text=${whatsappText}%0A${anniversaryCardURL_heart}`;
 
 
       tbl.innerHTML += `
@@ -98,13 +103,17 @@ async function loadData() {
           <td>${x.anniv || "-"}</td>
           <td>${x.gotra || "-"}</td>
           <td>
-            <a href="${birthdayCardURL_simple}" target="_blank" class="action-btn card-btn">B-Card (Simple)</a>
-            <a href="${birthdayCardURL_floral}" target="_blank" class="action-btn card-btn">B-Card (Floral)</a>
-            <a href="${anniversaryCardURL}" target="_blank" class="action-btn card-btn">A-Card</a>
+            <a href="${birthdayCardURL_floral}" target="_blank" class="action-btn card-btn">B-Floral</a>
+            <a href="${birthdayCardURL_simple}" target="_blank" class="action-btn card-btn">B-Simple</a>
             <br>
-            <a href="${birthdayShareLink_simple}" target="_blank" class="action-btn whatsapp-btn">B-WA (Simple)</a>
-            <a href="${birthdayShareLink_floral}" target="_blank" class="action-btn whatsapp-btn">B-WA (Floral)</a>
-            <a href="${anniversaryShareLink}" target="_blank" class="action-btn whatsapp-btn">A-WA</a>
+            <a href="${anniversaryCardURL_cake}" target="_blank" class="action-btn card-btn">A-Cake</a>
+            <a href="${anniversaryCardURL_heart}" target="_blank" class="action-btn card-btn">A-Heart</a>
+            <br>
+            <a href="${birthdayShareLink_floral}" target="_blank" class="action-btn whatsapp-btn">B-WA (F)</a>
+            <a href="${birthdayShareLink_simple}" target="_blank" class="action-btn whatsapp-btn">B-WA (S)</a>
+            <br>
+            <a href="${anniversaryShareLink_cake}" target="_blank" class="action-btn whatsapp-btn">A-WA (C)</a>
+            <a href="${anniversaryShareLink_heart}" target="_blank" class="action-btn whatsapp-btn">A-WA (H)</a>
           </td>
         </tr>`;
     });
