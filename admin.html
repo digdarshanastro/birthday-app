@@ -23,6 +23,8 @@
 
 <div class="container" id="dataBox" style="display:none;">
 
+<div id="upcomingAlert" class="alert-box" style="display:none;"></div>
+
 <h1>Saved Details</h1>
 
 <div class="table-box">
@@ -43,6 +45,7 @@ const loginBox = document.getElementById('loginBox');
 const dataBox = document.getElementById('dataBox');
 const lmsg = document.getElementById('lmsg');
 const tbl = document.getElementById('tbl');
+const upcomingAlert = document.getElementById('upcomingAlert');
 
 window.login = function () {
   if (u.value === "amitsree.com@gmail.com" && p.value === "alapan@47f") {
@@ -55,6 +58,7 @@ window.login = function () {
 };
 
 async function loadData() {
+
   tbl.innerHTML = `
     <tr>
       <th>Name</th>
@@ -66,32 +70,56 @@ async function loadData() {
       <th>Gotra</th>
       <th>Actions</th>
     </tr>`;
-  
+
+  let upcomingBirthdays = [];
+  let upcomingAnniversaries = [];
+
+  // Tomorrow Date Calculation
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
+  const tomorrow_day = ("0" + tomorrow.getDate()).slice(-2);
+  const tomorrow_month = ("0" + (tomorrow.getMonth() + 1)).slice(-2);
+
   try {
     const snap = await getDocs(collection(db, "birth_details"));
     snap.forEach(d => {
       let x = d.data();
-      
+
+      // --- UPCOMING BIRTHDAY CHECK ---
+      if (x.dob) {
+        const [d, m] = x.dob.split("/");
+        if (d === tomorrow_day && m === tomorrow_month) {
+          upcomingBirthdays.push(x.name);
+        }
+      }
+
+      // --- UPCOMING ANNIVERSARY CHECK ---
+      if (x.anniv) {
+        const [d, m] = x.anniv.split("/");
+        if (d === tomorrow_day && m === tomorrow_month) {
+          upcomingAnniversaries.push(x.name);
+        }
+      }
+
+      // Existing table rows as before (unchanged)
       const encodedName = encodeURIComponent(x.name || "");
-      
       const baseURL = window.location.origin + window.location.pathname.replace('admin.html', 'card.html');
 
-      // বার্থডে কার্ড লিঙ্ক
       const birthdayCardURL_floral = `${baseURL}?type=birthday&cardType=floral&name=${encodedName}`;
       const birthdayCardURL_simple = `${baseURL}?type=birthday&cardType=simple&name=${encodedName}`;
-      
-      // অ্যানিভার্সারি কার্ড লিঙ্ক
+
       const anniversaryCardURL_cake = `${baseURL}?type=anniversary&cardType=cake&name=${encodedName}`;
       const anniversaryCardURL_heart = `${baseURL}?type=anniversary&cardType=heart&name=${encodedName}`;
 
       const whatsappText = encodeURIComponent(`Here is your special wish card from Digdarshan Astro, ${x.name}:`);
-      
+
       const birthdayShareLink_floral = `https://wa.me/?text=${whatsappText}%0A${birthdayCardURL_floral}`;
       const birthdayShareLink_simple = `https://wa.me/?text=${whatsappText}%0A${birthdayCardURL_simple}`;
-      
+
       const anniversaryShareLink_cake = `https://wa.me/?text=${whatsappText}%0A${anniversaryCardURL_cake}`;
       const anniversaryShareLink_heart = `https://wa.me/?text=${whatsappText}%0A${anniversaryCardURL_heart}`;
-
 
       tbl.innerHTML += `
         <tr>
@@ -117,10 +145,25 @@ async function loadData() {
           </td>
         </tr>`;
     });
+
+    // --- SHOW UPCOMING ALERT BOX ---
+    let msg = "";
+    if (upcomingBirthdays.length > 0) {
+      msg += `🎂 Tomorrow Birthday: ${upcomingBirthdays.join(", ")}<br>`;
+    }
+    if (upcomingAnniversaries.length > 0) {
+      msg += `💍 Tomorrow Anniversary: ${upcomingAnniversaries.join(", ")}`;
+    }
+
+    if (msg !== "") {
+      upcomingAlert.innerHTML = msg;
+      upcomingAlert.style.display = "block";
+    }
+
   } catch (error) {
-    console.error("ডেটা লোড করার সময় ত্রুটি: ", error);
+    console.error("Error loading data: ", error);
     dataBox.style.display = "block"; 
-    tbl.innerHTML += `<tr><td colspan="8" style="color:red;">Error loading data! Please check Firebase Security Rules.</td></tr>`;
+    tbl.innerHTML += `<tr><td colspan="8" style="color:red;">Error loading data! Check Firebase Rules.</td></tr>`;
   }
 }
 </script>
