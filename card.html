@@ -12,7 +12,7 @@
       <div class="colored-frame"> 
           <div class="card-content">
               <div class="left-section">
-                  <img id="cardImage" src="">
+                  <img id="cardImage" src="/mnt/data/Screenshot 2025-11-19 103845.png" alt="card image">
               </div>
               <div class="right-section">
                   <div class="header-text" id="headerTxt"></div>
@@ -40,11 +40,12 @@ const headerTxtElement = document.getElementById("headerTxt");
 const msgTxtElement = document.getElementById("msgTxt");
 const footerTxtElement = document.getElementById("footerTxt");
 
+let currentTheme = null;
 let imageURL = "";
 let headerText = "";
 let discountText = "";
 
-// themes (png)
+// themes
 const themes = {
   'birthday_floral': { img: 'birthday66.png', borderColor: '#8A2BE2', headerColor: '#A377D6', discount: "a special birthday discount on a birth chart reading & Gemstone!" },
   'birthday_simple': { img: 'birthday77.png', borderColor: '#FFCC00', headerColor: '#FF8C00', discount: "a special birthday discount on a birth chart reading & Gemstone!" },
@@ -52,24 +53,19 @@ const themes = {
   'anniversary_heart': { img: 'anniversary99.png', borderColor: '#8B0000', headerColor: '#DC3545', discount: "a special anniversary discount on a birth chart reading & Gemstone!" }
 };
 
+function ordinal(n) {
+  const s = ["th","st","nd","rd"];
+  const v = n % 100;
+  return n + (s[(v-20)%10] || s[v] || s[0]);
+}
+
 if (type === "birthday") {
   currentTheme = cardType === 'floral' ? themes.birthday_floral : themes.birthday_simple;
-  if (age && age > 0) {
-    // ordinal suffix for nicer text (1st, 2nd, 3rd, 4th...)
-    function ordinal(n) {
-      const s = ["th","st","nd","rd"];
-      const v = n%100;
-      return n + (s[(v-20)%10] || s[v] || s[0]);
-    }
-    headerText = `Happy ${ordinal(age)} Birthday, ${name}! 🎉`;
-  } else {
-    headerText = `Happy Birthday, ${name}! 🎉`;
-  }
+  if (age && age > 0) headerText = `Happy ${ordinal(age)} Birthday, ${decodeURIComponent(name)}! 🎉`;
+  else headerText = `Happy Birthday, ${decodeURIComponent(name)}! 🎉`;
 } else if (type === "anniversary") {
   currentTheme = cardType === 'cake' ? themes.anniversary_cake : themes.anniversary_heart;
-  headerText = `Happy Anniversary, ${name}! 🎉`;
-} else {
-  currentTheme = null;
+  headerText = `Happy Anniversary, ${decodeURIComponent(name)}! 🎉`;
 }
 
 if (currentTheme) {
@@ -79,8 +75,8 @@ if (currentTheme) {
   headerTxtElement.style.color = currentTheme.headerColor;
   headerTxtElement.style.borderColor = currentTheme.headerColor;
 } else {
-  imageURL = "placeholder.png";
-  headerText = `Hello, ${name}!`;
+  imageURL = "/mnt/data/Screenshot 2025-11-19 103845.png";
+  headerText = `Hello, ${decodeURIComponent(name)}!`;
   discountText = "a special discount on a reading!";
   coloredFrameElement.style.borderColor = "#CCCCCC";
   headerTxtElement.style.color = "#333333";
@@ -88,9 +84,7 @@ if (currentTheme) {
   msgTxtElement.innerHTML = `Error: Invalid Card Type.`;
 }
 
-const mainMessage = 
-  `May the stars bring you immense joy and success this year. Start your new personal year ` +
-  `with cosmic guidance from Jyotish Devagya Amitsree. Get ${discountText}`;
+const mainMessage = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get ${discountText}`;
 
 cardImage.src = imageURL;
 headerTxtElement.innerHTML = headerText;
@@ -105,4 +99,3 @@ footerTxtElement.innerHTML =
 
 </body>
 </html>
-
