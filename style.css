@@ -9,14 +9,13 @@ body {
   overflow-x: hidden;
 }
 
-
 /* ============================= */
 /* CONTAINER (Admin Panel Style) */
 /* ============================= */
 
 .container {
   width: 95%;
-  max-width: 1200px;      /* ⭐ Desktop wide table */
+  max-width: 1200px;
   background: #ffffff;
   margin: 25px auto;
   padding: 25px;
@@ -29,8 +28,6 @@ body {
   background-blend-mode: lighten;
 }
 
-
-
 /* ======================== */
 /* HEADING                  */
 /* ======================== */
@@ -40,7 +37,6 @@ h1 {
   color: #d84315;
   margin-bottom: 10px;
 }
-
 
 /* ======================== */
 /* FORM INPUT               */
@@ -62,8 +58,6 @@ label {
   color: #e65100;
 }
 
-
-
 /* ======================== */
 /* LOGIN BUTTON             */
 /* ======================== */
@@ -80,15 +74,13 @@ button {
   cursor: pointer;
 }
 
-
-
 /* ================================ */
 /* TABLE + RESPONSIVE BEHAVIOR     */
 /* ================================ */
 
 .table-box {
   width: 100%;
-  overflow-x: auto;      /* ⭐ Mobile scroll */
+  overflow-x: auto;
 }
 
 table {
@@ -101,7 +93,7 @@ th, td {
   border: 1px solid #ffab76;
   padding: 10px;
   text-align: center;
-  font-size: 0.9em;
+  font-size: 0.95em;
   vertical-align: middle;
   white-space: nowrap;
 }
@@ -121,19 +113,12 @@ th, td {
 .card-btn { background: #ff4500; }
 .whatsapp-btn { background: #25d366; }
 
-
-/* 🔥 INVALID FIELD (Mobile No / DOB Missing) */
+/* INVALID FIELD */
 .invalid {
   background: #ffcccc !important;
 }
 
-
-
-
-
-/* ================================ */
-/* SEARCH BAR CENTER                */
-/* ================================ */
+/* SEARCH BAR CENTER */
 
 #searchBar {
   width: 70%;
@@ -146,11 +131,7 @@ th, td {
   text-align: center;
 }
 
-
-
-/* ================================ */
-/* UPCOMING COUNTER BOX             */
-/* ================================ */
+/* UPCOMING COUNTER BOX */
 
 #counterBox {
   background: #fff3cd;
@@ -163,42 +144,21 @@ th, td {
   border: 1px solid #ffeeba;
 }
 
-
-
-/* ================================ */
-/* SOFT BLINK (Nearest Event)       */
-/* ================================ */
+/* SOFT BLINK */
 
 @keyframes softBlink {
   0% { opacity: 1; }
   50% { opacity: 0.4; }
   100% { opacity: 1; }
 }
+.blink { animation: softBlink 1.5s infinite; }
 
-.blink {
-  animation: softBlink 1.5s infinite;
-}
+/* DELETE ICON */
 
+.delete-btn { cursor: pointer; font-size: 18px; color: red; }
+.delete-btn:hover { color: darkred; }
 
-
-/* ================================ */
-/* DELETE ICON STYLING             */
-/* ================================ */
-
-.delete-btn {
-  cursor: pointer;
-  font-size: 18px;
-  color: red;
-}
-.delete-btn:hover {
-  color: darkred;
-}
-
-
-
-/* ====================== */
-/* CARD PAGE RESPONSIVE   */
-/* ====================== */
+/* CARD PAGE STYLES */
 
 body.card-page {
   background: #EBEBEE;
@@ -215,8 +175,6 @@ body.card-page {
   position: relative;
   box-sizing: border-box;
 }
-
-
 
 /* Outer White Border */
 .card-border {
@@ -280,30 +238,15 @@ body.card-page {
     color: #007bff;
 }
 
-.footer-signature .call-number {
-    font-size: 1.8vmin;
-    color: #555;
-}
+.footer-signature .call-number { font-size: 1.8vmin; color: #555; }
 
-
-/* =============== MOBILE FIX =============== */
+/* MOBILE FIX */
 
 @media (max-width: 600px) {
-  .card-content {
-      grid-template-columns: 1fr;
-      grid-template-rows: 40% 60%;
-  }
-  .header-text {
-      font-size: 4.5vmin;
-  }
-  .main-message {
-      font-size: 3vmin;
-  }
-  .footer-signature {
-      font-size: 2.8vmin;
-  }
-  #searchBar {
-      width: 90%;
-  }
+  .card-content { grid-template-columns: 1fr; grid-template-rows: 40% 60%; }
+  .header-text { font-size: 4.5vmin; }
+  .main-message { font-size: 3vmin; }
+  .footer-signature { font-size: 2.8vmin; }
+  #searchBar { width: 90%; }
 }
 
