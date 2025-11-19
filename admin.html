@@ -27,7 +27,7 @@
 
   <h1>Saved Details</h1>
 
-  <input id="searchBar" placeholder="Search by name, phone or date (DD-MM / DD/MM / YYYY-MM-DD / DDMM)…">
+  <input id="searchBar" placeholder="Search by name, phone or date (DD-MM / DD/MM / YYYY-MM-DD / DDMM)">
 
   <div class="table-box">
     <table id="tbl"></table>
@@ -59,67 +59,64 @@ window.login = function () {
   }
 };
 
-// DATE PARSER SUPPORT DD-MM-YYYY, DD/MM/YYYY, YYYY-MM-DD
+// parse flexible date formats: DD-MM-YYYY, DD/MM/YYYY, YYYY-MM-DD
 function parseDateFlexible(s) {
-  if (!s) return null;
+  if (!s || typeof s !== 'string') return null;
   s = s.trim();
-
   const iso = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (iso) return { day: Number(iso[3]), month: Number(iso[2]), year: Number(iso[1]) };
-
   const dash = s.match(/^(\d{2})-(\d{2})-(\d{4})$/);
   if (dash) return { day: Number(dash[1]), month: Number(dash[2]), year: Number(dash[3]) };
-
   const slash = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
   if (slash) return { day: Number(slash[1]), month: Number(slash[2]), year: Number(slash[3]) };
-
+  // permissive fallback
   const sep = s.includes('-') ? '-' : (s.includes('/') ? '/' : null);
   if (sep) {
-    const parts = s.split(sep);
+    const parts = s.split(sep).map(p => p.trim());
     if (parts.length === 3) {
-      if (parts[0].length === 4) {
-        return { day: Number(parts[2]), month: Number(parts[1]), year: Number(parts[0]) };
-      }
+      if (parts[0].length === 4) return { day: Number(parts[2]), month: Number(parts[1]), year: Number(parts[0]) };
       return { day: Number(parts[0]), month: Number(parts[1]), year: Number(parts[2]) };
     }
   }
-
   return null;
 }
 
-function pad(n){ return n<10?'0'+n:n; }
-function formatDateDDMMYYYY(s) {
-  const p = parseDateFlexible(s);
+function pad(n){ return n < 10 ? '0'+n : ''+n; }
+function formatDateDDMMYYYY(dateStr) {
+  const p = parseDateFlexible(dateStr);
   if (!p) return null;
   return `${pad(p.day)}-${pad(p.month)}-${p.year}`;
 }
 
+// normalize phone -> +91 10digits or null
 function normalizePhone(raw) {
   if (!raw) return null;
-  const d = raw.replace(/\D/g,'');
-  if (d.length === 10) return '+91 ' + d;
-  if (d.length === 11 && d.startsWith('0')) return '+91 ' + d.slice(1);
-  if (d.length === 12 && d.startsWith('91')) return '+91 ' + d.slice(2);
+  const digits = raw.toString().replace(/\D/g,'');
+  if (digits.length === 10) return '+91 ' + digits;
+  if (digits.length === 11 && digits.startsWith('0')) return '+91 ' + digits.slice(1);
+  if (digits.length === 12 && digits.startsWith('91')) return '+91 ' + digits.slice(2);
   return null;
 }
 
-function calculateAgeFromString(s) {
-  const p = parseDateFlexible(s);
-  if (!p) return null;
+function calculateAgeFromString(dobStr) {
+  const p = parseDateFlexible(dobStr);
+  if (!p || !p.year) return null;
   const today = new Date();
   let age = today.getFullYear() - p.year;
-  if ((today.getMonth()+1) < p.month || ((today.getMonth()+1) === p.month && today.getDate() < p.day)) age--;
+  const thisMonth = today.getMonth() + 1;
+  const thisDay = today.getDate();
+  if (thisMonth < p.month || (thisMonth === p.month && thisDay < p.day)) age--;
   return age >= 0 ? age : null;
 }
 
-function daysUntilNextEvent(s) {
-  const p = parseDateFlexible(s);
+function daysUntilNextEvent(dateStr) {
+  const p = parseDateFlexible(dateStr);
   if (!p) return 99999;
   const today = new Date();
-  const todayTime = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+  const todayMid = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
   let ev = new Date(today.getFullYear(), p.month-1, p.day).getTime();
-  if (ev < todayTime) ev = new Date(today.getFullYear()+1, p.month-1, p.day).getTime();
-  return Math.ceil((ev - todayTime)/(1000*60*60*24));
+  if (ev < todayMid) ev = new Date(today.getFullYear()+1, p.month-1, p.day).getTime();
+  return Math.ceil((ev - todayMid) / (1000*60*60*24));
 }
 
 async function loadData() {
@@ -138,70 +135,64 @@ async function loadData() {
     </tr>`;
 
   let allData = [];
-
   try {
     const snap = await getDocs(collection(db, "birth_details"));
-    snap.forEach(d => {
-      let x = d.data();
-      x.id = d.id;
-
+    snap.forEach(docItem => {
+      const x = docItem.data();
+      x.id = docItem.id;
       x._phoneFormatted = normalizePhone(x.phone);
-      x._dobFormatted = formatDateDDMMYYYY(x.dob);
-      x._annivFormatted = formatDateDDMMYYYY(x.anniv);
-
       x._age = calculateAgeFromString(x.dob);
-
-      const dn1 = daysUntilNextEvent(x.dob);
-      const dn2 = daysUntilNextEvent(x.anniv);
-      x._daysToNext = Math.min(dn1, dn2);
-
+      x._dobFormatted = formatDateDDMMYYYY(x.dob) || x.dob || '-';
+      x._annivFormatted = formatDateDDMMYYYY(x.anniv) || x.anniv || '-';
+      x._daysToNext = Math.min(daysUntilNextEvent(x.dob), daysUntilNextEvent(x.anniv));
       allData.push(x);
     });
-  } catch (e) {
-    tbl.innerHTML += `<tr><td colspan="10" style="color:red;">Error loading data</td></tr>`;
+  } catch (err) {
+    console.error(err);
+    tbl.innerHTML += `<tr><td colspan="10" style="color:red">Error loading data. See console.</td></tr>`;
     return;
   }
 
-  allData.sort((a,b)=> (a._daysToNext||99999) - (b._daysToNext||99999));
+  allData.sort((a,b) => (a._daysToNext||99999) - (b._daysToNext||99999));
 
-  const thisMonth = new Date().getMonth()+1;
-  let bdCount=0, anCount=0;
-  allData.forEach(x=>{
-    let p1=parseDateFlexible(x.dob);
-    let p2=parseDateFlexible(x.anniv);
-    if (p1 && p1.month===thisMonth) bdCount++;
-    if (p2 && p2.month===thisMonth) anCount++;
+  // counters
+  const thisMonth = new Date().getMonth() + 1;
+  let bdCount = 0, anCount = 0;
+  allData.forEach(x => {
+    const pd = parseDateFlexible(x.dob);
+    const pa = parseDateFlexible(x.anniv);
+    if (pd && pd.month === thisMonth) bdCount++;
+    if (pa && pa.month === thisMonth) anCount++;
   });
-  counterBox.innerHTML = `🎂 Birthdays This Month: ${bdCount} &nbsp; 💍 Anniversaries This Month: ${anCount}`;
+  counterBox.innerHTML = `🎂 Birthdays This Month: ${bdCount} &nbsp;&nbsp; 💍 Anniversaries This Month: ${anCount}`;
 
-  const tomorrowUpcoming = allData.filter(x=> x._daysToNext===1);
-  if (tomorrowUpcoming.length){
+  // upcoming tomorrow
+  const upcomingTomorrow = allData.filter(x => x._daysToNext === 1);
+  if (upcomingTomorrow.length) {
     let msg = "Tomorrow:<br>";
-    tomorrowUpcoming.forEach(x => msg += `⭐ ${x.name}<br>`);
-    upcomingAlert.style.display='block';
+    upcomingTomorrow.forEach(x => msg += `⭐ ${x.name}<br>`);
     upcomingAlert.innerHTML = msg;
-  } else upcomingAlert.style.display='none';
+    upcomingAlert.style.display = 'block';
+  } else upcomingAlert.style.display = 'none';
 
   renderTable(allData);
 
-  searchBar.onkeyup = ()=>{
-    const key = searchBar.value.trim().toLowerCase();
-    if (!key) return renderTable(allData);
-
-    const short = key.replace(/\D/g,'');
-    const filtered = allData.filter(x=>{
-      const nm = (x.name||'').toLowerCase().includes(key);
-      const ph = (x._phoneFormatted||'').toLowerCase().includes(key);
-      const d1 = (x._dobFormatted||'').toLowerCase().includes(key);
-      const d2 = (x._annivFormatted||'').toLowerCase().includes(key);
-
-      const fr1 = (x._dobFormatted||'').replace(/\D/g,'').slice(0,4);
-      const fr2 = (x._annivFormatted||'').replace(/\D/g,'').slice(0,4);
-      const shortMatch = short && (fr1.startsWith(short) || fr2.startsWith(short));
-
-      return nm || ph || d1 || d2 || shortMatch;
+  // search
+  searchBar.onkeyup = () => {
+    const keyRaw = searchBar.value.trim().toLowerCase();
+    const short = keyRaw.replace(/\D/g,''); // numeric compact like 2411
+    if (!keyRaw) return renderTable(allData);
+    const filtered = allData.filter(x => {
+      const nameMatch = (x.name||'').toLowerCase().includes(keyRaw);
+      const phoneMatch = (x._phoneFormatted||'').toLowerCase().includes(keyRaw) || (x.phone||'').toLowerCase().includes(keyRaw);
+      const dobMatch = (x._dobFormatted||'').toLowerCase().includes(keyRaw) || (x.dob||'').toLowerCase().includes(keyRaw);
+      const annMatch = (x._annivFormatted||'').toLowerCase().includes(keyRaw) || (x.anniv||'').toLowerCase().includes(keyRaw);
+      // short numeric matches like 2411 match day-month fragments
+      const fragDob = (x._dobFormatted||'').replace(/\D/g,'').slice(0,4);
+      const fragAnn = (x._annivFormatted||'').replace(/\D/g,'').slice(0,4);
+      const shortMatch = short && (fragDob.startsWith(short) || fragAnn.startsWith(short));
+      return nameMatch || phoneMatch || dobMatch || annMatch || shortMatch;
     });
-
     renderTable(filtered);
   };
 }
@@ -220,84 +211,72 @@ function renderTable(list) {
       <th>Delete</th>
       <th>Actions</th>
     </tr>`;
+  const baseURL = window.location.origin + window.location.pathname.replace('admin.html','card.html');
 
-  const baseURL = window.location.origin + window.location.pathname.replace("admin.html","card.html");
+  list.forEach(x => {
+    const invalidMobile = !x._phoneFormatted;
+    const invalidDOB = !parseDateFlexible(x.dob);
+    const blinkClass = (x._daysToNext === 0 || x._daysToNext === 1) ? 'blink' : '';
 
-  list.forEach(x=>{
-    const blinkClass = (x._daysToNext<=1) ? "blink" : "";
-    const encName = encodeURIComponent(x.name||"");
-
-    const ageParam = x._age ? `&age=${x._age}` : "";
+    const encName = encodeURIComponent(x.name || '');
+    const ageParam = x._age ? `&age=${x._age}` : '';
 
     const bFloral = `${baseURL}?type=birthday&cardType=floral&name=${encName}${ageParam}`;
     const bSimple = `${baseURL}?type=birthday&cardType=simple&name=${encName}${ageParam}`;
-    const bModern = `${baseURL}?type=birthday&cardType=modern&name=${encName}${ageParam}`;
-
     const aCake = `${baseURL}?type=anniversary&cardType=cake&name=${encName}`;
     const aHeart = `${baseURL}?type=anniversary&cardType=heart&name=${encName}`;
-    const aModern = `${baseURL}?type=anniversary&cardType=modern&name=${encName}`;
 
     const waText = encodeURIComponent(`Best wishes from Digdarshan Astro to ${x.name}`);
-
     const waBFloral = `https://wa.me/?text=${waText}%0A${encodeURIComponent(bFloral)}`;
     const waBSimple = `https://wa.me/?text=${waText}%0A${encodeURIComponent(bSimple)}`;
-    const waBModern = `https://wa.me/?text=${waText}%0A${encodeURIComponent(bModern)}`;
-
     const waACake = `https://wa.me/?text=${waText}%0A${encodeURIComponent(aCake)}`;
     const waAHeart = `https://wa.me/?text=${waText}%0A${encodeURIComponent(aHeart)}`;
-    const waAModern = `https://wa.me/?text=${waText}%0A${encodeURIComponent(aModern)}`;
 
     tbl.innerHTML += `
       <tr class="${blinkClass}">
-        <td>${x.name||'-'}</td>
-        <td class="${!x._phoneFormatted?'invalid':''}">${x._phoneFormatted || x.phone || '-'}</td>
-        <td>${x._dobFormatted || '-'}</td>
+        <td>${x.name || '-'}</td>
+        <td class="${invalidMobile ? 'invalid' : ''}">${x._phoneFormatted || (x.phone || '-')}</td>
+        <td class="${invalidDOB ? 'invalid' : ''}">${x._dobFormatted || '-'}</td>
         <td>${x._age ?? '-'}</td>
-        <td>${x.time||'-'}</td>
-        <td>${x.place||'-'}</td>
-        <td>${x._annivFormatted||'-'}</td>
-        <td>${x.gotra||'-'}</td>
+        <td>${x.time || '-'}</td>
+        <td>${x.place || '-'}</td>
+        <td>${x._annivFormatted || '-'}</td>
+        <td>${x.gotra || '-'}</td>
 
         <td><span class="delete-btn" onclick="deleteData('${x.id}')">🗑️</span></td>
 
         <td class="actions-cell">
-
+          <!-- Line 1: cards -->
           <div class="action-line">
             <a href="${bFloral}" target="_blank" class="action-btn card-btn">B-Floral</a>
             <a href="${bSimple}" target="_blank" class="action-btn card-btn">B-Simple</a>
-            <a href="${bModern}" target="_blank" class="action-btn card-btn">B-Modern</a>
-
             <a href="${aCake}" target="_blank" class="action-btn card-btn">A-Cake</a>
             <a href="${aHeart}" target="_blank" class="action-btn card-btn">A-Heart</a>
-            <a href="${aModern}" target="_blank" class="action-btn card-btn">A-Modern</a>
           </div>
-
-          <div class="action-line" style="margin-top:5px;">
+          <!-- Line 2: whatsapp -->
+          <div class="action-line" style="margin-top:6px;">
             <a href="${waBFloral}" target="_blank" class="action-btn whatsapp-btn">WA B-F</a>
             <a href="${waBSimple}" target="_blank" class="action-btn whatsapp-btn">WA B-S</a>
-            <a href="${waBModern}" target="_blank" class="action-btn whatsapp-btn">WA B-M</a>
-
             <a href="${waACake}" target="_blank" class="action-btn whatsapp-btn">WA A-C</a>
             <a href="${waAHeart}" target="_blank" class="action-btn whatsapp-btn">WA A-H</a>
-            <a href="${waAModern}" target="_blank" class="action-btn whatsapp-btn">WA A-M</a>
           </div>
-
         </td>
       </tr>`;
   });
 }
 
 window.deleteData = async function(id) {
-  if (!confirm("Delete permanently?")) return;
+  if (!confirm("Are you sure you want to delete this entry?")) return;
   try {
-    await deleteDoc(doc(db,"birth_details",id));
-    alert("Deleted successfully");
+    await deleteDoc(doc(db, "birth_details", id));
+    alert("Deleted successfully.");
     loadData();
-  } catch (e) {
-    alert("Delete failed");
+  } catch (err) {
+    console.error(err);
+    alert("Delete failed. Check console.");
   }
 };
-</script>
 
+</script>
 </body>
 </html>
