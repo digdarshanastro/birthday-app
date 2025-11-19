@@ -3,11 +3,62 @@
 <head>
 <title>Admin Panel</title>
 <link rel="stylesheet" href="style.css">
+
+<style>
+/* 🔍 Search Bar Center */
+#searchBar {
+  width: 70%;
+  padding: 10px;
+  margin: 10px auto 20px auto;
+  display: block;
+  border: 1px solid #ff9800;
+  border-radius: 6px;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* 🟡 Upcoming Counter */
+#counterBox {
+  background: #fff3cd;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+/* 🔥 Soft Blink */
+@keyframes softBlink {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+.blink {
+  animation: softBlink 1.5s infinite;
+}
+
+/* ❌ Invalid Field Highlighting */
+.invalid {
+  background: #ffcccc !important;
+}
+
+/* 🗑️ Delete Button Style */
+.delete-btn {
+  cursor: pointer;
+  font-size: 18px;
+  color: red;
+}
+.delete-btn:hover {
+  color: darkred;
+}
+
+</style>
 </head>
 <body>
 
 <div class="container" id="loginBox">
-
 <h1>Admin Login</h1>
 
 <label>Username</label>
@@ -18,25 +69,30 @@
 
 <button onclick="login()">Login</button>
 <p id="lmsg" class="error"></p>
-
 </div>
 
+
+
+<!-- =================== DATA BOX =================== -->
 <div class="container" id="dataBox" style="display:none;">
 
+<div id="counterBox"></div>
 <div id="upcomingAlert" class="alert-box" style="display:none;"></div>
 
 <h1>Saved Details</h1>
 
+<input id="searchBar" placeholder="Search by name or date (DD/MM)...">
+
 <div class="table-box">
-<table id="tbl">
-  </table>
+<table id="tbl"></table>
 </div>
 
 </div>
 
+<!-- ================================================= -->
 <script type="module">
 import { db } from "./firebase-config.js";
-import { collection, getDocs } 
+import { collection, getDocs, deleteDoc, doc } 
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const u = document.getElementById('u');
@@ -46,6 +102,8 @@ const dataBox = document.getElementById('dataBox');
 const lmsg = document.getElementById('lmsg');
 const tbl = document.getElementById('tbl');
 const upcomingAlert = document.getElementById('upcomingAlert');
+const counterBox = document.getElementById('counterBox');
+const searchBar = document.getElementById('searchBar');
 
 window.login = function () {
   if (u.value === "amitsree.com@gmail.com" && p.value === "alapan@47f") {
@@ -57,116 +115,181 @@ window.login = function () {
   }
 };
 
-async function loadData() {
 
+function calculateAge(dob) {
+  if (!dob || !dob.includes("/")) return null;
+
+  const [day, month, year] = dob.split("/").map(Number);
+  if (!day || !month || !year) return null;
+
+  const today = new Date();
+  let age = today.getFullYear() - year;
+
+  if (today.getMonth() + 1 < month || 
+     (today.getMonth() + 1 === month && today.getDate() < day)) {
+    age--;
+  }
+  return age;
+}
+
+
+
+function daysUntilNextEvent(dateStr) {
+  if (!dateStr || !dateStr.includes("/")) return 9999;
+
+  const [d, m] = dateStr.split("/").map(Number);
+  const today = new Date();
+  const event = new Date(today.getFullYear(), m - 1, d);
+
+  if (event < today) event.setFullYear(today.getFullYear() + 1);
+
+  const diff = Math.ceil((event - today) / (1000 * 60 * 60 * 24));
+  return diff;
+}
+
+
+
+async function loadData() {
   tbl.innerHTML = `
     <tr>
       <th>Name</th>
-      <th>Phone</th>
+      <th>Mobile No.</th>
       <th>DOB</th>
+      <th>Age</th>
       <th>TOB</th>
       <th>Place</th>
       <th>Anniv</th>
       <th>Gotra</th>
+      <th>Delete</th>
       <th>Actions</th>
     </tr>`;
 
-  let upcomingBirthdays = [];
-  let upcomingAnniversaries = [];
+  let allData = [];
 
-  // Tomorrow Date Calculation
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
+  const snap = await getDocs(collection(db, "birth_details"));
+  snap.forEach(docItem => {
+    let x = docItem.data();
+    x.id = docItem.id;
 
-  const tomorrow_day = ("0" + tomorrow.getDate()).slice(-2);
-  const tomorrow_month = ("0" + (tomorrow.getMonth() + 1)).slice(-2);
+    x.age = calculateAge(x.dob);
+    x.daysToNext = Math.min(daysUntilNextEvent(x.dob), daysUntilNextEvent(x.anniv));
 
-  try {
-    const snap = await getDocs(collection(db, "birth_details"));
-    snap.forEach(d => {
-      let x = d.data();
+    allData.push(x);
+  });
 
-      // --- UPCOMING BIRTHDAY CHECK ---
-      if (x.dob) {
-        const [d, m] = x.dob.split("/");
-        if (d === tomorrow_day && m === tomorrow_month) {
-          upcomingBirthdays.push(x.name);
-        }
-      }
 
-      // --- UPCOMING ANNIVERSARY CHECK ---
-      if (x.anniv) {
-        const [d, m] = x.anniv.split("/");
-        if (d === tomorrow_day && m === tomorrow_month) {
-          upcomingAnniversaries.push(x.name);
-        }
-      }
+  // ===================== SORT by nearest event =====================
+  allData.sort((a, b) => a.daysToNext - b.daysToNext);
 
-      // Existing table rows as before (unchanged)
-      const encodedName = encodeURIComponent(x.name || "");
-      const baseURL = window.location.origin + window.location.pathname.replace('admin.html', 'card.html');
+  // ===================== UPCOMING COUNTERS =====================
+  const thisMonth = new Date().getMonth() + 1;
 
-      const birthdayCardURL_floral = `${baseURL}?type=birthday&cardType=floral&name=${encodedName}`;
-      const birthdayCardURL_simple = `${baseURL}?type=birthday&cardType=simple&name=${encodedName}`;
+  let bdCount = 0, anCount = 0;
 
-      const anniversaryCardURL_cake = `${baseURL}?type=anniversary&cardType=cake&name=${encodedName}`;
-      const anniversaryCardURL_heart = `${baseURL}?type=anniversary&cardType=heart&name=${encodedName}`;
+  allData.forEach(x => {
+    if (x.dob && Number(x.dob.split("/")[1]) === thisMonth) bdCount++;
+    if (x.anniv && Number(x.anniv.split("/")[1]) === thisMonth) anCount++;
+  });
 
-      const whatsappText = encodeURIComponent(`Here is your special wish card from Digdarshan Astro, ${x.name}:`);
+  counterBox.innerHTML = `
+    🎂 Birthdays This Month: ${bdCount} &nbsp;&nbsp;
+    💍 Anniversaries This Month: ${anCount}
+  `;
 
-      const birthdayShareLink_floral = `https://wa.me/?text=${whatsappText}%0A${birthdayCardURL_floral}`;
-      const birthdayShareLink_simple = `https://wa.me/?text=${whatsappText}%0A${birthdayCardURL_simple}`;
+  // ===================== SHOW UPCOMING ALERT =====================
+  let upcoming = allData.filter(x => x.daysToNext === 1);
 
-      const anniversaryShareLink_cake = `https://wa.me/?text=${whatsappText}%0A${anniversaryCardURL_cake}`;
-      const anniversaryShareLink_heart = `https://wa.me/?text=${whatsappText}%0A${anniversaryCardURL_heart}`;
+  if (upcoming.length > 0) {
+    let msg = "Upcoming Tomorrow:<br>";
+    upcoming.forEach(x => msg += `⭐ ${x.name}<br>`);
 
-      tbl.innerHTML += `
-        <tr>
-          <td>${x.name || "-"}</td>
-          <td>${x.phone || "-"}</td>
-          <td>${x.dob || "-"}</td>
-          <td>${x.time || "-"}</td> 
-          <td>${x.place || "-"}</td> 
-          <td>${x.anniv || "-"}</td>
-          <td>${x.gotra || "-"}</td>
-          <td>
-            <a href="${birthdayCardURL_floral}" target="_blank" class="action-btn card-btn">B-Floral</a>
-            <a href="${birthdayCardURL_simple}" target="_blank" class="action-btn card-btn">B-Simple</a>
-            <br>
-            <a href="${anniversaryCardURL_cake}" target="_blank" class="action-btn card-btn">A-Cake</a>
-            <a href="${anniversaryCardURL_heart}" target="_blank" class="action-btn card-btn">A-Heart</a>
-            <br>
-            <a href="${birthdayShareLink_floral}" target="_blank" class="action-btn whatsapp-btn">B-WA (F)</a>
-            <a href="${birthdayShareLink_simple}" target="_blank" class="action-btn whatsapp-btn">B-WA (S)</a>
-            <br>
-            <a href="${anniversaryShareLink_cake}" target="_blank" class="action-btn whatsapp-btn">A-WA (C)</a>
-            <a href="${anniversaryShareLink_heart}" target="_blank" class="action-btn whatsapp-btn">A-WA (H)</a>
-          </td>
-        </tr>`;
-    });
-
-    // --- SHOW UPCOMING ALERT BOX ---
-    let msg = "";
-    if (upcomingBirthdays.length > 0) {
-      msg += `🎂 Tomorrow Birthday: ${upcomingBirthdays.join(", ")}<br>`;
-    }
-    if (upcomingAnniversaries.length > 0) {
-      msg += `💍 Tomorrow Anniversary: ${upcomingAnniversaries.join(", ")}`;
-    }
-
-    if (msg !== "") {
-      upcomingAlert.innerHTML = msg;
-      upcomingAlert.style.display = "block";
-    }
-
-  } catch (error) {
-    console.error("Error loading data: ", error);
-    dataBox.style.display = "block"; 
-    tbl.innerHTML += `<tr><td colspan="8" style="color:red;">Error loading data! Check Firebase Rules.</td></tr>`;
+    upcomingAlert.innerHTML = msg;
+    upcomingAlert.style.display = "block";
   }
-}
-</script>
 
+  // ===================== TABLE RENDER =====================
+  renderTable(allData);
+
+  // ===================== SEARCH LISTENER =====================
+  searchBar.onkeyup = () => {
+    const key = searchBar.value.toLowerCase();
+    const filtered = allData.filter(x =>
+      x.name.toLowerCase().includes(key) ||
+      (x.dob && x.dob.includes(key)) ||
+      (x.anniv && x.anniv.includes(key))
+    );
+    renderTable(filtered);
+  };
+}
+
+
+
+function renderTable(list) {
+  tbl.innerHTML = `
+    <tr>
+      <th>Name</th>
+      <th>Mobile No.</th>
+      <th>DOB</th>
+      <th>Age</th>
+      <th>TOB</th>
+      <th>Place</th>
+      <th>Anniv</th>
+      <th>Gotra</th>
+      <th>Delete</th>
+      <th>Actions</th>
+    </tr>`;
+
+  const today = new Date();
+
+  list.forEach(x => {
+
+    const isInvalidMobile = !x.phone || x.phone.trim() === "";
+    const isInvalidDOB = !x.dob || !x.dob.includes("/");
+
+    const blinkClass = x.daysToNext === 0 || x.daysToNext === 1 ? "blink" : "";
+
+    const nameEncoded = encodeURIComponent(x.name);
+    const ageEncoded = x.age ? `&age=${x.age}` : "";
+
+    const baseURL = window.location.origin + window.location.pathname.replace("admin.html","card.html");
+
+    const birthdayURL = `${baseURL}?type=birthday&cardType=simple&name=${nameEncoded}${ageEncoded}`;
+    const anniversaryURL = `${baseURL}?type=anniversary&cardType=heart&name=${nameEncoded}`;
+
+    tbl.innerHTML += `
+      <tr class="${blinkClass}">
+        <td>${x.name}</td>
+        <td class="${isInvalidMobile ? 'invalid' : ''}">${x.phone || "-"}</td>
+        <td class="${isInvalidDOB ? 'invalid' : ''}">${x.dob || "-"}</td>
+        <td>${x.age ?? "-"}</td>
+        <td>${x.time || "-"}</td>
+        <td>${x.place || "-"}</td>
+        <td>${x.anniv || "-"}</td>
+        <td>${x.gotra || "-"}</td>
+
+        <td>
+          <span class="delete-btn" onclick="deleteData('${x.id}')">🗑️</span>
+        </td>
+
+        <td>
+          <a href="${birthdayURL}" target="_blank" class="action-btn card-btn">B-Day</a>
+          <a href="${anniversaryURL}" target="_blank" class="action-btn whatsapp-btn">Anniv</a>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+
+
+window.deleteData = async function(id) {
+  if (!confirm("Are you sure you want to delete this entry?")) return;
+
+  await deleteDoc(doc(db, "birth_details", id));
+  alert("Deleted Successfully!");
+  loadData();
+};
+
+</script>
 </body>
 </html>
