@@ -26,11 +26,14 @@
 
 <script>
 const url = new URLSearchParams(window.location.search);
+
 const type = url.get("type"); 
 const cardType = url.get("cardType"); 
 let name = url.get("name");
+let age = url.get("age");  // ⭐ NEW — Age parameter added
 
 name = name ? decodeURIComponent(name) : "[Client's Name]";
+age = age ? Number(age) : null;
 
 const coloredFrameElement = document.querySelector(".colored-frame"); 
 const cardImage = document.getElementById("cardImage");
@@ -42,32 +45,28 @@ let imageURL = "";
 let headerText = "";
 let discountText = "";
 
-// --- কার্ড থিম এবং কালার কম্বিনেশন (সবগুলি এখন .png) ---
+// --- CARD THEMES (.png) ---
 const themes = {
-    // Birthday Card 1: ফুলের ডিজাইন (বেগুনি থিম)
     'birthday_floral': { 
-        img: 'birthday66.png', // ✅ PNG
+        img: 'birthday66.png',
         borderColor: '#8A2BE2', 
         headerColor: '#A377D6', 
         discount: "a special birthday discount on a birth chart reading & Gemstone!"
     },
-    // Birthday Card 2: সাধারণ ডিজাইন (হলুদ/কমলা থিম)
     'birthday_simple': { 
-        img: 'birthday77.png', // ✅ PNG
+        img: 'birthday77.png',
         borderColor: '#FFCC00', 
         headerColor: '#FF8C00', 
         discount: "a special birthday discount on a birth chart reading & Gemstone!"
     },
-    // Anniversary Card 1: কেক ডিজাইন (রোজ থিম)
     'anniversary_cake': { 
-        img: 'anniversary88.png', // ✅ PNG
+        img: 'anniversary88.png',
         borderColor: '#C2185B', 
         headerColor: '#E91E63', 
         discount: "a special anniversary discount on a birth chart reading & Gemstone!"
     },
-    // Anniversary Card 2: হার্ট ডিজাইন (লাল থিম)
     'anniversary_heart': { 
-        img: 'anniversary99.png', // ✅ PNG
+        img: 'anniversary99.png',
         borderColor: '#8B0000', 
         headerColor: '#DC3545', 
         discount: "a special anniversary discount on a birth chart reading & Gemstone!"
@@ -76,25 +75,32 @@ const themes = {
 
 let currentTheme = null;
 
+// ----------------------
+// ⭐ HEADER TEXT LOGIC
+// ----------------------
 if (type === "birthday") {
     currentTheme = cardType === 'floral' ? themes.birthday_floral : themes.birthday_simple;
-    headerText = `Happy Birthday! ${name} 🎉`;
+
+    if (age && age > 0) {
+        headerText = `Happy ${age}th Birthday, ${name}! 🎉`;
+    } else {
+        headerText = `Happy Birthday, ${name}! 🎉`;
+    }
+
 } else if (type === "anniversary") {
     currentTheme = cardType === 'cake' ? themes.anniversary_cake : themes.anniversary_heart;
-    headerText = `Happy Anniversary! ${name} 🎉`;
+    headerText = `Happy Anniversary, ${name}! 🎉`;
 }
 
 if (currentTheme) {
     imageURL = currentTheme.img;
     discountText = currentTheme.discount;
     
-    // স্টাইলিশ বর্ডারের কালার সেট করা
     coloredFrameElement.style.borderColor = currentTheme.borderColor;
     headerTxtElement.style.color = currentTheme.headerColor;
-    headerTxtElement.style.borderColor = currentTheme.headerColor; 
+    headerTxtElement.style.borderColor = currentTheme.headerColor;
 
 } else {
-    // ফলব্যাক
     imageURL = "placeholder.png"; 
     headerText = `Hello, ${name}!`;
     discountText = "a special discount on a reading!";
@@ -104,17 +110,20 @@ if (currentTheme) {
     msgTxtElement.innerHTML = `Error: Invalid Card Type.`;
 }
 
+// ---------------------
+// Main Message (unchanged)
+// ---------------------
 const mainMessage = 
     `May the stars bring you immense joy and success this year. Start your new personal year ` +
     `with cosmic guidance from Jyotish Devagya Amitsree. Get ${discountText}`;
 
-// ইমেজ এবং টেক্সট সেট করা
+// SET DATA
 cardImage.src = imageURL;
 headerTxtElement.innerHTML = headerText;
 msgTxtElement.innerHTML = mainMessage;
 
 
-// ফুটার টেক্সট
+// FOOTER TEXT
 footerTxtElement.innerHTML =
   `With Best Wishes from<br>` +
   `<span class="company-name">Digdarshan Astro</span><br>` +
