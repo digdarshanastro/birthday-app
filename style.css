@@ -1,7 +1,4 @@
-/* ============================ */
-/* GLOBAL RESET + BACKGROUND    */
-/* ============================ */
-
+/* GLOBAL */
 body {
   margin: 0;
   background: #fff8ef;
@@ -9,10 +6,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ============================= */
-/* CONTAINER (Admin Panel Style) */
-/* ============================= */
-
+/* Container */
 .container {
   width: 95%;
   max-width: 1200px;
@@ -20,7 +14,7 @@ body {
   margin: 25px auto;
   padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  box-shadow: 0 0 12px rgba(0,0,0,0.08);
   background-image: url("rashichakra 000.jpg");
   background-size: 95%;
   background-repeat: no-repeat;
@@ -28,225 +22,72 @@ body {
   background-blend-mode: lighten;
 }
 
-/* ======================== */
-/* HEADING                  */
-/* ======================== */
+h1 { text-align:center; color:#d84315; margin-bottom:12px; }
 
-h1 {
-  text-align: center;
-  color: #d84315;
-  margin-bottom: 10px;
-}
+/* Inputs */
+input { width:100%; padding:12px; border:1px solid #ffa366; border-radius:6px; box-sizing:border-box; }
+label { display:block; margin-top:12px; font-weight:bold; color:#e65100; }
 
-/* ======================== */
-/* FORM INPUT               */
-/* ======================== */
+/* Button */
+button { width:100%; background:#ff4500; color:#fff; padding:12px; border-radius:6px; border:none; cursor:pointer; }
 
-input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ffa366;
-  border-radius: 6px;
-  margin-top: 5px;
-  box-sizing: border-box;
-}
+/* Table container */
+.table-box { width:100%; overflow-x:auto; }
 
-label {
-  font-weight: bold;
-  margin-top: 15px;
-  display: block;
-  color: #e65100;
-}
+table { width:100%; border-collapse:collapse; margin-top:15px; }
+th, td { border:1px solid #ffab76; padding:10px; text-align:center; font-size:0.95em; vertical-align:middle; white-space:nowrap; }
 
-/* ======================== */
-/* LOGIN BUTTON             */
-/* ======================== */
+/* Action buttons */
+.action-btn { display:inline-block; padding:6px 8px; margin:2px 4px; font-size:12px; border-radius:6px; text-decoration:none; color:#fff; }
+.card-btn { background:#ff4500; }
+.whatsapp-btn { background:#25d366; }
 
-button {
-  width: 100%;
-  background: #ff4500;
-  border: none;
-  padding: 14px;
-  color: white;
-  font-size: 18px;
-  border-radius: 6px;
-  margin-top: 25px;
-  cursor: pointer;
-}
+/* two-line actions container */
+.actions-cell .action-line { white-space:nowrap; }
 
-/* ================================ */
-/* TABLE + RESPONSIVE BEHAVIOR     */
-/* ================================ */
-
-.table-box {
-  width: 100%;
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-
-th, td {
-  border: 1px solid #ffab76;
-  padding: 10px;
-  text-align: center;
-  font-size: 0.95em;
-  vertical-align: middle;
-  white-space: nowrap;
-}
-
-.action-btn {
-  display: inline-block;
-  padding: 5px 8px;
-  margin: 2px 1px;
-  text-decoration: none;
-  font-size: 11px;
-  border-radius: 4px;
-  color: white;
-  text-align: center;
-  min-width: 40px;
-}
-
-.card-btn { background: #ff4500; }
-.whatsapp-btn { background: #25d366; }
-
-/* INVALID FIELD */
-.invalid {
-  background: #ffcccc !important;
-}
-
-/* SEARCH BAR CENTER */
-
+/* search bar (pill style) */
 #searchBar {
-  width: 70%;
-  padding: 10px;
-  margin: 15px auto;
-  border: 1px solid #ffa366;
-  border-radius: 6px;
-  display: block;
-  font-size: 16px;
-  text-align: center;
+  width:70%; margin:18px auto; display:block;
+  padding:12px 16px; border-radius:30px; border:1px solid #ffb07a;
+  box-shadow:0 4px 14px rgba(255,160,110,0.08); text-align:center; font-size:16px;
+  transition:box-shadow .2s, border-color .2s;
 }
+#searchBar:focus { outline:none; border-color:#ff8c33; box-shadow:0 6px 18px rgba(255,140,50,0.12); }
 
-/* UPCOMING COUNTER BOX */
+/* upcoming counter */
+#counterBox { background:#fff3cd; padding:10px; border-radius:6px; margin-bottom:12px; text-align:center; font-weight:bold; color:#856404; border:1px solid #ffeeba; }
 
-#counterBox {
-  background: #fff3cd;
-  padding: 10px;
-  text-align: center;
-  font-weight: bold;
-  border-radius: 6px;
-  margin-bottom: 12px;
-  color: #856404;
-  border: 1px solid #ffeeba;
+/* invalid */
+.invalid { background:#ffdddd !important; }
+
+/* blink */
+@keyframes softBlink { 0%{opacity:1}50%{opacity:0.45}100%{opacity:1} }
+.blink { animation:softBlink 1.4s infinite; }
+
+/* delete icon */
+.delete-btn { cursor:pointer; font-size:18px; color:#b33; }
+.delete-btn:hover { color:#800; }
+
+/* CARD styles (kept from original with alignment fix) */
+body.card-page { background:#EBEBEE; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+#card { width:95vmin; max-width:900px; aspect-ratio:3/2; box-sizing:border-box; }
+.card-border { width:100%; height:100%; border:10px solid white; border-radius:20px; padding:8px; box-shadow:0 8px 20px rgba(0,0,0,0.25); }
+.colored-frame { width:100%; height:100%; border:5px solid; border-radius:10px; background:#fff; display:flex; justify-content:center; align-items:center; }
+.card-content { width:100%; height:100%; display:grid; grid-template-columns:40% 60%; padding:10px; align-items:center; }
+.left-section { display:flex; justify-content:center; align-items:center; padding:6px; }
+.left-section img { max-width:100%; max-height:100%; object-fit:contain; }
+.right-section { padding:10px 20px 10px 10px; display:flex; flex-direction:column; justify-content:space-around; }
+.header-text { font-size:3.5vmin; font-weight:800; margin-bottom:2vmin; font-style:italic; border-bottom:3px double; padding-bottom:0.5vmin; }
+.main-message { font-size:2.5vmin; line-height:1.45; margin-bottom:3vmin; }
+.footer-signature { text-align:right; font-size:2.2vmin; font-weight:bold; }
+.footer-signature .company-name { font-size:3.2vmin; color:#007bff; }
+.footer-signature .call-number { font-size:1.8vmin; color:#555; }
+
+/* mobile */
+@media (max-width:600px) {
+  .card-content { grid-template-columns:1fr; grid-template-rows:40% 60%; }
+  .header-text { font-size:4.5vmin; }
+  .main-message { font-size:3vmin; }
+  .footer-signature { font-size:2.8vmin; }
+  #searchBar { width:92%; }
 }
-
-/* SOFT BLINK */
-
-@keyframes softBlink {
-  0% { opacity: 1; }
-  50% { opacity: 0.4; }
-  100% { opacity: 1; }
-}
-.blink { animation: softBlink 1.5s infinite; }
-
-/* DELETE ICON */
-
-.delete-btn { cursor: pointer; font-size: 18px; color: red; }
-.delete-btn:hover { color: darkred; }
-
-/* CARD PAGE STYLES */
-
-body.card-page {
-  background: #EBEBEE;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-#card {
-  width: 95vmin;
-  max-width: 900px;
-  aspect-ratio: 3 / 2;
-  position: relative;
-  box-sizing: border-box;
-}
-
-/* Outer White Border */
-.card-border {
-    width: 100%;
-    height: 100%;
-    border: 10px solid white;
-    border-radius: 20px;
-    padding: 8px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
-
-/* Inner Color Border */
-.colored-frame {
-    width: 100%;
-    height: 100%;
-    border: 5px solid;
-    border-radius: 10px;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.card-content {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 40% 60%;
-    padding: 10px;
-}
-
-.left-section img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
-
-.header-text {
-    font-size: 3.5vmin;
-    font-weight: 800;
-    margin-bottom: 2vmin;
-    font-style: italic;
-    border-bottom: 3px double;
-    padding-bottom: 0.5vmin;
-}
-
-.main-message {
-    font-size: 2.5vmin;
-    line-height: 1.5;
-    margin-bottom: 3vmin;
-}
-
-.footer-signature {
-    text-align: right;
-    font-size: 2.2vmin;
-    font-weight: bold;
-}
-
-.footer-signature .company-name {
-    font-size: 3.2vmin;
-    color: #007bff;
-}
-
-.footer-signature .call-number { font-size: 1.8vmin; color: #555; }
-
-/* MOBILE FIX */
-
-@media (max-width: 600px) {
-  .card-content { grid-template-columns: 1fr; grid-template-rows: 40% 60%; }
-  .header-text { font-size: 4.5vmin; }
-  .main-message { font-size: 3vmin; }
-  .footer-signature { font-size: 2.8vmin; }
-  #searchBar { width: 90%; }
-}
-
