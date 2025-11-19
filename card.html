@@ -5,33 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="style.css"> 
 </head>
-<body class="card-page"> 
+<body class="card-page">
 
 <div id="card">
-  <div class="card-border"> 
-      <div class="colored-frame"> 
-          <div class="card-content">
-              <div class="left-section">
-                  <img id="cardImage" src="/mnt/data/Screenshot 2025-11-19 103845.png" alt="card image">
-              </div>
-              <div class="right-section">
-                  <div class="header-text" id="headerTxt"></div>
-                  <div class="main-message" id="msgTxt"></div>
-                  <div class="footer-signature" id="footerTxt"></div>
-              </div>
-          </div>
+  <div class="card-border">
+    <div class="colored-frame">
+      <div class="card-content">
+
+        <div class="left-section">
+          <img id="cardImage" src="">
+        </div>
+
+        <div class="right-section">
+          <div class="header-text" id="headerTxt"></div>
+          <div class="main-message" id="msgTxt"></div>
+          <div class="footer-signature" id="footerTxt"></div>
+        </div>
+
       </div>
+    </div>
   </div>
 </div>
 
 <script>
 const url = new URLSearchParams(window.location.search);
-const type = url.get("type"); 
-const cardType = url.get("cardType"); 
+
+const type = url.get("type");
+const cardType = url.get("cardType");
 let name = url.get("name");
 let age = url.get("age");
 
-name = name ? decodeURIComponent(name) : "[Client's Name]";
+name = name ? decodeURIComponent(name) : "[Client]";
 age = age ? Number(age) : null;
 
 const coloredFrameElement = document.querySelector(".colored-frame"); 
@@ -40,61 +44,82 @@ const headerTxtElement = document.getElementById("headerTxt");
 const msgTxtElement = document.getElementById("msgTxt");
 const footerTxtElement = document.getElementById("footerTxt");
 
-let currentTheme = null;
-let imageURL = "";
-let headerText = "";
-let discountText = "";
+function ordinal(n){
+  const s=["th","st","nd","rd"];
+  const v=n%100;
+  return n+(s[(v-20)%10]||s[v]||s[0]);
+}
 
-// themes
 const themes = {
-  'birthday_floral': { img: 'birthday66.png', borderColor: '#8A2BE2', headerColor: '#A377D6', discount: "a special birthday discount on a birth chart reading & Gemstone!" },
-  'birthday_simple': { img: 'birthday77.png', borderColor: '#FFCC00', headerColor: '#FF8C00', discount: "a special birthday discount on a birth chart reading & Gemstone!" },
-  'anniversary_cake': { img: 'anniversary88.png', borderColor: '#C2185B', headerColor: '#E91E63', discount: "a special anniversary discount on a birth chart reading & Gemstone!" },
-  'anniversary_heart': { img: 'anniversary99.png', borderColor: '#8B0000', headerColor: '#DC3545', discount: "a special anniversary discount on a birth chart reading & Gemstone!" }
+
+  // Old Birthday
+  birthday_floral: { img:'birthday66.png', borderColor:'#8A2BE2', headerColor:'#A377D6', discount:"a special birthday discount on a birth chart reading & Gemstone!" },
+  birthday_simple: { img:'birthday77.png', borderColor:'#FFCC00', headerColor:'#FF8C00', discount:"a special birthday discount on a birth chart reading & Gemstone!" },
+
+  // Old Anniversary
+  anniversary_cake: { img:'anniversary88.png', borderColor:'#C2185B', headerColor:'#E91E63', discount:"a special anniversary discount on a birth chart reading & Gemstone!" },
+  anniversary_heart: { img:'anniversary99.png', borderColor:'#8B0000', headerColor:'#DC3545', discount:"a special anniversary discount on a birth chart reading & Gemstone!" },
+
+  // NEW Modern Birthday
+  modern_birthday: { 
+    img: "images/modern-birthday.png",
+    borderColor: "#6C63FF",
+    headerColor: "#4B47D6",
+    discount: "a special birthday discount on a birth chart reading & Gemstone!"
+  },
+
+  // NEW Modern Anniversary
+  modern_anniversary: { 
+    img: "images/modern-anniversary.png",
+    borderColor: "#FF4081",
+    headerColor: "#D81B60",
+    discount: "a special anniversary discount on a birth chart reading & Gemstone!"
+  }
 };
 
-function ordinal(n) {
-  const s = ["th","st","nd","rd"];
-  const v = n % 100;
-  return n + (s[(v-20)%10] || s[v] || s[0]);
+let currentTheme = null;
+
+// pick theme
+if (type === "birthday") {
+  if (cardType === "floral") currentTheme = themes.birthday_floral;
+  else if (cardType === "simple") currentTheme = themes.birthday_simple;
+  else if (cardType === "modern") currentTheme = themes.modern_birthday;
+} 
+else if (type === "anniversary") {
+  if (cardType === "cake") currentTheme = themes.anniversary_cake;
+  else if (cardType === "heart") currentTheme = themes.anniversary_heart;
+  else if (cardType === "modern") currentTheme = themes.modern_anniversary;
 }
+
+let headerText = "";
 
 if (type === "birthday") {
-  currentTheme = cardType === 'floral' ? themes.birthday_floral : themes.birthday_simple;
-  if (age && age > 0) headerText = `Happy ${ordinal(age)} Birthday, ${decodeURIComponent(name)}! 🎉`;
-  else headerText = `Happy Birthday, ${decodeURIComponent(name)}! 🎉`;
+  headerText = age ? `Happy ${ordinal(age)} Birthday, ${name}! 🎉` 
+                   : `Happy Birthday, ${name}! 🎉`;
 } else if (type === "anniversary") {
-  currentTheme = cardType === 'cake' ? themes.anniversary_cake : themes.anniversary_heart;
-  headerText = `Happy Anniversary, ${decodeURIComponent(name)}! 🎉`;
+  headerText = `Happy Anniversary, ${name}! 🎉`;
 }
 
-if (currentTheme) {
-  imageURL = currentTheme.img;
-  discountText = currentTheme.discount;
+if (!currentTheme) {
+  headerTxtElement.innerText = "Invalid Theme";
+} else {
   coloredFrameElement.style.borderColor = currentTheme.borderColor;
   headerTxtElement.style.color = currentTheme.headerColor;
   headerTxtElement.style.borderColor = currentTheme.headerColor;
-} else {
-  imageURL = "/mnt/data/Screenshot 2025-11-19 103845.png";
-  headerText = `Hello, ${decodeURIComponent(name)}!`;
-  discountText = "a special discount on a reading!";
-  coloredFrameElement.style.borderColor = "#CCCCCC";
-  headerTxtElement.style.color = "#333333";
-  headerTxtElement.style.borderColor = "#333333";
-  msgTxtElement.innerHTML = `Error: Invalid Card Type.`;
+
+  cardImage.src = currentTheme.img;
+  headerTxtElement.innerHTML = headerText;
+
+  msgTxtElement.innerHTML =
+    `May the stars bring you immense joy and success this year. Start your new personal year 
+     with cosmic guidance from Jyotish Devagya Amitsree. Get ${currentTheme.discount}`;
+
+  footerTxtElement.innerHTML =
+    `With Best Wishes from<br>
+     <span class="company-name">Digdarshan Astro</span><br>
+     Jyotish Devagya Amitsree<br>
+     <span class="call-number">Call : 8697190840 / 9830637766</span>`;
 }
-
-const mainMessage = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get ${discountText}`;
-
-cardImage.src = imageURL;
-headerTxtElement.innerHTML = headerText;
-msgTxtElement.innerHTML = mainMessage;
-
-footerTxtElement.innerHTML =
-  `With Best Wishes from<br>` +
-  `<span class="company-name">Digdarshan Astro</span><br>` +
-  `Jyotish Devagya Amitsree<br>` +
-  `<span class="call-number">Call : 8697190840 / 9830637766</span>`;
 </script>
 
 </body>
