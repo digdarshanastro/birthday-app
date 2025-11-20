@@ -7,246 +7,352 @@
 
 <link rel="stylesheet" href="style.css">
 
-<!-- Page-level small tweaks -->
 <style>
-/* Ensure the background impression uses project images/ first, fallback to /mnt/data for local preview */
-:root{
-  --rashichakra-url: url("images/Rashichakra.png");
-  --rashichakra-fallback: url("/mnt/data/Rashichakra.png");
+/* Extra admin styles */
+h1{
+  font-size:32px;
+  text-align:center;
+  font-weight:900;
+  color:#ffb0d9;
+  margin-bottom:25px;
 }
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background-image: var(--rashichakra-url);
-  background-position:center;
-  background-repeat:no-repeat;
-  background-size:60vmin;
-  opacity:0.08; /* very light impression */
-  pointer-events:none;
-  z-index:0;
+
+/* Background */
+body{
+  background:#09050d url("Rashichakra.png") center/420px repeat;
+  background-attachment:fixed;
+  background-blend-mode: soft-light;
 }
-/* If images/Rashichakra.png missing, browser will still try the fallback via empty rule in CSS (you can replace manually) */
+
+/* Search bar */
+#searchBar{
+  width:70%;
+  display:block;
+  margin:0 auto 20px;
+  padding:14px 20px;
+  border-radius:30px;
+  background:rgba(0,0,0,0.35);
+  border:1px solid rgba(255,255,255,0.1);
+  color:#fff;
+  font-size:15px;
+}
+
+/* Table wrapper */
+.table-box{
+  overflow-x:auto;
+  width:100%;
+  padding-bottom:18px;
+}
+
+/* Table */
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+  background:rgba(0,0,0,0.45);
+}
+
+th,td{
+  padding:10px;
+  border:1px solid rgba(255,255,255,0.08);
+  text-align:center;
+  white-space:nowrap;
+  color:#fff;
+}
+
+th{
+  background:rgba(255,255,255,0.10);
+  font-weight:800;
+  font-size:13px;
+}
+
+/* Highlight */
+.blink{
+  animation:blink 1.5s infinite;
+}
+@keyframes blink{
+  50%{ background:rgba(255,0,90,0.32); }
+}
+
+/* ACTION LAYOUT */
+.action-block{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+}
+
+.red-row, .green-row{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.action-btn{
+  padding:6px 12px;
+  min-width:70px;
+  border-radius:8px;
+  text-align:center;
+  font-size:12px;
+  font-weight:800;
+  text-decoration:none;
+  color:#fff;
+}
+.red-btn{
+  background:#ff4f37;
+}
+.green-btn{
+  background:#21d96b;
+  color:#062a11;
+}
+
+/* edit/delete column */
+.icon-col{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+.edit-icon{
+  font-size:18px;
+  cursor:pointer;
+  color:#ffd96b;
+}
+.delete-icon{
+  font-size:20px;
+  cursor:pointer;
+  color:#ff4545;
+}
+
+/* MOBILE */
+@media(max-width:700px){
+  #searchBar{ width:90%; }
+  table{ font-size:12px; }
+  th,td{ padding:7px; }
+}
 </style>
 </head>
+
 <body>
 
-<div class="adm-wrap">
-  <header class="adm-header">
-    <div class="brand">
-      <img src="images/Digdarshan Astro Logo.png" alt="logo" class="brand-logo" onerror="this.style.display='none'">
-      <div>
-        <h1>Digdarshan Dashmode</h1>
-        <div class="brand-sub">Jyotish Devagya Amitsree — Call: 8697190840 / 9830637766</div>
-        <a class="brand-link" href="https://digdarshanastro.mydurable.com/" target="_blank">https://digdarshanastro.mydurable.com/</a>
-      </div>
-    </div>
-  </header>
+<div class="container">
 
-  <main class="adm-main">
-    <section class="panel">
-      <div class="panel-top">
-        <div id="counters" class="counters">🎂 Birthdays this month: 0 &nbsp;&nbsp; 💍 Anniversaries this month: 0</div>
-        <div id="upcomingAlert" class="upcoming" aria-live="polite"></div>
-      </div>
+  <h1>Digdarshan Dashmode</h1>
 
-      <h2 class="table-title">Saved Details</h2>
+  <input id="searchBar" placeholder="Search by anything…">
 
-      <div class="search-row">
-        <input id="searchBar" placeholder="Search by Name / Mobile / DOB / PIN / City / Consult Type / Gotra / Notes..." />
-      </div>
+  <div class="table-box">
+    <table id="tbl"></table>
+  </div>
 
-      <div class="table-box">
-        <table id="tbl" role="table" aria-label="Saved Details Table">
-          <!-- rows injected by JS -->
-        </table>
-      </div>
-    </section>
-  </main>
 </div>
 
 <script type="module">
+
 import { db } from "./firebase-config.js";
-import {
-  collection, getDocs, deleteDoc, doc
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, getDocs, deleteDoc, doc } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* Helpers */
-const pad = n => n<10? '0'+n : ''+n;
-const formatDate = s => {
-  if(!s) return '-';
-  if(/^\d{4}-\d{2}-\d{2}$/.test(s)){ const [y,m,d]=s.split('-'); return `${pad(+d)}-${pad(+m)}-${y}`; }
-  return s;
-};
-const parseISOToDM = s => {
-  if(!s) return null;
-  if(/^\d{4}-\d{2}-\d{2}$/.test(s)){ const [y,m,d]=s.split('-'); return { day:+d, month:+m, year:+y }; }
-  return null;
-};
-const daysUntil = (d,m) => {
-  const now = new Date(); let event = new Date(now.getFullYear(), m-1, d);
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  if(event < today) event = new Date(now.getFullYear()+1, m-1, d);
-  return Math.ceil((event - today)/(1000*60*60*24));
-};
-const calcAge = iso => {
-  if(!iso) return '';
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return '';
-  const [y,m,d] = iso.split('-').map(Number);
-  const dob = new Date(y,m-1,d);
-  const t = new Date();
-  let age = t.getFullYear() - dob.getFullYear();
-  const mm = t.getMonth() - dob.getMonth();
-  if(mm<0 || (mm===0 && t.getDate() < dob.getDate())) age--;
-  return age;
-};
+/* --- UTILS --- */
+function pad(n){ return n<10 ? "0"+n : n; }
 
-/* DOM references */
-const tbl = document.getElementById('tbl');
-const searchBar = document.getElementById('searchBar');
-const counters = document.getElementById('counters');
-const upcomingAlert = document.getElementById('upcomingAlert');
-
-async function loadData(){
-  tbl.innerHTML = `
-    <tr>
-      <th>Name</th><th>Mobile</th><th>DOB</th><th>Age</th><th>TOB</th><th>Place</th><th>Gotra</th><th>Marriage</th>
-      <th>Consult Type</th><th>Consult Mode</th><th>Remedies</th><th>Notes</th><th>Actions</th>
-    </tr>
-  `;
-  try{
-    const snap = await getDocs(collection(db,'birth_details'));
-    const rows = [];
-    snap.forEach(d=>{
-      const x = d.data(); x._id = d.id;
-      x.dobF = formatDate(x.dob);
-      x.annF = formatDate(x.anniv);
-      x.age = calcAge(x.dob);
-      const pd = parseISOToDM(x.dob);
-      const pa = parseISOToDM(x.anniv);
-      const nextDob = pd ? daysUntil(pd.day, pd.month) : 9999;
-      const nextAnn = pa ? daysUntil(pa.day, pa.month) : 9999;
-      x.next = Math.min(nextDob, nextAnn);
-      rows.push(x);
-    });
-
-    // sort by nearest upcoming (DOB or ANN)
-    rows.sort((a,b)=> (a.next||9999)-(b.next||9999));
-
-    // counters
-    const thisM = (new Date()).getMonth()+1;
-    const bCount = rows.filter(r=> parseISOToDM(r.dob)?.month === thisM).length;
-    const aCount = rows.filter(r=> parseISOToDM(r.anniv)?.month === thisM).length;
-    counters.innerText = `🎂 Birthdays this month: ${bCount}   💍 Anniversaries this month: ${aCount}`;
-
-    // upcoming tomorrow
-    const t = new Date(); t.setDate(t.getDate()+1);
-    const td = t.getDate(), tm = t.getMonth()+1;
-    const up = rows.filter(r=>{
-      const pd = parseISOToDM(r.dob), pa = parseISOToDM(r.anniv);
-      return (pd && pd.day===td && pd.month===tm) || (pa && pa.day===td && pa.month===tm);
-    });
-    if(up.length){ upcomingAlert.style.display='block'; upcomingAlert.textContent = 'Tomorrow: '+ up.map(x=>x.name).join(', '); } else { upcomingAlert.style.display='none'; }
-
-    render(rows);
-
-    // search filter
-    searchBar.oninput = ()=> {
-      const q = searchBar.value.trim().toLowerCase();
-      if(!q) { render(rows); return; }
-      const filtered = rows.filter(r=>{
-        const s = `${r.name||''} ${r.mobile||''} ${r.phone||''} ${r.pin||''} ${r.city||''} ${r.consultType||''} ${r.gotra||''} ${r.dobF||''} ${r.annF||''} ${r.notes||''}`.toLowerCase();
-        return s.includes(q);
-      });
-      render(filtered);
-    };
-
-  } catch(e){ console.error(e); tbl.innerHTML += `<tr><td colspan="13" style="color:tomato;">Error loading data — check console.</td></tr>`; }
+function format(iso){
+  if(!iso) return "-";
+  if(!iso.includes("-")) return iso;
+  const [y,m,d]=iso.split("-");
+  return `${d}-${m}-${y}`;
 }
 
+function ageFrom(iso){
+  if(!iso) return "";
+  const [y,m,d]=iso.split("-");
+  const dob=new Date(+y,+m-1,+d);
+  const t=new Date();
+  let a=t.getFullYear()-dob.getFullYear();
+  if(
+    t.getMonth() < dob.getMonth() ||
+    (t.getMonth()==dob.getMonth() && t.getDate() < dob.getDate())
+  ) a--;
+  return a;
+}
+
+function parseDMY(iso){
+  if(!iso || !iso.includes("-")) return null;
+  const [y,m,d]=iso.split("-");
+  return {day:+d, month:+m};
+}
+
+function daysTo(d,m){
+  const now=new Date();
+  const today=new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let event=new Date(now.getFullYear(), m-1, d);
+  if(event < today) event=new Date(now.getFullYear()+1, m-1, d);
+  return Math.ceil( (event - today)/(1000*60*60*24) );
+}
+
+/* === LOAD DATA === */
+async function load(){
+  const tbl=document.getElementById("tbl");
+
+  tbl.innerHTML = `
+    <tr>
+      <th>Name</th>
+      <th>Mobile</th>
+      <th>DOB</th>
+      <th>Age</th>
+      <th>TOB</th>
+      <th>Birth Place</th>
+      <th>Gotra</th>
+      <th>Anniv</th>
+      <th>Consult Type</th>
+      <th>Consult Mode</th>
+      <th>Remedies</th>
+      <th>Notes</th>
+      <th>Actions</th>
+    </tr>
+  `;
+
+  const snap = await getDocs(collection(db,"birth_details"));
+  const rows=[];
+
+  snap.forEach(d=>{
+    const x=d.data();
+    x._id=d.id;
+
+    x.dF = format(x.dob);
+    x.aF = format(x.anniv);
+    x.age = ageFrom(x.dob);
+
+    // TOB fix
+    x.tobFinal = x.tob || x.time || "-";
+
+    const dobP = parseDMY(x.dob);
+    const anP  = parseDMY(x.anniv);
+
+    x.next = Math.min(
+      dobP ? daysTo(dobP.day,dobP.month) : 9999,
+      anP  ? daysTo(anP.day, anP.month) : 9999
+    );
+
+    rows.push(x);
+  });
+
+  // SORT nearest events first
+  rows.sort((a,b)=> (a.next||9999)-(b.next||9999));
+
+  // SEARCH
+  const search = document.getElementById("searchBar");
+  search.oninput = ()=> render(rows.filter(r=>
+    JSON.stringify(r).toLowerCase().includes(search.value.toLowerCase())
+  ));
+
+  render(rows);
+}
+
+/* === RENDER === */
 function render(list){
-  // remove old rows (except header)
-  tbl.querySelectorAll('tr:not(:first-child)').forEach(n=>n.remove());
-  const base = window.location.origin + window.location.pathname.replace('admin.html','card.html');
+  const tbl=document.getElementById("tbl");
+
+  tbl.querySelectorAll("tr:not(:first-child)").forEach(e=>e.remove());
+
+  const base = window.location.origin + "/card.html";
 
   list.forEach(x=>{
-    const enc = encodeURIComponent(x.name||'');
-    // pass age param for card
-    const ageParam = x.age ? `&age=${x.age}` : '';
-    // card URLs (preserve existing 2 types + modern as extra)
-    const Bf = `${base}?type=birthday&cardType=floral&name=${enc}${ageParam}`;
-    const Bs = `${base}?type=birthday&cardType=simple&name=${enc}${ageParam}`;
-    const Bm = `${base}?type=birthday&cardType=modern&name=${enc}${ageParam}`;
-    const Ac = `${base}?type=anniversary&cardType=cake&name=${enc}`;
-    const Ah = `${base}?type=anniversary&cardType=heart&name=${enc}`;
-    const Am = `${base}?type=anniversary&cardType=modern&name=${enc}`;
+    const nameENC = encodeURIComponent(x.name||"");
 
-    const waText = encodeURIComponent(`Best wishes from Digdarshan Astro to ${x.name}`);
+    const lb = `${base}?type=birthday&cardType=floral&name=${nameENC}&age=${x.age||""}`;
+    const ls = `${base}?type=birthday&cardType=simple&name=${nameENC}&age=${x.age||""}`;
+    const lm = `${base}?type=birthday&cardType=modern&name=${nameENC}&age=${x.age||""}`;
 
-    const tr = document.createElement('tr');
-    // highlight row if event within 1 day
-    if(x.next !== undefined && x.next <= 1) tr.classList.add('highlight');
+    const ac = `${base}?type=anniversary&cardType=cake&name=${nameENC}`;
+    const ah = `${base}?type=anniversary&cardType=heart&name=${nameENC}`;
+    const am = `${base}?type=anniversary&cardType=modern&name=${nameENC}`;
+
+    const waMsg = encodeURIComponent(`Best wishes from Digdarshan Astro to ${x.name}`);
+
+    const tr=document.createElement("tr");
+    if(x.next<=1) tr.classList.add("blink");
 
     tr.innerHTML = `
-      <td>${x.name||'-'}</td>
-      <td>${x.mobile||x.phone||'-'}</td>
-      <td>${x.dobF||'-'}</td>
-      <td>${x.age||'-'}</td>
-      <td>${x.tob||'-'}</td>
-      <td>${x.place||'-'}</td>
-      <td>${x.gotra||'-'}</td>
-      <td>${x.annF||'-'}</td>
-      <td>${x.consultType||'-'}</td>
-      <td>${x.consultMode||'-'}</td>
-      <td style="max-width:180px; white-space:normal;">${x.remedies? x.remedies.substring(0,200) : '-'}</td>
-      <td style="max-width:220px; white-space:normal;">${(x.notes||'-').substring(0,300)}</td>
-      <td style="width:260px;">
+      <td>${x.name||"-"}</td>
+      <td>${x.mobile||x.phone||"-"}</td>
+      <td>${x.dF}</td>
+      <td>${x.age||"-"}</td>
+      <td>${x.tobFinal}</td>
+      <td>${x.place||"-"}</td>
+      <td>${x.gotra||"-"}</td>
+      <td>${x.aF}</td>
+      <td>${x.consultType||"-"}</td>
+      <td>${x.consultMode||"-"}</td>
+      <td>${x.remedies||"-"}</td>
+      <td style="max-width:220px;white-space:normal;">
+         ${(x.notes||"").substring(0,200)}
+      </td>
+
+      <td>
         <div class="action-block">
-          <div class="btn-row red-row">
-            <a class="action-btn card-btn" href="${Bf}" target="_blank">B-F</a>
-            <a class="action-btn card-btn" href="${Bs}" target="_blank">B-S</a>
-            <a class="action-btn card-btn" href="${Bm}" target="_blank">B-M</a>
-            <a class="action-btn card-btn" href="${Ac}" target="_blank">A-C</a>
-            <a class="action-btn card-btn" href="${Ah}" target="_blank">A-H</a>
-            <a class="action-btn card-btn" href="${Am}" target="_blank">A-M</a>
-          </div>
-          <div class="btn-row green-row" style="margin-top:8px;">
-            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bf)}" target="_blank">WA B-F</a>
-            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bs)}" target="_blank">WA B-S</a>
-            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bm)}" target="_blank">WA B-M</a>
-            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ac)}" target="_blank">WA A-C</a>
-            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ah)}" target="_blank">WA A-H</a>
-            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Am)}" target="_blank">WA A-M</a>
+
+          <div>
+            <div class="red-row">
+              <a class="action-btn red-btn" href="${lb}" target="_blank">B-F</a>
+              <a class="action-btn red-btn" href="${ls}" target="_blank">B-S</a>
+              <a class="action-btn red-btn" href="${lm}" target="_blank">B-M</a>
+              <a class="action-btn red-btn" href="${ac}" target="_blank">A-C</a>
+              <a class="action-btn red-btn" href="${ah}" target="_blank">A-H</a>
+              <a class="action-btn red-btn" href="${am}" target="_blank">A-M</a>
+            </div>
+
+            <div class="green-row" style="margin-top:6px;">
+              <a class="action-btn green-btn" target="_blank"
+                 href="https://wa.me/?text=${waMsg}%0A${encodeURIComponent(lb)}">WA B-F</a>
+
+              <a class="action-btn green-btn" target="_blank"
+                 href="https://wa.me/?text=${waMsg}%0A${encodeURIComponent(ls)}">WA B-S</a>
+
+              <a class="action-btn green-btn" target="_blank"
+                 href="https://wa.me/?text=${waMsg}%0A${encodeURIComponent(lm)}">WA B-M</a>
+
+              <a class="action-btn green-btn" target="_blank"
+                 href="https://wa.me/?text=${waMsg}%0A${encodeURIComponent(ac)}">WA A-C</a>
+
+              <a class="action-btn green-btn" target="_blank"
+                 href="https://wa.me/?text=${waMsg}%0A${encodeURIComponent(ah)}">WA A-H</a>
+
+              <a class="action-btn green-btn" target="_blank"
+                 href="https://wa.me/?text=${waMsg}%0A${encodeURIComponent(am)}">WA A-M</a>
+            </div>
           </div>
 
-          <div class="edit-delete" style="margin-top:10px; display:flex; flex-direction:column; gap:6px; align-items:center;">
-            <button title="Edit" class="icon-btn edit" onclick="editOne('${x._id}')">✏️</button>
-            <button title="Delete" class="icon-btn del" onclick="deleteOne('${x._id}')">🗑️</button>
+          <div class="icon-col">
+            <span class="edit-icon" onclick="editOne('${x._id}')">✏️</span>
+            <span class="delete-icon" onclick="deleteOne('${x._id}')">🗑️</span>
           </div>
+
         </div>
       </td>
     `;
+
     tbl.appendChild(tr);
   });
 }
 
-/* deletion */
+/* === DELETE === */
 window.deleteOne = async function(id){
-  if(!confirm('Delete this record?')) return;
-  try{
-    await deleteDoc(doc(db,'birth_details',id));
-    alert('Deleted');
-    loadData();
-  } catch(e){ console.error(e); alert('Delete failed'); }
+  if(!confirm("Delete this record?")) return;
+  await deleteDoc(doc(db,"birth_details",id));
+  alert("Deleted.");
+  load();
 };
 
-/* Edit placeholder - open card page with id param (you can implement a modal later) */
+/* === EDIT (placeholder) === */
 window.editOne = function(id){
-  // For now navigate to admin edit page or open modal - keep simple
-  alert('Edit requested for id: ' + id + '\n(Implement edit modal as next step.)');
+  alert("Edit system coming soon!");
 };
 
-loadData();
+/* INIT */
+load();
+
 </script>
 
 </body>
