@@ -1,76 +1,93 @@
-/* ===================== MASTER STYLE (Purple Spa Theme) ===================== */
-/* Reset */
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family: "Inter", Arial, sans-serif;background:#0b0710;color:#fff;}
-
-/* Global container for admin and forms */
-.container{
-  width:95%;
-  max-width:1180px;
-  margin:28px auto;
-  padding:22px;
-  border-radius:14px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border:1px solid rgba(255,255,255,0.04);
-  box-shadow: 0 16px 60px rgba(2,6,20,0.6);
+/* GLOBAL */
+body {
+  margin: 0;
+  background: #fff8ef;
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
 }
 
-/* Typography */
-h1{font-size:24px;color:#ffd6e8;text-align:center;margin-bottom:12px}
-label{display:block;font-weight:700;color:rgba(255,255,255,0.9);margin-top:10px;font-size:13px}
+/* Container */
+.container {
+  width: 95%;
+  max-width: 1200px;
+  background: #ffffff;
+  margin: 25px auto;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.08);
+  background-image: url("rashichakra 000.jpg");
+  background-size: 95%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-blend-mode: lighten;
+}
+
+h1 { text-align:center; color:#d84315; margin-bottom:12px; }
 
 /* Inputs */
-input,select,textarea{width:100%;padding:12px;border-radius:12px;border:none;background:rgba(255,255,255,0.06);color:#fff;outline:none;font-size:14px}
-textarea{min-height:110px;resize:vertical}
+input { width:100%; padding:12px; border:1px solid #ffa366; border-radius:6px; box-sizing:border-box; }
+label { display:block; margin-top:12px; font-weight:bold; color:#e65100; }
 
-/* Rows */
-.row{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
-.col{flex:1;min-width:220px}
+/* Button */
+button { width:100%; background:#ff4500; color:#fff; padding:12px; border-radius:6px; border:none; cursor:pointer; }
 
-/* Buttons */
-.btn{display:inline-block;padding:12px 26px;border-radius:28px;background:linear-gradient(90deg,#ff6ea6,#ff9d6d);color:#fff;font-weight:800;border:none;cursor:pointer}
-.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.08);color:#fff}
+/* Table container */
+.table-box { width:100%; overflow-x:auto; }
 
-/* Stepper small */
-.stepper{display:flex;justify-content:center;gap:24px;margin-bottom:18px}
-.step{color:rgba(255,255,255,0.55);font-weight:800;text-align:center;cursor:pointer}
-.step .bar{width:140px;height:6px;border-radius:10px;background:rgba(255,255,255,0.06);margin-bottom:8px}
-.step.active .bar{background:linear-gradient(90deg,#ff6ea6,#ff9d6d);box-shadow:0 8px 20px rgba(255,90,140,0.12);color:#fff}
+table { width:100%; border-collapse:collapse; margin-top:15px; }
+th, td { border:1px solid #ffab76; padding:10px; text-align:center; font-size:0.95em; vertical-align:middle; white-space:nowrap; }
 
-/* PREVIEW */
-.preview{padding:12px;border-radius:8px;background:rgba(255,255,255,0.03);color:#fff;margin-top:8px}
+/* Action buttons */
+.action-btn { display:inline-block; padding:6px 8px; margin:2px 4px; font-size:12px; border-radius:6px; text-decoration:none; color:#fff; }
+.card-btn { background:#ff4500; }
+.whatsapp-btn { background:#25d366; }
 
-/* ALERT */
-.alert-box{background:#ffedd7;border-left:6px solid #ff6b9a;padding:10px 12px;color:#7a2d00;border-radius:6px}
+/* two-line actions container */
+.actions-cell .action-line { white-space:nowrap; }
 
-/* SEARCH */
-#searchBar{display:block;margin:12px auto 18px;padding:10px 16px;border-radius:26px;border:1px solid rgba(255,255,255,0.06);width:68%;background:rgba(0,0,0,0.12);color:#fff}
+/* search bar (pill style) */
+#searchBar {
+  width:70%; margin:18px auto; display:block;
+  padding:12px 16px; border-radius:30px; border:1px solid #ffb07a;
+  box-shadow:0 4px 14px rgba(255,160,110,0.08); text-align:center; font-size:16px;
+  transition:box-shadow .2s, border-color .2s;
+}
+#searchBar:focus { outline:none; border-color:#ff8c33; box-shadow:0 6px 18px rgba(255,140,50,0.12); }
 
-/* TABLE styles (admin) */
-.table-box{overflow:auto}
-table{width:100%;border-collapse:collapse;margin-top:14px}
-th,td{padding:10px 8px;border:1px solid rgba(255,255,255,0.04);text-align:center;vertical-align:middle;white-space:nowrap;font-size:13px}
-th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
+/* upcoming counter */
+#counterBox { background:#fff3cd; padding:10px; border-radius:6px; margin-bottom:12px; text-align:center; font-weight:bold; color:#856404; border:1px solid #ffeeba; }
 
-/* Action Buttons grouping */
-.action-btn{display:inline-block;padding:6px 10px;border-radius:8px;text-decoration:none;font-weight:800;color:#fff;font-size:12px;margin:0 4px}
-.card-btn{background:#ff4500}
-.whatsapp-btn{background:#25d366;color:#05260f}
-.delete-btn{color:#ff5555;cursor:pointer;font-size:18px}
+/* invalid */
+.invalid { background:#ffdddd !important; }
 
 /* blink */
-.blink{animation:softBlink 1.5s infinite}
-@keyframes softBlink{0%{opacity:1}50%{opacity:0.45}100%{opacity:1}}
+@keyframes softBlink { 0%{opacity:1}50%{opacity:0.45}100%{opacity:1} }
+.blink { animation:softBlink 1.4s infinite; }
 
-/* Responsive */
-@media (max-width:980px){
-  #searchBar{width:86%}
-  .step .bar{width:110px}
-  th,td{font-size:12px;padding:8px}
-}
-@media (max-width:640px){
-  .row{flex-direction:column}
-  .col{min-width:100%}
-  th,td{font-size:11px;padding:7px;white-space:normal}
-  .action-btn{font-size:11px;padding:6px 8px}
+/* delete icon */
+.delete-btn { cursor:pointer; font-size:18px; color:#b33; }
+.delete-btn:hover { color:#800; }
+
+/* CARD styles (kept from original with alignment fix) */
+body.card-page { background:#EBEBEE; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+#card { width:95vmin; max-width:900px; aspect-ratio:3/2; box-sizing:border-box; }
+.card-border { width:100%; height:100%; border:10px solid white; border-radius:20px; padding:8px; box-shadow:0 8px 20px rgba(0,0,0,0.25); }
+.colored-frame { width:100%; height:100%; border:5px solid; border-radius:10px; background:#fff; display:flex; justify-content:center; align-items:center; }
+.card-content { width:100%; height:100%; display:grid; grid-template-columns:40% 60%; padding:10px; align-items:center; }
+.left-section { display:flex; justify-content:center; align-items:center; padding:6px; }
+.left-section img { max-width:100%; max-height:100%; object-fit:contain; }
+.right-section { padding:10px 20px 10px 10px; display:flex; flex-direction:column; justify-content:space-around; }
+.header-text { font-size:3.5vmin; font-weight:800; margin-bottom:2vmin; font-style:italic; border-bottom:3px double; padding-bottom:0.5vmin; }
+.main-message { font-size:2.5vmin; line-height:1.45; margin-bottom:3vmin; }
+.footer-signature { text-align:right; font-size:2.2vmin; font-weight:bold; }
+.footer-signature .company-name { font-size:3.2vmin; color:#007bff; }
+.footer-signature .call-number { font-size:1.8vmin; color:#555; }
+
+/* mobile */
+@media (max-width:600px) {
+  .card-content { grid-template-columns:1fr; grid-template-rows:40% 60%; }
+  .header-text { font-size:4.5vmin; }
+  .main-message { font-size:3vmin; }
+  .footer-signature { font-size:2.8vmin; }
+  #searchBar { width:92%; }
 }
