@@ -1,298 +1,193 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Birth Details — Digdarshan Astro</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Fill Your Birth Details — Digdarshan Astro</title>
 
 <link rel="stylesheet" href="style.css">
 
 <style>
-/* ------------ PAGE BACKGROUND -------------- */
-body {
-  margin:0;
-  font-family: Arial, sans-serif;
-  background-image: url('Rashichakra.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  backdrop-filter: blur(4px);
-}
-
-/* GLASS FORM WRAPPER */
-.form-wrapper {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 25px 30px;
-  background: rgba(255,255,255,0.07);
+/* small page-level overrides for spa look */
+body { background: url('/mnt/data/intake-forms-spa-client-intake-form.jpg') center/cover fixed no-repeat; }
+.form-card {
+  max-width: 920px;
+  margin: 36px auto 80px;
+  padding: 34px 40px;
   border-radius: 20px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 0 20px rgba(0,0,0,0.35);
+  background: linear-gradient(180deg, rgba(8,6,18,0.72), rgba(20,8,30,0.72));
+  box-shadow: 0 20px 60px rgba(2,6,20,0.6);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.05);
 }
+.brand-block { text-align:center; margin-bottom: 6px; }
+.brand-block img { width:84px; height:84px; object-fit:contain; border-radius:12px; }
+.brand-title { font-weight:900; font-size:28px; margin-top:8px; letter-spacing:0.7px; color:#fff; }
+.brand-sub { font-size:14px; color:rgba(255,255,255,0.85); margin-top:6px; font-weight:700; }
+.brand-link a { color:#ffd2ee; text-decoration:underline; font-weight:800; }
 
-/* ---------- BRAND HEADER ---------- */
-.brand-block {
-  text-align:center;
-  margin-bottom:20px;
-  color:white;
+.small-title { text-align:center; font-size:16px; color:rgba(255,255,255,0.9); margin:10px 0 18px; }
+
+/* stepper */
+.stepper { display:flex; justify-content:center; gap:28px; margin-bottom:20px; }
+.step { text-align:center; color:rgba(255,255,255,0.55); font-weight:800; cursor:pointer; }
+.step .bar { width:160px; height:6px; border-radius:8px; background:rgba(255,255,255,0.08); margin-bottom:8px; }
+.step.active .bar { background: linear-gradient(90deg,#ff6ea6,#ff9d6d); box-shadow:0 8px 20px rgba(255,100,140,0.08); color:#fff; }
+
+/* form layout */
+.form-row { display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap; }
+.col { flex:1; min-width:220px; }
+label { display:block; font-weight:700; margin-top:12px; color:rgba(255,255,255,0.9); font-size:13px; }
+input, select, textarea {
+  width:100%; padding:12px 14px; border-radius:12px; border:none;
+  background: rgba(255,255,255,0.08); color:#fff; outline:none; box-shadow: inset 0 -6px 12px rgba(0,0,0,0.18);
 }
+input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.55); }
 
-.brand-block img {
-  width:90px;
-  height:90px;
-  object-fit:contain;
+textarea { min-height:110px; }
+
+/* buttons */
+.btn { display:inline-block; padding:12px 26px; border-radius:26px; background:linear-gradient(90deg,#ff6ea6,#ff9d6d); color:#fff; font-weight:800; border:none; cursor:pointer; }
+.btn.ghost { background: transparent; border:1px solid rgba(255,255,255,0.12); color:#fff; }
+
+/* preview */
+.preview { margin-top:12px; padding:12px 14px; border-radius:10px; background: rgba(255,255,255,0.03); color:#fff; }
+
+/* responsive */
+@media (max-width:900px){
+  .form-card { margin:20px 12px 60px; padding:20px; }
+  .step .bar { width:110px; }
 }
-
-.brand-title {
-  font-size:28px;
-  font-weight:900;
-  margin-top:10px;
-}
-
-.brand-sub {
-  font-size:16px;
-  margin-top:4px;
-  font-weight:600;
-}
-
-.brand-link a {
-  color:#ffe0f2;
-  font-size:15px;
-  font-weight:700;
-  text-decoration: underline;
-}
-
-/* ------------ TITLE ----------- */
-.main-title {
-  text-align:center;
-  font-size:16px;     /* SMALLER as requested */
-  font-weight:bold;
-  margin-bottom:20px;
-  color:#fff;
-}
-
-/* ---------- STEPPER ---------- */
-.stepper {
-  display:flex;
-  justify-content:center;
-  margin-bottom:25px;
-  gap:20px;
-}
-
-.step {
-  text-align:center;
-  cursor:pointer;
-  color:#ddd;
-  font-weight:700;
-}
-
-.step.active .bar {
-  background: linear-gradient(90deg,#ff6ea6,#ff9d6d);
-}
-
-.step .bar {
-  width:140px;
-  height:6px;
-  border-radius:10px;
-  background: rgba(255,255,255,0.25);
-  margin-bottom:6px;
-}
-
-/* ------------- INPUT STYLING --------------- */
-label {
-  color:white;
-  font-size:14px;
-  font-weight:bold;
-  margin-top:12px;
-  display:block;
-}
-
-input, textarea, select {
-  width:100%;
-  padding:12px;
-  margin-top:4px;
-  border-radius:12px;
-  border:none;
-  background: rgba(255,255,255,0.15);
-  color:white;
-  backdrop-filter: blur(4px);
-}
-
-textarea {
-  height:100px;
-}
-
-.row { display:flex; gap:15px; flex-wrap:wrap; }
-.col { flex:1; min-width:240px; }
-
-/* ------------ BUTTONS ------------- */
-.btn {
-  background: linear-gradient(90deg,#ff6ea6,#ff9d6d);
-  padding:12px 28px;
-  border-radius:30px;
-  border:none;
-  font-weight:bold;
-  color:white;
-  cursor:pointer;
-}
-
-.btn-outline {
-  background:transparent;
-  padding:10px 22px;
-  border-radius:25px;
-  color:white;
-  border:1px solid rgba(255,255,255,0.4);
-  cursor:pointer;
-}
-
-/* PREVIEW BOX */
-.preview-box {
-  background: rgba(255,255,255,0.10);
-  border-radius:12px;
-  padding:12px;
-  margin-top:10px;
-  color:white;
-  line-height:1.5;
+@media (max-width:520px){
+  .form-row { flex-direction:column; }
+  .brand-title { font-size:22px; }
 }
 </style>
 </head>
-
 <body>
 
-<div class="form-wrapper">
-
-  <!-- LOGO + COMPANY DETAILS -->
+<div class="form-card" role="main" aria-labelledby="formTitle">
   <div class="brand-block">
-    <img src="Digdarshan Astro Logo.png" alt="">
+    <img src="/mnt/data/Digdarshan Astro Logo.png" alt="Digdarshan Astro">
     <div class="brand-title">DIGDARSHAN ASTRO</div>
     <div class="brand-sub">Jyotish Devagya Amitsree — Call: 8697190840 / 9830637766</div>
-    <div class="brand-link">
-      <a href="https://digdarshanastro.mydurable.com/" target="_blank">
-        https://digdarshanastro.mydurable.com/
-      </a>
+    <div class="brand-link"><a href="https://digdarshanastro.mydurable.com/" target="_blank">https://digdarshanastro.mydurable.com/</a></div>
+  </div>
+
+  <div class="small-title" id="formTitle">Fill Your Birth Details Consultation Type.</div>
+
+  <div class="stepper" aria-hidden="true">
+    <div class="step active" id="tab1" onclick="showStep(1)">
+      <div class="bar"></div>Client Details
+    </div>
+    <div class="step" id="tab2" onclick="showStep(2)">
+      <div class="bar"></div>Birth Details
+    </div>
+    <div class="step" id="tab3" onclick="showStep(3)">
+      <div class="bar"></div>Consultation
     </div>
   </div>
 
-  <!-- SMALL TITLE -->
-  <div class="main-title">Fill Your Birth Details Consultation Type.</div>
-
-  <!-- STEPPER -->
-  <div class="stepper">
-    <div class="step active" id="s1" onclick="showStep(1)">
-      <div class="bar"></div> Client Details
-    </div>
-    <div class="step" id="s2" onclick="showStep(2)">
-      <div class="bar"></div> Birth Details
-    </div>
-    <div class="step" id="s3" onclick="showStep(3)">
-      <div class="bar"></div> Consultation
-    </div>
-  </div>
-
-  <!-- FORM START -->
-  <form id="mainForm">
-
+  <form id="theForm" onsubmit="return false;">
     <!-- STEP 1 -->
     <div id="step1">
-
-      <div class="row">
+      <div class="form-row">
         <div class="col">
-          <label>First Name</label>
-          <input id="fname" required>
+          <label for="fname">First Name</label>
+          <input id="fname" placeholder="First Name" required>
         </div>
         <div class="col">
-          <label>Last Name</label>
-          <input id="lname">
+          <label for="lname">Last Name</label>
+          <input id="lname" placeholder="Last Name">
         </div>
       </div>
 
-      <label>Mobile Number</label>
-      <div class="row">
-        <div class="col" style="max-width:120px;">
+      <label for="mobile">Mobile Number</label>
+      <div class="form-row">
+        <div style="min-width:110px;max-width:110px;">
           <input value="+91" disabled>
         </div>
         <div class="col">
-          <input id="mobile" maxlength="10" minlength="10" placeholder="10-digit number">
+          <input id="mobile" placeholder="10-digit number" maxlength="10" minlength="10" pattern="\d{10}" required>
         </div>
       </div>
 
-      <label>Email</label>
-      <input id="email">
+      <label for="email">Email</label>
+      <input id="email" placeholder="you@example.com">
 
-      <label>Address</label>
-      <input id="address">
+      <label for="address">Address (Street)</label>
+      <input id="address" placeholder="Street address">
 
-      <div class="row">
+      <div class="form-row">
         <div class="col">
-          <label>City</label>
-          <input id="city">
+          <label for="city">City</label>
+          <input id="city" placeholder="City">
         </div>
         <div class="col">
-          <label>State</label>
-          <input id="state">
+          <label for="state">State / Region</label>
+          <input id="state" placeholder="State">
         </div>
       </div>
 
-      <div class="row">
+      <div class="form-row">
         <div class="col">
-          <label>PIN</label>
-          <input id="pin">
+          <label for="pin">PIN</label>
+          <input id="pin" placeholder="Postal / PIN code">
         </div>
         <div class="col">
-          <label>Country</label>
+          <label for="country">Country</label>
           <input id="country" value="India">
         </div>
       </div>
 
-      <br>
-      <center><button type="button" class="btn" onclick="showStep(2)">Next</button></center>
-
+      <div style="text-align:center; margin-top:18px;">
+        <button class="btn" type="button" onclick="nextStep(2)">Next</button>
+      </div>
     </div>
 
     <!-- STEP 2 -->
     <div id="step2" style="display:none;">
-
-      <div class="row">
+      <div class="form-row">
         <div class="col">
-          <label>Date of Birth</label>
-          <input type="date" id="dob">
+          <label for="dob">Date of Birth</label>
+          <input id="dob" type="date" placeholder="">
         </div>
         <div class="col">
-          <label>Time of Birth</label>
-          <input type="time" id="tob">
+          <label for="tob">Time of Birth</label>
+          <input id="tob" type="time" placeholder="">
         </div>
       </div>
 
-      <label>Place of Birth</label>
-      <input id="place">
+      <label for="place">Place of Birth</label>
+      <input id="place" placeholder="City / Town / Village">
 
-      <label>Gotra</label>
-      <input id="gotra">
+      <div class="form-row">
+        <div class="col">
+          <label for="gotra">Gotra</label>
+          <input id="gotra" placeholder="Gotra (if known)">
+        </div>
+        <div class="col">
+          <label for="anniv">Date of Marriage</label>
+          <input id="anniv" type="date" placeholder="">
+        </div>
+      </div>
 
-      <label>Date of Marriage</label>
-      <input type="date" id="anniv">
-
-      <br>
-      <center>
-        <button type="button" class="btn-outline" onclick="showStep(1)">Back</button>
-        <button type="button" class="btn" onclick="showStep(3)">Next</button>
-      </center>
-
+      <div style="text-align:center;margin-top:18px;">
+        <button class="btn ghost" type="button" onclick="prevStep(1)">Back</button>
+        <button class="btn" type="button" onclick="nextStep(3)">Next</button>
+      </div>
     </div>
 
     <!-- STEP 3 -->
     <div id="step3" style="display:none;">
-
-      <label>A. Consultation Type</label>
+      <label for="consultType">A. Choose Consultation Type</label>
       <select id="consultType">
         <option value="">Select</option>
         <option>Physical Visit</option>
         <option>Online Consultation</option>
       </select>
 
-      <label>B. Consultation Mode</label>
+      <label for="consultMode">B. Choose Consultation Mode</label>
       <select id="consultMode">
         <option value="">Select</option>
         <option>Free Consultation (offline)</option>
@@ -300,20 +195,18 @@ textarea {
         <option>Premium Consultation (Recommended)</option>
       </select>
 
-      <label>C. Preferred Remedies</label>
-      <textarea id="remedies" placeholder="Gemstone, Rudraksha, Kavach, Totka..."></textarea>
+      <label for="remedies">C. Preferred Remedies</label>
+      <textarea id="remedies" placeholder="Gemstone, Rudraksha, Tantra/Kavach, Home Remedies..."></textarea>
 
-      <label>Notes (optional)</label>
-      <textarea id="notes"></textarea>
+      <label for="notes">Notes (optional)</label>
+      <textarea id="notes" placeholder="Anything for the astrologer..."></textarea>
 
-      <div class="preview-box" id="previewBox">Preview will appear here...</div>
+      <div class="preview" id="preview"></div>
 
-      <br>
-      <center>
-        <button type="button" class="btn-outline" onclick="showStep(2)">Back</button>
-        <button type="button" class="btn" onclick="submitForm()">Submit</button>
-      </center>
-
+      <div style="text-align:center;margin-top:18px;">
+        <button class="btn ghost" type="button" onclick="prevStep(2)">Back</button>
+        <button class="btn" type="button" onclick="submitForm()">Submit</button>
+      </div>
     </div>
 
   </form>
@@ -321,77 +214,85 @@ textarea {
 
 <script type="module">
 import { db } from "./firebase-config.js";
-import { collection, addDoc, serverTimestamp } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* -------------------- STEPS ------------------------ */
-function showStep(n) {
-  document.getElementById("step1").style.display = (n===1 ? "block" : "none");
-  document.getElementById("step2").style.display = (n===2 ? "block" : "none");
-  document.getElementById("step3").style.display = (n===3 ? "block" : "none");
-
-  document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
-  document.getElementById("s"+n).classList.add("active");
+function showStep(n){
+  document.getElementById('step1').style.display = n===1?'block':'none';
+  document.getElementById('step2').style.display = n===2?'block':'none';
+  document.getElementById('step3').style.display = n===3?'block':'none';
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('tab'+n).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
 }
-
-/* ------------------- PREVIEW ---------------------- */
-function buildPreview() {
-  let name = (fname.value + " " + lname.value).trim();
-
-  previewBox.innerHTML =
-    "<b>Name:</b> " + name + "<br>" +
-    "<b>Mobile:</b> +91 " + mobile.value + "<br>" +
-    "<b>Date of Birth:</b> " + dob.value + "<br>" +
-    "<b>Consultation Type:</b> " + consultType.value + "<br>" +
-    "<b>Consultation Mode:</b> " + consultMode.value + "<br>" +
-    "<b>Remedies:</b> " + remedies.value;
-}
-
 window.showStep = showStep;
 
-/* ------------------- SUBMIT ----------------------- */
-window.submitForm = async function () {
-
-  if (!mobile.value || mobile.value.length !== 10) {
-    alert("Enter a 10-digit mobile number");
-    return;
+function nextStep(n){
+  // validations before moving forward
+  if(n===2){
+    const m = document.getElementById('mobile').value.trim();
+    if(!/^\d{10}$/.test(m)) { alert('Please enter a valid 10-digit mobile number'); return; }
   }
+  showStep(n);
+}
+function prevStep(n){ showStep(n); }
+window.nextStep = nextStep; window.prevStep = prevStep;
+
+function buildPreview(){
+  const name = (document.getElementById('fname').value + ' ' + document.getElementById('lname').value).trim();
+  const p = [
+    `<b>Name:</b> ${name||'—'}`,
+    `<b>Mobile:</b> +91 ${document.getElementById('mobile').value||'—'}`,
+    `<b>DOB:</b> ${document.getElementById('dob').value||'—'}`,
+    `<b>TOB:</b> ${document.getElementById('tob').value||'—'}`,
+    `<b>Place:</b> ${document.getElementById('place').value||'—'}`,
+    `<b>Consult:</b> ${document.getElementById('consultType').value||'—'} / ${document.getElementById('consultMode').value||'—'}`,
+    `<b>Remedies:</b> ${document.getElementById('remedies').value||'—'}`
+  ];
+  document.getElementById('preview').innerHTML = p.join('<br>');
+}
+
+document.querySelectorAll('#consultType,#consultMode,#remedies').forEach(el=>{
+  el.addEventListener('change', buildPreview);
+});
+
+window.submitForm = async function(){
+  // final validation
+  const mobile = document.getElementById('mobile').value.trim();
+  if(!/^\d{10}$/.test(mobile)) { alert('Enter a valid 10-digit mobile.'); showStep(1); return; }
 
   buildPreview();
 
   const payload = {
-    name: (fname.value + " " + lname.value).trim(),
-    mobile: "+91 " + mobile.value,
-    phone: "+91 " + mobile.value,
-    email: email.value,
-    address: address.value,
-    city: city.value,
-    state: state.value,
-    country: country.value,
-    pin: pin.value,
-    dob: dob.value,
-    tob: tob.value,
-    place: place.value,
-    gotra: gotra.value,
-    anniv: anniv.value,
-    consultType: consultType.value,
-    consultMode: consultMode.value,
-    remedies: remedies.value,
-    notes: notes.value,
+    name: (document.getElementById('fname').value + ' ' + document.getElementById('lname').value).trim(),
+    mobile: '+91 ' + mobile,
+    phone: '+91 ' + mobile, // keep both keys for admin compatibility
+    email: document.getElementById('email').value || '',
+    address: document.getElementById('address').value || '',
+    city: document.getElementById('city').value || '',
+    state: document.getElementById('state').value || '',
+    pin: document.getElementById('pin').value || '',
+    country: document.getElementById('country').value || '',
+    dob: document.getElementById('dob').value || '',
+    tob: document.getElementById('tob').value || '',
+    place: document.getElementById('place').value || '',
+    gotra: document.getElementById('gotra').value || '',
+    anniv: document.getElementById('anniv').value || '',
+    consultType: document.getElementById('consultType').value || '',
+    consultMode: document.getElementById('consultMode').value || '',
+    remedies: document.getElementById('remedies').value || '',
+    notes: document.getElementById('notes').value || '',
     createdAt: serverTimestamp()
   };
 
   try {
-    await addDoc(collection(db, "birth_details"), payload);
-    alert("Details Saved Successfully!");
+    await addDoc(collection(db, 'birth_details'), payload);
+    alert('Saved successfully!');
     location.reload();
-  }
-  catch(e){
-    alert("Failed to save. Check Firebase rules.");
-    console.error(e);
+  } catch(err){
+    console.error(err);
+    alert('Save failed — check Firebase rules or console.');
   }
 };
 </script>
-
 </body>
 </html>
