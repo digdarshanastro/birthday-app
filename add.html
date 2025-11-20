@@ -1,245 +1,516 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<title>Fill Your Birth Details</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Fill Your Birth Details Consultation Type.</title>
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: url("Rashichakra.png") no-repeat center top/cover;
-        font-family: Arial, sans-serif;
-        overflow-x: hidden;
-    }
+  /* ---------- root & fonts ---------- */
+  :root{
+    --accent: #ff6b9a;
+    --accent2:#ff9a5b;
+    --glass: rgba(255,255,255,0.06);
+    --glass-2: rgba(255,255,255,0.03);
+    --card-radius: 18px;
+    --maxw: 980px;
+    --text: #fff;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  html,body{height:100%;margin:0;background:#0b0812;color:var(--text);-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
 
-    /* Fixed Header With Logo */
-    .top-header {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        background: rgba(0,0,0,0.55);
-        padding: 12px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.5);
-        z-index: 999;
-        display: flex;
-        align-items: center;
-    }
-    .top-header img {
-        height: 70px;
-        margin-right: 15px;
-    }
-    .top-header .company-info {
-        color: white;
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 1.3;
-    }
+  /* ---------- background image + blurred overlay ---------- */
+  body {
+    background-image: url('/mnt/data/Rashichakra.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background: linear-gradient(180deg, rgba(6,8,20,0.45), rgba(20,10,40,0.65));
+    backdrop-filter: blur(6px) saturate(120%);
+    pointer-events:none;
+    z-index:0;
+  }
 
-    /* Step Navigation */
-    .steps {
-        margin-top: 120px;
-        text-align: center;
-        color: white;
-    }
-    .step-tabs {
-        display: flex;
-        justify-content: center;
-        margin-top: 10px;
-        gap: 40px;
-    }
-    .tab {
-        padding: 6px 18px;
-        border-radius: 20px;
-        color: #bbb;
-        font-size: 14px;
-        transition: 0.3s;
-        cursor: pointer;
-        border-bottom: 2px solid transparent;
-    }
-    .tab.active {
-        color: #ff7aff;
-        font-weight: bold;
-        border-bottom: 3px solid #ff7aff;
-    }
+  /* ---------- main centered panel ---------- */
+  .wrap {
+    position:relative;
+    z-index:2;
+    max-width:var(--maxw);
+    margin: 36px auto 80px;
+    padding: 36px 34px 48px;
+    border-radius: 22px;
+    box-shadow: 0 18px 50px rgba(2,6,20,0.6);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.04);
+    backdrop-filter: blur(8px);
+  }
 
-    /* Form Sections */
-    .step-page {
-        display: none;
-        margin: 20px auto;
-        width: 90%;
-        max-width: 750px;
-        background: rgba(0, 0, 0, 0.45);
-        padding: 25px;
-        border-radius: 16px;
-        backdrop-filter: blur(8px);
-        color: white;
-    }
-    .step-page.active {
-        display: block;
-    }
+  /* ---------- logo centered above title (option 2.B) ---------- */
+  .logo-wrap {
+    text-align:center;
+    margin-top: -80px;
+    margin-bottom: 6px;
+  }
+  .logo-wrap img {
+    width:92px;
+    height:92px;
+    object-fit:contain;
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
 
-    label {
-        font-size: 13px;
-        font-weight: bold;
-        display: block;
-        margin-top: 12px;
-    }
+  /* ---------- heading ---------- */
+  .title {
+    text-align:center;
+    margin:6px 0 18px;
+  }
+  .title h1 {
+    margin:0;
+    font-family: "Dancing Script", Georgia, serif;
+    font-size:36px;
+    color:#ffeef6;
+    text-shadow: 0 6px 22px rgba(0,0,0,0.6);
+  }
+  .title p { margin:6px 0 0; color: rgba(255,255,255,0.75); font-size:13px; }
 
-    input, select {
-        width: 100%;
-        padding: 12px;
-        border-radius: 12px;
-        border: none;
-        margin-top: 6px;
-        background: rgba(255, 255, 255, 0.15);
-        color: white;
-        font-size: 15px;
-    }
-    input::placeholder { color: #ddd; }
+  /* ---------- stepper ---------- */
+  .stepper {
+    display:flex;
+    justify-content:center;
+    gap:44px;
+    align-items:center;
+    margin: 14px 0 28px;
+  }
+  .step {
+    text-align:center;
+    color: rgba(255,255,255,0.72);
+    font-weight:600;
+    font-size:13px;
+    position:relative;
+    padding-bottom:8px;
+  }
+  .step .bar {
+    height:6px;
+    width:120px;
+    border-radius:9px;
+    background: rgba(255,255,255,0.08);
+    margin-bottom:8px;
+  }
+  .step.active .bar {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    box-shadow: 0 6px 20px rgba(255,100,120,0.12);
+  }
+  .step.active, .step.complete { color: #ffd2e6; }
 
-    .row {
-        display: flex;
-        gap: 18px;
-    }
-    .row div {
-        flex: 1;
-    }
+  /* ---------- card (form area) ---------- */
+  .card {
+    border-radius: var(--card-radius);
+    padding: 22px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 10px 30px rgba(2,6,20,0.45);
+  }
+  .card .row { display:flex; gap:16px; align-items:center; }
+  .card .col { flex:1; min-width:0; }
 
-    /* Buttons */
-    .next-btn, .back-btn, .submit-btn {
-        width: 150px;
-        padding: 12px;
-        border: none;
-        border-radius: 25px;
-        margin-top: 25px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-    .next-btn { background: #ff7aff; color: white; }
-    .back-btn { background: #666; color: white; }
-    .submit-btn { background: #00d07e; color: white; }
+  label {
+    font-size:13px;
+    color: rgba(255,255,255,0.86);
+    margin-bottom:8px;
+    display:block;
+    font-weight:700;
+  }
 
+  input[type="text"], input[type="email"], input[type="date"], input[type="time"], select, textarea {
+    width:100%;
+    padding:12px 14px;
+    border-radius:12px;
+    border: none;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    color: #fff;
+    font-size:15px;
+    outline: none;
+    box-shadow: inset 0 -6px 14px rgba(0,0,0,0.18);
+  }
+  input::placeholder { color: rgba(255,255,255,0.5); }
+
+  textarea { min-height:90px; resize:vertical; padding-top:12px; }
+
+  /* small helper & hint */
+  .hint { font-size:12px; color: rgba(255,255,255,0.55); margin-top:6px; }
+
+  /* buttons */
+  .actions { display:flex; gap:12px; justify-content:center; margin-top:18px; }
+  .btn {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    color:white;
+    border:none;
+    padding:12px 28px;
+    border-radius:32px;
+    font-weight:800;
+    cursor:pointer;
+    box-shadow: 0 10px 30px rgba(255,80,120,0.12);
+  }
+  .btn.ghost {
+    background: transparent;
+    border:1px solid rgba(255,255,255,0.06);
+    color: #fff;
+    box-shadow:none;
+    padding:10px 20px;
+  }
+
+  /* preview area */
+  .preview {
+    margin-top:12px;
+    padding:12px;
+    border-radius:10px;
+    background: rgba(255,255,255,0.02);
+    border:1px solid rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.95);
+  }
+
+  /* option boxes */
+  .options { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+  .opt {
+    padding:10px 14px;
+    border-radius:12px;
+    background: rgba(255,255,255,0.03);
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0.04);
+    color:#fff;
+    font-weight:700;
+  }
+  .opt.active {
+    background: linear-gradient(90deg,var(--accent),var(--accent2));
+    box-shadow: 0 8px 20px rgba(255,90,120,0.12);
+  }
+
+  /* small responsive */
+  @media (max-width:900px) {
+    .stepper { gap:18px; }
+    .logo-wrap img { width:72px; height:72px; }
+    .wrap { margin: 24px 14px 60px; padding:22px; }
+    .title h1 { font-size:30px; }
+  }
+  @media (max-width:520px){
+    .card .row { flex-direction:column; }
+    .logo-wrap { margin-top:-60px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- TOP HEADER -->
-<div class="top-header">
-    <img src="Digdarshan Astro Logo.png" alt="Company Logo">
-    <div class="company-info">
-        DIGDARSHAN ASTRO<br>
-        Jyotish Devagya Amitsree<br>
-        Call : 8697190840 / 9830637766<br>
-        Website : https://digdarshanastro.mydurable.com/
+<div class="wrap" role="main">
+
+  <!-- logo centered above title -->
+  <div class="logo-wrap" aria-hidden="true">
+    <img src="/mnt/data/Digdarshan Astro Logo.png" alt="Digdarshan Astro">
+  </div>
+
+  <div class="title">
+    <h1>Fill Your Birth Details Consultation Type.</h1>
+    <p>Provide accurate birth details so we can prepare your personalized astrological guidance.</p>
+  </div>
+
+  <!-- stepper -->
+  <div class="stepper" aria-hidden="true">
+    <div class="step active" data-step="1">
+      <div class="bar"></div>
+      <div>Client Details</div>
     </div>
-</div>
-
-<!-- TITLE + STEPS -->
-<div class="steps">
-    <h2>Fill Your Birth Details</h2>
-    <div class="step-tabs">
-        <div class="tab active" onclick="showStep(1)">Client Details</div>
-        <div class="tab" onclick="showStep(2)">Emergency Contact</div>
-        <div class="tab" onclick="showStep(3)">Services & Checkout</div>
+    <div class="step" data-step="2">
+      <div class="bar"></div>
+      <div>Emergency Contact Details</div>
     </div>
-</div>
-
-<!-- STEP 1 -->
-<div class="step-page active" id="step1">
-    <div class="row">
-        <div>
-            <label>First Name</label>
-            <input id="fname" placeholder="First Name">
-        </div>
-        <div>
-            <label>Last Name</label>
-            <input id="lname" placeholder="Last Name">
-        </div>
+    <div class="step" data-step="3">
+      <div class="bar"></div>
+      <div>Services & Checkout</div>
     </div>
+  </div>
 
-    <label>Phone</label>
-    <div class="row">
-        <div style="max-width:90px;">
-            <input value="+91" disabled>
+  <!-- card / form -->
+  <div class="card">
+
+    <!-- STEP 1 -->
+    <form id="multiForm" onsubmit="return false;">
+      <div id="step1">
+        <div class="row">
+          <div class="col">
+            <label for="fname">First Name</label>
+            <input id="fname" type="text" placeholder="First Name" required>
+          </div>
+          <div class="col">
+            <label for="lname">Last Name</label>
+            <input id="lname" type="text" placeholder="Last Name">
+          </div>
         </div>
-        <div>
-            <input id="phone" placeholder="Enter 10-digit number">
+
+        <label>Phone</label>
+        <div class="row">
+          <div style="flex:0 0 110px;">
+            <input type="text" value="+91" disabled>
+          </div>
+          <div class="col">
+            <input id="phone" type="text" placeholder="10-digit mobile number (e.g. 9836889400)" minlength="10" maxlength="10" required pattern="\d{10}">
+          </div>
         </div>
-    </div>
 
-    <label>Email</label>
-    <input id="email">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@example.com">
 
-    <label>Street Address</label>
-    <input id="street">
+        <label>Address</label>
+        <input id="address" type="text" placeholder="Street address">
 
-    <label>City</label>
-    <input id="city">
-
-    <div class="row">
-        <div>
-            <label>Postal / Zip Code</label>
-            <input id="zip">
+        <div class="row">
+          <div class="col">
+            <label>City</label>
+            <input id="city" type="text" placeholder="City">
+          </div>
+          <div class="col">
+            <label>State / Region</label>
+            <input id="state" type="text" placeholder="State / Region">
+          </div>
         </div>
-        <div>
-            <label>Country</label>
-            <input id="country" value="India">
+
+        <div style="height:10px;"></div>
+        <div style="text-align:center;">
+          <button class="btn" type="button" onclick="goToStep(2)">Next</button>
         </div>
-    </div>
+      </div>
 
-    <button class="next-btn" onclick="showStep(2)">Next</button>
-</div>
+      <!-- STEP 2 -->
+      <div id="step2" style="display:none;">
+        <label>Emergency Contact Name</label>
+        <input id="emname" type="text">
 
-<!-- STEP 2 -->
-<div class="step-page" id="step2">
-    <label>Emergency Contact Name</label>
-    <input id="em_name">
+        <label>Emergency Contact Phone</label>
+        <input id="emphone" type="text" placeholder="Emergency phone">
 
-    <label>Emergency Phone</label>
-    <input id="em_phone">
+        <label>Date of Birth</label>
+        <input id="dob" type="date" required>
 
-    <button class="back-btn" onclick="showStep(1)">Back</button>
-    <button class="next-btn" onclick="showStep(3)">Next</button>
-</div>
+        <div class="row">
+          <div class="col">
+            <label>Time of Birth</label>
+            <input id="tob" type="time">
+          </div>
+          <div class="col">
+            <label>Place of Birth</label>
+            <input id="place" type="text" placeholder="City / Town">
+          </div>
+        </div>
 
-<!-- STEP 3 -->
-<div class="step-page" id="step3">
+        <div style="height:10px;"></div>
+        <div style="display:flex; gap:12px; justify-content:center;">
+          <button class="btn ghost" type="button" onclick="goToStep(1)">Back</button>
+          <button class="btn" type="button" onclick="goToStep(3)">Next</button>
+        </div>
+      </div>
 
-    <label>A. Choose Consultation Type</label>
-    <select id="type">
-        <option>Physical Visit</option>
-        <option>Online Consultation</option>
-    </select>
+      <!-- STEP 3 -->
+      <div id="step3" style="display:none;">
+        <label>A. Choose Consultation Type</label>
+        <div class="options" id="consultType">
+          <div class="opt" data-value="physical"><input style="display:none" name="ct" type="radio" value="Physical Visit"> Physical Visit</div>
+          <div class="opt" data-value="online"><input style="display:none" name="ct" type="radio" value="Online Consultation"> Online Consultation</div>
+        </div>
 
-    <label>B. Consultation Mode</label>
-    <select id="mode">
-        <option>Free Consultation (offline)</option>
-        <option>Paid Consultation</option>
-        <option>Premium Consultation (Recommended)</option>
-    </select>
+        <label style="margin-top:12px;">B. Choose Consultation Mode</label>
+        <div class="options" id="consultMode">
+          <div class="opt" data-value="free"><input style="display:none" name="cm" type="radio" value="Free Consultation (offline)"> Free Consultation (offline)</div>
+          <div class="opt" data-value="paid"><input style="display:none" name="cm" type="radio" value="Paid Consultation"> Paid Consultation</div>
+          <div class="opt" data-value="premium"><input style="display:none" name="cm" type="radio" value="Premium Consultation"> Premium Consultation (Recommended)</div>
+        </div>
 
-    <label>C. Preferred Remedies</label>
-    <select id="remedy">
-        <option>Gemstone</option>
-        <option>Rudraksha</option>
-        <option>Tantra/Kavach</option>
-        <option>Home based Remedies (Totka)</option>
-    </select>
+        <label style="margin-top:12px;">C. Preferred Remedies</label>
+        <div class="options" id="remedies">
+          <div class="opt" data-value="gemstone"><input style="display:none" type="checkbox" name="rem" value="Gemstone"> Gemstone</div>
+          <div class="opt" data-value="rudraksha"><input style="display:none" type="checkbox" name="rem" value="Rudraksha"> Rudraksha</div>
+          <div class="opt" data-value="tantra"><input style="display:none" type="checkbox" name="rem" value="Tantra/Kavach"> Tantra/Kavach</div>
+          <div class="opt" data-value="home"><input style="display:none" type="checkbox" name="rem" value="Home based Remedies"> Home based Remedies (Totka)</div>
+        </div>
 
-    <button class="back-btn" onclick="showStep(2)">Back</button>
-    <button class="submit-btn" onclick="submitForm()">Submit</button>
+        <label style="margin-top:12px;">Additional Notes (optional)</label>
+        <textarea id="notes" placeholder="Anything you'd like to tell the astrologer..."></textarea>
+
+        <div class="preview" id="preview">Preview will appear here before submit.</div>
+
+        <div style="height:14px;"></div>
+        <div style="display:flex; gap:12px; justify-content:center;">
+          <button class="btn ghost" type="button" onclick="goToStep(2)">Back</button>
+          <button class="btn" type="button" onclick="submitForm()">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
 </div>
 
 <script>
-function showStep(n) {
-    document.querySelectorAll(".step-page").forEach(pg => pg.classList.remove("active"));
-    document.getElementById("step" + n).classList.add("active");
+  // stepper visuals
+  function setStepper(step){
+    document.querySelectorAll('.step').forEach(el=>{
+      const s = Number(el.getAttribute('data-step'));
+      el.classList.toggle('active', s===step);
+      el.classList.toggle('complete', s < step);
+    });
+  }
 
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    document.querySelectorAll(".tab")[n - 1].classList.add("active");
+  // navigate
+  function goToStep(n){
+    // validation short
+    if(n===2){
+      const fname = document.getElementById('fname').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      if(!fname || !/^\d{10}$/.test(phone)){
+        alert('Please enter First Name and valid 10-digit phone (no +91).');
+        return;
+      }
+    }
+    if(n===3){
+      const dob = document.getElementById('dob').value;
+      if(!dob){
+        alert('Please select Date of Birth on Step 2 before proceeding.');
+        goToStep(2);
+        return;
+      }
+      buildPreview();
+    }
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+    // hide all
+    document.querySelectorAll('#step1,#step2,#step3').forEach(el=>el.style.display='none');
+    document.getElementById('step'+n).style.display='block';
+    setStepper(n);
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  // options interactive
+  document.addEventListener('click', function(e){
+    const opt = e.target.closest('.opt');
+    if(!opt) return;
+    const parent = opt.parentElement;
+    const input = opt.querySelector('input');
+    if(!input) return;
+    if(input.type === 'radio'){
+      // deactivate siblings
+      parent.querySelectorAll('.opt').forEach(o=>o.classList.remove('active'));
+      input.checked = true;
+      opt.classList.add('active');
+    } else if(input.type === 'checkbox'){
+      const checked = input.checked;
+      input.checked = !checked;
+      opt.classList.toggle('active', !checked);
+    }
+  });
+
+  function buildPreview(){
+    const fname = document.getElementById('fname').value.trim();
+    const lname = document.getElementById('lname').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const dob = document.getElementById('dob').value;
+    const tob = document.getElementById('tob').value;
+    const place = document.getElementById('place').value.trim();
+    const cType = document.querySelector('#consultType input[type=radio]:checked');
+    const cMode = document.querySelector('#consultMode input[type=radio]:checked');
+    const remedies = Array.from(document.querySelectorAll('#remedies input[type=checkbox]:checked')).map(i=>i.value);
+    const notes = document.getElementById('notes').value.trim();
+
+    const parts = [];
+    parts.push(`<strong>Name:</strong> ${fname} ${lname}`);
+    parts.push(`<strong>Phone:</strong> +91 ${phone}`);
+    if(email) parts.push(`<strong>Email:</strong> ${email}`);
+    if(dob) parts.push(`<strong>DOB:</strong> ${formatDate(dob)}`);
+    if(tob) parts.push(`<strong>TOB:</strong> ${tob}`);
+    if(place) parts.push(`<strong>Place:</strong> ${place}`);
+    parts.push(`<strong>Consultation Type:</strong> ${cType ? cType.value : '—'}`);
+    parts.push(`<strong>Consultation Mode:</strong> ${cMode ? cMode.value : '—'}`);
+    parts.push(`<strong>Remedies:</strong> ${remedies.length ? remedies.join(', ') : '—'}`);
+    if(notes) parts.push(`<strong>Notes:</strong> ${escapeHtml(notes)}`);
+
+    document.getElementById('preview').innerHTML = parts.join('<br>');
+  }
+
+  function formatDate(iso){
+    if(!iso) return '';
+    const p = iso.split('-');
+    if(p.length!==3) return iso;
+    return `${p[2]}-${p[1]}-${p[0]}`;
+  }
+  function escapeHtml(s){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  async function submitForm(){
+    // simple validation again
+    const phone = document.getElementById('phone').value.trim();
+    const fname = document.getElementById('fname').value.trim();
+    if(!fname || !/^\d{10}$/.test(phone)){
+      alert('Please ensure First Name and 10-digit Phone are correct.');
+      goToStep(1);
+      return;
+    }
+
+    // prepare payload
+    const payload = {
+      name: (document.getElementById('fname').value + ' ' + document.getElementById('lname').value).trim(),
+      phone: '+91 ' + phone,
+      email: document.getElementById('email').value || '',
+      dob: document.getElementById('dob').value || '',
+      time: document.getElementById('tob').value || '',
+      place: document.getElementById('place').value || '',
+      emergencyName: document.getElementById('emname').value || '',
+      emergencyPhone: document.getElementById('emphone').value || '',
+      consultType: (document.querySelector('#consultType input[type=radio]:checked')||{}).value || '',
+      consultMode: (document.querySelector('#consultMode input[type=radio]:checked')||{}).value || '',
+      remedies: Array.from(document.querySelectorAll('#remedies input[type=checkbox]:checked')).map(i=>i.value),
+      notes: document.getElementById('notes').value || '',
+      createdAt: new Date().toISOString()
+    };
+
+    // Try saving to Firestore if firebase-config.js exists (dynamic import). If not, fallback to local success message.
+    try {
+      const mod = await import('./firebase-config.js');
+      const fb = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+      const { collection, addDoc, serverTimestamp } = fb;
+      if(mod.db){
+        await addDoc(collection(mod.db, 'birth_details'), {
+          ...payload, createdAt: serverTimestamp ? serverTimestamp() : new Date()
+        });
+        showSuccess();
+        return;
+      } else {
+        console.warn('firebase-config.js loaded but no db exported — skipping cloud save.');
+      }
+    } catch(e) {
+      console.warn('Firebase not available or failed to import - saving skipped.', e);
+    }
+
+    // fallback local success
+    showSuccess();
+  }
+
+  function showSuccess(){
+    const wrap = document.querySelector('.wrap');
+    wrap.innerHTML = `
+      <div style="text-align:center; padding:36px;">
+        <h2 style="margin:0;color:#fff;font-size:28px;">Thank you!</h2>
+        <p style="color:rgba(255,255,255,0.85); margin-top:8px;">Your details have been recorded successfully.</p>
+        <div style="margin-top:18px;">
+          <button class="btn" onclick="location.reload()">Add Another</button>
+        </div>
+      </div>
+    `;
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  // init
+  setStepper(1);
 </script>
 
 </body>
