@@ -8,149 +8,43 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-/* ===== ADMIN FIXED CLEAN DARK THEME ===== */
-body{
-  background:#0b0710;
-  color:#fff;
-  font-family: "Inter", sans-serif;
-}
+/* Admin overrides */
+.admin-wrapper { max-width:1450px; margin:auto; }
 
-/* Container */
-.container{
-  width:95%;
-  max-width:1400px;
-  margin:30px auto;
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.06);
-  padding:20px 26px;
-  border-radius:12px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.5);
-}
+.table-box { overflow:auto; }
+.actions-line { display:flex; gap:6px; flex-wrap:nowrap; }
+.actions-line.two { margin-top:6px; display:flex; gap:6px; flex-wrap:nowrap; }
 
-/* Heading */
-h1{
-  text-align:center;
-  font-size:26px;
-  margin-top:10px;
-  margin-bottom:18px;
-  font-weight:900;
-  color:#ffbedc;
-}
+.card-btn { background:#ff4500; color:#fff; }
+.whatsapp-btn { background:#25d366; color:#062c12; font-weight:800; }
 
-/* Search bar */
-#searchBar{
-  width:70%;
-  margin:10px auto 20px;
-  display:block;
-  padding:12px 18px;
-  border-radius:30px;
-  border:1px solid rgba(255,255,255,0.08);
-  background:rgba(255,255,255,0.05);
-  color:#fff;
-}
+.delete-btn { color:#ff4d4d; font-size:20px; cursor:pointer; margin-left:6px; }
+.edit-btn { color:#36c2ff; font-size:20px; cursor:pointer; margin-left:4px; }
 
-/* Table wrapper */
-.table-box{
-  width:100%;
-  overflow-x:auto;
-  overflow-y:auto;
-  max-height:calc(100vh - 220px);
-  padding-bottom:20px;
-}
-
-/* Table */
-table{
-  width:100%;
-  border-collapse:collapse;
-  table-layout:auto;
-}
-
-th{
-  background:rgba(255,255,255,0.06);
-  padding:10px 8px;
-  font-size:14px;
-  color:#ffd6ee;
-  font-weight:800;
-  white-space:nowrap;
-}
-
-td{
-  padding:9px 8px;
-  font-size:13px;
-  border-bottom:1px solid rgba(255,255,255,0.06);
-  white-space:nowrap;
-}
-
-/* Action Buttons */
-.action-btn{
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:8px;
-  text-decoration:none;
-  font-weight:800;
-  font-size:12px;
-  color:#fff;
-}
-
-.card-btn{ background:#ff4500; }
-.whatsapp-btn{ background:#25d366; color:#041f10; }
-
-/* Delete icon */
-.delete-btn{
-  cursor:pointer;
-  font-size:20px;
-  margin-left:10px;
-  color:#ff4d4d;
-}
-
-/* Group buttons */
-.actions-line, .actions-line.two{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:8px;
-}
-
-/* Blink upcoming */
-.blink{animation: softBlink 1.2s infinite;}
-@keyframes softBlink{
-  0%{opacity:1}
-  50%{opacity:0.4}
-  100%{opacity:1}
-}
-
-/* Responsive */
-@media(max-width:780px){
-  #searchBar{width:90%;}
-  th,td{font-size:11px; padding:7px;}
+@media(max-width:800px){
+  .actions-line, .actions-line.two { flex-wrap:wrap; justify-content:center; }
+  table th, table td { white-space:normal; }
 }
 </style>
 </head>
+
 <body>
 
-<!-- LOGIN BOX -->
-<div class="container" id="loginBox">
-  <h1>Admin Login</h1>
+<div class="container admin-wrapper" id="loginBox">
+  <h1 style="text-align:center;">Admin Login</h1>
   <label>Username</label>
   <input id="u">
   <label>Password</label>
   <input id="p" type="password">
-  <button onclick="login()" class="btn" style="margin-top:12px;">Login</button>
-  <p id="lmsg" style="color:#ff7f7f;font-weight:700;"></p>
+  <button onclick="login()">Login</button>
+  <p id="lmsg" class="error"></p>
 </div>
 
-<!-- DATA BOX -->
-<div class="container" id="dataBox" style="display:none;">
+<div class="container admin-wrapper" id="dataBox" style="display:none;">
+  
+  <h1 style="text-align:center;">DIGDARSHAN ADMIN DASHBOARD</h1>
 
-  <h1>DIGDARSHAN ADMIN DASHBOARD</h1>
-
-  <div style="text-align:center;font-weight:700;margin-bottom:10px;">
-    <span id="counterBox"></span>
-  </div>
-
-  <div style="text-align:center;margin-bottom:10px;">
-    <input id="searchBar" placeholder="Search by Name / Mobile / DOB / PIN / City / Consult Type...">
-  </div>
+  <input id="searchBar" placeholder="Search by anything..." />
 
   <div class="table-box">
     <table id="tbl"></table>
@@ -159,226 +53,163 @@ td{
 
 
 <script type="module">
-/* FIREBASE IMPORT */
 import { db } from "./firebase-config.js";
-import { collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, getDocs, deleteDoc, doc, updateDoc } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* DOM Elements */
-const loginBox = document.getElementById("loginBox");
-const dataBox  = document.getElementById("dataBox");
-const u = document.getElementById("u");
-const p = document.getElementById("p");
-const lmsg = document.getElementById("lmsg");
-const tbl = document.getElementById("tbl");
-const searchBar = document.getElementById("searchBar");
-const counterBox = document.getElementById("counterBox");
+const loginBox=document.getElementById('loginBox');
+const dataBox=document.getElementById('dataBox');
+const searchBar=document.getElementById('searchBar');
+const tbl=document.getElementById('tbl');
+const lmsg=document.getElementById('lmsg');
 
-/* LOGIN */
-window.login = function(){
+
+/* ---------------- LOGIN ---------------- */
+window.login=function(){
   if(u.value==="amitsree.com@gmail.com" && p.value==="alapan@47f"){
     loginBox.style.display="none";
     dataBox.style.display="block";
     loadData();
-  } else {
-    lmsg.innerText = "Invalid Login!";
-  }
+  } else lmsg.innerText="Invalid login!";
 };
 
-/* DATE HELPERS */
-function pad(n){ return n<10? "0"+n : n; }
 
-function formatDate(s){
-  if(!s) return "-";
-  if(/^\d{4}-\d{2}-\d{2}$/.test(s)){
-    const [y,m,d] = s.split("-");
-    return `${pad(+d)}-${pad(+m)}-${y}`;
+/* ---------------- UTILITIES ---------------- */
+function formatDate(d){
+  if(!d) return "-";
+  if(/^\d{4}-\d{2}-\d{2}$/.test(d)){
+    const [y,m,dd]=d.split("-");
+    return dd+"-"+m+"-"+y;
   }
-  return s;
+  return d;
 }
-
-function parseDMY(s){
-  if(!s) return null;
-  if(/^\d{4}-\d{2}-\d{2}$/.test(s)){
-    const [y,m,d] = s.split("-");
-    return { day:+d, month:+m };
-  }
-  return null;
-}
-
-function daysTo(d,m){
-  const now = new Date();
-  let ev = new Date(now.getFullYear(), m-1, d);
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  if(ev < today) ev = new Date(now.getFullYear()+1, m-1, d);
-  return Math.ceil((ev - today)/(1000*60*60*24));
-}
-
-function calcAge(iso){
-  if(!iso) return "";
-  const [y,m,d]=iso.split("-");
-  const dob=new Date(+y,+m-1,+d);
-  const t=new Date();
-  let age=t.getFullYear()-dob.getFullYear();
-  const mm=t.getMonth()-dob.getMonth();
-  if(mm<0 || (mm===0 && t.getDate()<dob.getDate())) age--;
+function calcAge(d){
+  if(!d) return "";
+  const [y,m,dd]=d.split("-");
+  const birth=new Date(y,m-1,dd);
+  const now=new Date();
+  let age=now.getFullYear()-birth.getFullYear();
+  const mo=now.getMonth()-birth.getMonth();
+  if(mo<0 || (mo===0 && now.getDate()<birth.getDate())) age--;
   return age;
 }
 
-/* LOAD DATA */
+
+/* ---------------- LOAD DATA ---------------- */
 async function loadData(){
-  tbl.innerHTML = `
-    <tr>
-      <th>Name</th>
-      <th>Mobile</th>
-      <th>DOB</th>
-      <th>Age</th>
-      <th>TOB</th>
-      <th>Place</th>
-      <th>Gotra</th>
-      <th>Marriage</th>
-      <th>Address</th>
-      <th>PIN</th>
-      <th>City</th>
-      <th>State</th>
-      <th>Country</th>
-      <th>Consult Type</th>
-      <th>Consult Mode</th>
-      <th>Remedies</th>
-      <th>Notes</th>
-      <th>Actions</th>
-    </tr>`;
+  tbl.innerHTML=`
+  <tr>
+    <th>Name</th><th>Mobile</th><th>DOB</th><th>Age</th><th>TOB</th>
+    <th>Place</th><th>Gotra</th><th>Marriage</th>
+    <th>Consult Type</th><th>Consult Mode</th><th>Remedies</th>
+    <th>Notes</th><th>Actions</th>
+  </tr>`;
 
-  try{
-    const snap = await getDocs(collection(db,'birth_details'));
-    const rows = [];
+  const snap=await getDocs(collection(db,"birth_details"));
+  let rows=[];
+  snap.forEach(d=>{
+    let x=d.data();
+    x.id=d.id;
+    rows.push(x);
+  });
 
-    snap.forEach(d=>{
-      const x = d.data();
-      x._id = d.id;
-      x.dobF = formatDate(x.dob);
-      x.annF = formatDate(x.anniv);
-      x.age = calcAge(x.dob);
+  render(rows);
 
-      const dobP = parseDMY(x.dob);
-      const anP  = parseDMY(x.anniv);
-      x.next = Math.min(
-        dobP?daysTo(dobP.day,dobP.month):9999,
-        anP?daysTo(anP.day,anP.month):9999
-      );
+  searchBar.oninput=function(){
+    const q=this.value.toLowerCase();
+    if(!q) return render(rows);
 
-      rows.push(x);
+    const f=rows.filter(r=>{
+      return JSON.stringify(r).toLowerCase().includes(q);
     });
 
-    rows.sort((a,b)=>(a.next||9999)-(b.next||9999));
-
-    /* Counter */
-    const thisM=(new Date()).getMonth()+1;
-    const bCount = rows.filter(r=>parseDMY(r.dob)?.month===thisM).length;
-    const aCount = rows.filter(r=>parseDMY(r.anniv)?.month===thisM).length;
-    counterBox.innerText = `🎂 Birthdays this month: ${bCount}   💍 Anniversaries this month: ${aCount}`;
-
-    render(rows);
-
-    searchBar.oninput = ()=>{
-      const q = searchBar.value.trim().toLowerCase();
-      if(!q) return render(rows);
-      const filtered = rows.filter(r=>{
-        return (
-          (r.name || "").toLowerCase().includes(q) ||
-          (r.mobile || r.phone || "").toLowerCase().includes(q) ||
-          (r.city || "").toLowerCase().includes(q) ||
-          (r.pin || "").toLowerCase().includes(q) ||
-          (r.consultType || "").toLowerCase().includes(q)
-        );
-      });
-      render(filtered);
-    };
-
-  }catch(err){
-    console.error(err);
-    tbl.innerHTML += `<tr><td colspan="18" style="color:red;">Error loading data.</td></tr>`;
-  }
+    render(f);
+  };
 }
 
-/* RENDER TABLE */
-function render(list){
-  tbl.querySelectorAll("tr:not(:first-child)").forEach(n=>n.remove());
 
-  const base = window.location.origin + window.location.pathname.replace('admin.html','card.html');
+/* ---------------- RENDER ROWS ---------------- */
+function render(list){
+  tbl.querySelectorAll("tr:not(:first-child)").forEach(r=>r.remove());
+
+  const base=window.location.origin+"/card.html";
 
   list.forEach(x=>{
-    const enc = encodeURIComponent(x.name||"");
-    const ageParam = x.age ? `&age=${x.age}` : "";
+    const enc=encodeURIComponent(x.name||"");
+    const age=calcAge(x.dob);
 
-    /* Card URLs */
-    const Bf = `${base}?type=birthday&cardType=floral&name=${enc}${ageParam}`;
-    const Bs = `${base}?type=birthday&cardType=simple&name=${enc}${ageParam}`;
-    const Bm = `${base}?type=birthday&cardType=modern&name=${enc}${ageParam}`;
-    const Ac = `${base}?type=anniversary&cardType=cake&name=${enc}`;
-    const Ah = `${base}?type=anniversary&cardType=heart&name=${enc}`;
-    const Am = `${base}?type=anniversary&cardType=modern&name=${enc}`;
-    const waText = encodeURIComponent(`Best wishes from Digdarshan Astro to ${x.name}`);
+    /* CARD URLs */
+    const Bf=`${base}?type=birthday&cardType=floral&name=${enc}&age=${age}`;
+    const Bs=`${base}?type=birthday&cardType=simple&name=${enc}&age=${age}`;
+    const Bm=`${base}?type=birthday&cardType=modern&name=${enc}&age=${age}`;
 
-    const tr=document.createElement("tr");
-    tr.className = x.next<=1 ? "blink" : "";
+    const Ac=`${base}?type=anniversary&cardType=cake&name=${enc}`;
+    const Ah=`${base}?type=anniversary&cardType=heart&name=${enc}`;
+    const Am=`${base}?type=anniversary&cardType=modern&name=${enc}`;
 
-    tr.innerHTML = `
+    const wa=encodeURIComponent(`Digdarshan Astro wishes for ${x.name}`);
+
+    const row=document.createElement("tr");
+    row.innerHTML=`
       <td>${x.name||"-"}</td>
-      <td>${x.mobile || x.phone || "-"}</td>
-      <td>${x.dobF||"-"}</td>
-      <td>${x.age||"-"}</td>
+      <td>${x.mobile||x.phone||"-"}</td>
+      <td>${formatDate(x.dob)}</td>
+      <td>${age||"-"}</td>
       <td>${x.tob||"-"}</td>
       <td>${x.place||"-"}</td>
       <td>${x.gotra||"-"}</td>
-      <td>${x.annF||"-"}</td>
-      <td>${x.address||"-"}</td>
-      <td>${x.pin||"-"}</td>
-      <td>${x.city||"-"}</td>
-      <td>${x.state||"-"}</td>
-      <td>${x.country||"-"}</td>
+      <td>${formatDate(x.anniv)}</td>
       <td>${x.consultType||"-"}</td>
       <td>${x.consultMode||"-"}</td>
       <td>${x.remedies||"-"}</td>
-      <td style="white-space:normal;max-width:220px;">${(x.notes||"").substring(0,240)}</td>
+      <td style="max-width:220px;white-space:normal;">${x.notes||"-"}</td>
 
       <td>
         <div class="actions-line">
-          <a class="action-btn card-btn" href="${Bf}" target="_blank">B-Floral</a>
-          <a class="action-btn card-btn" href="${Bs}" target="_blank">B-Simple</a>
-          <a class="action-btn card-btn" href="${Bm}" target="_blank">B-Modern</a>
-          <a class="action-btn card-btn" href="${Ac}" target="_blank">A-Cake</a>
-          <a class="action-btn card-btn" href="${Ah}" target="_blank">A-Heart</a>
-          <a class="action-btn card-btn" href="${Am}" target="_blank">A-Modern</a>
-          <span class="delete-btn" onclick="deleteOne('${x._id}')">🗑️</span>
+          <a class="action-btn card-btn" target="_blank" href="${Bf}">B-F</a>
+          <a class="action-btn card-btn" target="_blank" href="${Bs}">B-S</a>
+          <a class="action-btn card-btn" target="_blank" href="${Bm}">B-M</a>
+
+          <a class="action-btn card-btn" target="_blank" href="${Ac}">A-C</a>
+          <a class="action-btn card-btn" target="_blank" href="${Ah}">A-H</a>
+          <a class="action-btn card-btn" target="_blank" href="${Am}">A-M</a>
         </div>
 
-        <div class="actions-line two" style="margin-top:6px;">
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bf)}" target="_blank">WA B-F</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bs)}" target="_blank">WA B-S</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bm)}" target="_blank">WA B-M</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ac)}" target="_blank">WA A-C</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ah)}" target="_blank">WA A-H</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Am)}" target="_blank">WA A-M</a>
+        <div class="actions-line two">
+          <a class="action-btn whatsapp-btn" target="_blank" href="https://wa.me/?text=${wa}%0A${encodeURIComponent(Bf)}">WA B-F</a>
+          <a class="action-btn whatsapp-btn" target="_blank" href="https://wa.me/?text=${wa}%0A${encodeURIComponent(Bs)}">WA B-S</a>
+          <a class="action-btn whatsapp-btn" target="_blank" href="https://wa.me/?text=${wa}%0A${encodeURIComponent(Bm)}">WA B-M</a>
+
+          <a class="action-btn whatsapp-btn" target="_blank" href="https://wa.me/?text=${wa}%0A${encodeURIComponent(Ac)}">WA A-C</a>
+          <a class="action-btn whatsapp-btn" target="_blank" href="https://wa.me/?text=${wa}%0A${encodeURIComponent(Ah)}">WA A-H</a>
+          <a class="action-btn whatsapp-btn" target="_blank" href="https://wa.me/?text=${wa}%0A${encodeURIComponent(Am)}">WA A-M</a>
+        </div>
+
+        <div style="text-align:center;margin-top:6px;">
+          <span class="edit-btn" onclick="editOne('${x.id}')">✏️</span>
+          <span class="delete-btn" onclick="deleteOne('${x.id}')">🗑️</span>
         </div>
       </td>
     `;
-
-    tbl.appendChild(tr);
+    tbl.appendChild(row);
   });
 }
 
-window.deleteOne = async function(id){
-  if(!confirm("Delete this record?")) return;
-  try{
-    await deleteDoc(doc(db,"birth_details",id));
-    alert("Deleted!");
-    loadData();
-  }catch(e){
-    alert("Failed!");
-    console.error(e);
-  }
-};
-</script>
 
+/* ---------------- DELETE ---------------- */
+window.deleteOne=async function(id){
+  if(!confirm("Delete this entry?")) return;
+  await deleteDoc(doc(db,"birth_details",id));
+  alert("Deleted");
+  loadData();
+};
+
+
+/* ---------------- EDIT ---------------- */
+window.editOne=async function(id){
+  alert("Inline edit coming next — you can now tell me which fields you want editable.");
+};
+
+</script>
 </body>
 </html>
