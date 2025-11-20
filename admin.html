@@ -9,19 +9,19 @@
 
 <style>
 /* Admin overrides */
-.admin-wrapper { max-width:1450px; margin:auto; }
+.container.admin-wrapper { max-width:1450px; margin:auto; }
 
 .table-box { overflow:auto; }
-.actions-line { display:flex; gap:6px; flex-wrap:nowrap; }
-.actions-line.two { margin-top:6px; display:flex; gap:6px; flex-wrap:nowrap; }
+.actions-line { display:flex; gap:6px; flex-wrap:nowrap; justify-content:center; }
+.actions-line.two { margin-top:6px; display:flex; gap:6px; flex-wrap:nowrap; justify-content:center; }
 
-.card-btn { background:#ff4500; color:#fff; }
-.whatsapp-btn { background:#25d366; color:#062c12; font-weight:800; }
+.card-btn { background:#ff4500; color:#fff; min-width:72px; padding:8px 10px; display:inline-block; border-radius:8px; text-decoration:none; text-align:center; font-weight:800; }
+.whatsapp-btn { background:#25d366; color:#062c12; font-weight:800; min-width:72px; padding:8px 10px; display:inline-block; border-radius:8px; text-decoration:none; text-align:center; }
 
-.delete-btn { color:#ff4d4d; font-size:20px; cursor:pointer; margin-left:6px; }
-.edit-btn { color:#36c2ff; font-size:20px; cursor:pointer; margin-left:4px; }
+.delete-btn { color:#ff4d4d; font-size:20px; cursor:pointer; display:block; margin:6px auto 0; }
+.edit-btn { color:#36c2ff; font-size:20px; cursor:pointer; display:block; margin:0 auto; }
 
-@media(max-width:800px){
+@media(max-width:1000px){
   .actions-line, .actions-line.two { flex-wrap:wrap; justify-content:center; }
   table th, table td { white-space:normal; }
 }
@@ -33,11 +33,11 @@
 <div class="container admin-wrapper" id="loginBox">
   <h1 style="text-align:center;">Admin Login</h1>
   <label>Username</label>
-  <input id="u">
+  <input id="u" autocomplete="username">
   <label>Password</label>
-  <input id="p" type="password">
+  <input id="p" type="password" autocomplete="current-password">
   <button onclick="login()">Login</button>
-  <p id="lmsg" class="error"></p>
+  <p id="lmsg" class="error" style="color:crimson;margin-top:10px;"></p>
 </div>
 
 <div class="container admin-wrapper" id="dataBox" style="display:none;">
@@ -46,7 +46,7 @@
 
   <input id="searchBar" placeholder="Search by anything..." />
 
-  <div class="table-box">
+  <div class="table-box" role="region" aria-label="Saved details table">
     <table id="tbl"></table>
   </div>
 </div>
@@ -62,6 +62,8 @@ const dataBox=document.getElementById('dataBox');
 const searchBar=document.getElementById('searchBar');
 const tbl=document.getElementById('tbl');
 const lmsg=document.getElementById('lmsg');
+const u = document.getElementById('u');
+const p = document.getElementById('p');
 
 
 /* ---------------- LOGIN ---------------- */
@@ -70,7 +72,9 @@ window.login=function(){
     loginBox.style.display="none";
     dataBox.style.display="block";
     loadData();
-  } else lmsg.innerText="Invalid login!";
+  } else {
+    lmsg.innerText="Invalid login!";
+  }
 };
 
 
@@ -93,7 +97,21 @@ function calcAge(d){
   if(mo<0 || (mo===0 && now.getDate()<birth.getDate())) age--;
   return age;
 }
-
+function daysUntil(d,m){
+  const now=new Date();
+  let ev=new Date(now.getFullYear(), m-1, d);
+  const today=new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if(ev < today) ev = new Date(now.getFullYear()+1, m-1, d);
+  return Math.ceil((ev - today)/(1000*60*60*24));
+}
+function parseISO(s){
+  if(!s) return null;
+  if(/^\d{4}-\d{2}-\d{2}$/.test(s)){
+    const [y,m,dd]=s.split("-");
+    return {y:+y, m:+m, d:+dd};
+  }
+  return null;
+}
 
 /* ---------------- LOAD DATA ---------------- */
 async function loadData(){
@@ -110,17 +128,32 @@ async function loadData(){
   snap.forEach(d=>{
     let x=d.data();
     x.id=d.id;
+    // normalize mobile/phone
+    if(!x.mobile && x.phone && x.phone.startsWith("+91")) x.mobile = x.phone;
     rows.push(x);
   });
 
+  // Sort by nearest upcoming (DOB or anniv) — compute days remaining
+  rows.forEach(r=>{
+    r._next = 99999;
+    const pd = parseISO(r.dob);
+    if(pd) r._next = Math.min(r._next, daysUntil(pd.d, pd.m));
+    const pa = parseISO(r.anniv);
+    if(pa) r._next = Math.min(r._next, daysUntil(pa.d, pa.m));
+  });
+  rows.sort((a,b) => (a._next||99999) - (b._next||99999));
+
   render(rows);
 
+  // search handler
   searchBar.oninput=function(){
     const q=this.value.toLowerCase();
     if(!q) return render(rows);
 
     const f=rows.filter(r=>{
-      return JSON.stringify(r).toLowerCase().includes(q);
+      // stringify relevant fields
+      const hay = ((r.name||"") + " " + (r.mobile||"") + " " + (r.phone||"") + " " + (r.dob||"") + " " + (r.anniv||"") + " " + (r.pin||"") + " " + (r.city||"") + " " + (r.consultType||"") + " " + (r.remedies||"") + " " + (r.notes||"")).toLowerCase();
+      return hay.includes(q);
     });
 
     render(f);
@@ -132,7 +165,7 @@ async function loadData(){
 function render(list){
   tbl.querySelectorAll("tr:not(:first-child)").forEach(r=>r.remove());
 
-  const base=window.location.origin+"/card.html";
+  const base=window.location.origin + "/card.html";
 
   list.forEach(x=>{
     const enc=encodeURIComponent(x.name||"");
@@ -150,6 +183,9 @@ function render(list){
     const wa=encodeURIComponent(`Digdarshan Astro wishes for ${x.name}`);
 
     const row=document.createElement("tr");
+    // highlight if upcoming within 1 day
+    if(x._next <= 1) row.classList.add('blink');
+
     row.innerHTML=`
       <td>${x.name||"-"}</td>
       <td>${x.mobile||x.phone||"-"}</td>
@@ -165,7 +201,7 @@ function render(list){
       <td style="max-width:220px;white-space:normal;">${x.notes||"-"}</td>
 
       <td>
-        <div class="actions-line">
+        <div class="actions-line" aria-hidden="true">
           <a class="action-btn card-btn" target="_blank" href="${Bf}">B-F</a>
           <a class="action-btn card-btn" target="_blank" href="${Bs}">B-S</a>
           <a class="action-btn card-btn" target="_blank" href="${Bm}">B-M</a>
@@ -175,7 +211,7 @@ function render(list){
           <a class="action-btn card-btn" target="_blank" href="${Am}">A-M</a>
         </div>
 
-        <div class="actions-line two">
+        <div class="actions-line two" aria-hidden="true">
           <a class="action-btn whatsapp-btn" target="_blank" href="https://wa.me/?text=${wa}%0A${encodeURIComponent(Bf)}">WA B-F</a>
           <a class="action-btn whatsapp-btn" target="_blank" href="https://wa.me/?text=${wa}%0A${encodeURIComponent(Bs)}">WA B-S</a>
           <a class="action-btn whatsapp-btn" target="_blank" href="https://wa.me/?text=${wa}%0A${encodeURIComponent(Bm)}">WA B-M</a>
@@ -186,8 +222,8 @@ function render(list){
         </div>
 
         <div style="text-align:center;margin-top:6px;">
-          <span class="edit-btn" onclick="editOne('${x.id}')">✏️</span>
-          <span class="delete-btn" onclick="deleteOne('${x.id}')">🗑️</span>
+          <span class="edit-btn" onclick="editOne('${x.id}')" title="Edit">✏️</span>
+          <span class="delete-btn" onclick="deleteOne('${x.id}')" title="Delete">🗑️</span>
         </div>
       </td>
     `;
@@ -199,15 +235,21 @@ function render(list){
 /* ---------------- DELETE ---------------- */
 window.deleteOne=async function(id){
   if(!confirm("Delete this entry?")) return;
-  await deleteDoc(doc(db,"birth_details",id));
-  alert("Deleted");
-  loadData();
+  try {
+    await deleteDoc(doc(db,"birth_details",id));
+    alert("Deleted");
+    loadData();
+  } catch (e) {
+    console.error(e);
+    alert("Delete failed");
+  }
 };
 
 
-/* ---------------- EDIT ---------------- */
+/* ---------------- EDIT (placeholder) ---------------- */
 window.editOne=async function(id){
-  alert("Inline edit coming next — you can now tell me which fields you want editable.");
+  // This is a placeholder. Implement inline-edit modal or redirect to edit page if required.
+  alert("Edit requested for id: " + id + "\nTell me which fields you'd like editable and I'll add an inline editor/modal.");
 };
 
 </script>
