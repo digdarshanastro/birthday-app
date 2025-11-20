@@ -8,56 +8,48 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-/* Page-level overrides */
-body {
-  background: url('intake-forms-spa-client-intake-form.jpg') center/cover fixed no-repeat;
-}
-
-/* Form container */
+/* page-level overrides for the form card (keeps in-page small tweaks) */
 .form-card {
-  max-width: 920px;
-  margin: 36px auto 80px;
-  padding: 34px 40px;
-  border-radius: 20px;
-  background: linear-gradient(180deg, rgba(8,6,18,0.72), rgba(20,8,30,0.72));
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.05);
+  max-width:920px;
+  margin:36px auto 80px;
+  padding:34px 40px;
+  border-radius:20px;
+  background: linear-gradient(180deg, rgba(8,6,18,0.78), rgba(20,8,30,0.78));
+  box-shadow: 0 20px 60px rgba(2,6,20,0.6);
+  color:#fff;
+  border:1px solid rgba(255,255,255,0.05);
 }
-.brand-block { text-align:center; margin-bottom: 6px; }
-.brand-block img { width:84px; height:84px; object-fit:contain; border-radius:12px; }
-.brand-title { font-weight:900; font-size:28px; margin-top:8px; letter-spacing:0.7px; color:#fff; }
+.brand-block { text-align:center; margin-bottom:10px; }
+.brand-block img { width:84px; height:84px; object-fit:contain; border-radius:12px; display:block; margin:0 auto 6px; }
+.brand-title { font-weight:900; font-size:28px; margin-top:2px; letter-spacing:0.7px; color:#fff; }
 .brand-sub { font-size:14px; color:rgba(255,255,255,0.85); margin-top:6px; font-weight:700; }
 .brand-link a { color:#ffd2ee; text-decoration:underline; font-weight:800; }
 
-.small-title { text-align:center; font-size:16px; color:rgba(255,255,255,0.9); margin:10px 0 18px; }
-
-/* stepper */
-.stepper { display:flex; justify-content:center; gap:28px; margin-bottom:20px; }
+/* stepper look */
+.stepper { display:flex; justify-content:center; gap:28px; margin-bottom:18px; }
 .step { text-align:center; color:rgba(255,255,255,0.55); font-weight:800; cursor:pointer; }
-.step .bar { width:160px; height:6px; border-radius:8px; background:rgba(255,255,255,0.08); margin-bottom:8px; }
+.step .bar { width:160px; height:6px; border-radius:8px; background:rgba(255,255,255,0.06); margin-bottom:8px; }
 .step.active .bar { background: linear-gradient(90deg,#ff6ea6,#ff9d6d); box-shadow:0 8px 20px rgba(255,100,140,0.08); color:#fff; }
 
 /* form layout */
 .form-row { display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap; }
 .col { flex:1; min-width:220px; }
-label { display:block; font-weight:700; margin-top:12px; color:rgba(255,255,255,0.9); font-size:13px; }
+label { display:block; font-weight:700; margin-top:12px; color:rgba(255,255,255,0.92); font-size:13px; }
 input, select, textarea {
   width:100%; padding:12px 14px; border-radius:12px; border:none;
-  background: rgba(255,255,255,0.08); color:#fff; outline:none; box-shadow: inset 0 -6px 12px rgba(0,0,0,0.18);
+  background: rgba(255,255,255,0.06); color:#fff; outline:none; box-shadow: inset 0 -6px 12px rgba(0,0,0,0.18);
 }
-input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.55); }
-
-textarea { min-height:110px; }
+input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.5); }
+textarea { min-height:110px; resize:vertical; }
 
 /* buttons */
 .btn { display:inline-block; padding:12px 26px; border-radius:26px; background:linear-gradient(90deg,#ff6ea6,#ff9d6d); color:#fff; font-weight:800; border:none; cursor:pointer; }
 .btn.ghost { background: transparent; border:1px solid rgba(255,255,255,0.12); color:#fff; }
 
-/* preview */
+/* small preview box */
 .preview { margin-top:12px; padding:12px 14px; border-radius:10px; background: rgba(255,255,255,0.03); color:#fff; }
 
-/* responsive */
+/* watermark styling via body pseudo element is in style.css */
 @media (max-width:900px){
   .form-card { margin:20px 12px 60px; padding:20px; }
   .step .bar { width:110px; }
@@ -71,11 +63,11 @@ textarea { min-height:110px; }
 <body>
 
 <div class="form-card" role="main" aria-labelledby="formTitle">
-  <div class="brand-block">
-    <img src="Digdarshan Astro Logo.png" alt="Digdarshan Astro">
+  <div class="brand-block" aria-hidden="true">
+    <img src="/mnt/data/Digdarshan Astro Logo.png" alt="Digdarshan Astro">
     <div class="brand-title">DIGDARSHAN ASTRO</div>
     <div class="brand-sub">Jyotish Devagya Amitsree — Call: 8697190840 / 9830637766</div>
-    <div class="brand-link"><a href="https://digdarshanastro.mydurable.com/" target="_blank">https://digdarshanastro.mydurable.com/</a></div>
+    <div class="brand-link"><a href="https://digdarshanastro.mydurable.com/" target="_blank" rel="noopener">https://digdarshanastro.mydurable.com/</a></div>
   </div>
 
   <div class="small-title" id="formTitle">Fill Your Birth Details Consultation Type.</div>
@@ -154,11 +146,11 @@ textarea { min-height:110px; }
       <div class="form-row">
         <div class="col">
           <label for="dob">Date of Birth</label>
-          <input id="dob" type="date" placeholder="">
+          <input id="dob" type="date">
         </div>
         <div class="col">
           <label for="tob">Time of Birth</label>
-          <input id="tob" type="time" placeholder="">
+          <input id="tob" type="time">
         </div>
       </div>
 
@@ -172,7 +164,7 @@ textarea { min-height:110px; }
         </div>
         <div class="col">
           <label for="anniv">Date of Marriage</label>
-          <input id="anniv" type="date" placeholder="">
+          <input id="anniv" type="date">
         </div>
       </div>
 
@@ -184,14 +176,14 @@ textarea { min-height:110px; }
 
     <!-- STEP 3 -->
     <div id="step3" style="display:none;">
-      <label for="consultType">A. Consultation Type</label>
+      <label for="consultType">A. Choose Consultation Type</label>
       <select id="consultType">
         <option value="">Select</option>
         <option>Physical Visit</option>
         <option>Online Consultation</option>
       </select>
 
-      <label for="consultMode">B. Consultation Mode</label>
+      <label for="consultMode">B. Choose Consultation Mode</label>
       <select id="consultMode">
         <option value="">Select</option>
         <option>Free Consultation (offline)</option>
@@ -201,17 +193,17 @@ textarea { min-height:110px; }
 
       <label for="remedies">C. Preferred Remedies</label>
       <select id="remedies">
-        <option value="">Select</option>
+        <option value="">Select preferred remedies</option>
         <option>Gemstone</option>
         <option>Rudraksha</option>
         <option>Tantra/Kavach</option>
-        <option>Home Based Remedies (Totka)</option>
+        <option>Home based Remedies (Totka)</option>
       </select>
 
       <label for="notes">Notes (optional)</label>
       <textarea id="notes" placeholder="Anything for the astrologer..."></textarea>
 
-      <div class="preview" id="preview"></div>
+      <div class="preview" id="preview" aria-live="polite"></div>
 
       <div style="text-align:center;margin-top:18px;">
         <button class="btn ghost" type="button" onclick="prevStep(2)">Back</button>
@@ -259,9 +251,9 @@ function buildPreview(){
   ];
   document.getElementById('preview').innerHTML = p.join('<br>');
 }
-
-document.querySelectorAll('#consultType,#consultMode,#remedies').forEach(el=>{
+document.querySelectorAll('#consultType,#consultMode,#remedies,#fname,#lname,#mobile,#dob,#tob,#place').forEach(el=>{
   el.addEventListener('change', buildPreview);
+  el.addEventListener('input', buildPreview);
 });
 
 window.submitForm = async function(){
@@ -273,7 +265,7 @@ window.submitForm = async function(){
   const payload = {
     name: (document.getElementById('fname').value + ' ' + document.getElementById('lname').value).trim(),
     mobile: '+91 ' + mobile,
-    phone: '+91 ' + mobile,
+    phone: '+91 ' + mobile, // keep both for compatibility
     email: document.getElementById('email').value || '',
     address: document.getElementById('address').value || '',
     city: document.getElementById('city').value || '',
@@ -281,7 +273,7 @@ window.submitForm = async function(){
     pin: document.getElementById('pin').value || '',
     country: document.getElementById('country').value || '',
     dob: document.getElementById('dob').value || '',
-    tob: document.getElementById('tob').value || '',
+    time: document.getElementById('tob').value || '',   // important: save as `time`
     place: document.getElementById('place').value || '',
     gotra: document.getElementById('gotra').value || '',
     anniv: document.getElementById('anniv').value || '',
@@ -295,7 +287,7 @@ window.submitForm = async function(){
   try {
     await addDoc(collection(db, 'birth_details'), payload);
     alert('Saved successfully!');
-    location.reload();
+    location.href = 'admin.html';
   } catch(err){
     console.error(err);
     alert('Save failed — check Firebase rules or console.');
