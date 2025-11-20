@@ -3,152 +3,177 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>DIGDARSHAN ADMIN DASHBOARD</title>
+<title>Digdarshan Admin Dashboard</title>
 
 <link rel="stylesheet" href="style.css">
 
 <style>
-/* Admin-specific overrides */
-h1 {
+/* ===== ADMIN FIXED CLEAN DARK THEME ===== */
+body{
+  background:#0b0710;
+  color:#fff;
+  font-family: "Inter", sans-serif;
+}
+
+/* Container */
+.container{
+  width:95%;
+  max-width:1400px;
+  margin:30px auto;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  padding:20px 26px;
+  border-radius:12px;
+  box-shadow:0 18px 45px rgba(0,0,0,0.5);
+}
+
+/* Heading */
+h1{
   text-align:center;
-  margin-bottom:18px;
   font-size:26px;
-  color:#ffdae7;
+  margin-top:10px;
+  margin-bottom:18px;
   font-weight:900;
+  color:#ffbedc;
 }
 
 /* Search bar */
-#searchBar {
+#searchBar{
   width:70%;
-  margin:14px auto 20px;
-  padding:10px 16px;
+  margin:10px auto 20px;
   display:block;
-  border-radius:26px;
+  padding:12px 18px;
+  border-radius:30px;
   border:1px solid rgba(255,255,255,0.08);
-  background:rgba(0,0,0,0.18);
+  background:rgba(255,255,255,0.05);
   color:#fff;
 }
 
-/* Table area */
-.table-box {
+/* Table wrapper */
+.table-box{
+  width:100%;
   overflow-x:auto;
-  padding-bottom:18px;
-  margin-top:10px;
+  overflow-y:auto;
+  max-height:calc(100vh - 220px);
+  padding-bottom:20px;
 }
 
-table {
+/* Table */
+table{
   width:100%;
   border-collapse:collapse;
-  background:rgba(255,255,255,0.02);
+  table-layout:auto;
 }
 
-th {
+th{
   background:rgba(255,255,255,0.06);
-  color:#ffe3f0;
-  font-weight:800;
-  padding:10px;
-  font-size:14px;
-}
-
-td {
   padding:10px 8px;
-  font-size:13px;
-  text-align:center;
+  font-size:14px;
+  color:#ffd6ee;
+  font-weight:800;
   white-space:nowrap;
-  border-bottom:1px solid rgba(255,255,255,0.04);
 }
 
-/* Action button rows */
-.actions-container {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+td{
+  padding:9px 8px;
+  font-size:13px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  white-space:nowrap;
 }
 
-.btn-row {
-  display:flex;
-  gap:8px;
-  margin-bottom:6px;
-}
-
-.action-btn {
+/* Action Buttons */
+.action-btn{
+  display:inline-block;
   padding:6px 10px;
   border-radius:8px;
-  font-weight:800;
-  color:#fff;
-  font-size:12px;
   text-decoration:none;
-  min-width:72px;
-  text-align:center;
+  font-weight:800;
+  font-size:12px;
+  color:#fff;
 }
 
-.card-btn { background:#ff4500; }
-.whatsapp-btn { background:#25d366; color:#0b2b17; }
+.card-btn{ background:#ff4500; }
+.whatsapp-btn{ background:#25d366; color:#041f10; }
 
-.delete-btn {
+/* Delete icon */
+.delete-btn{
   cursor:pointer;
-  font-size:22px;
-  color:#ff4444;
-  margin-top:4px;
+  font-size:20px;
   margin-left:10px;
+  color:#ff4d4d;
+}
+
+/* Group buttons */
+.actions-line, .actions-line.two{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:8px;
+}
+
+/* Blink upcoming */
+.blink{animation: softBlink 1.2s infinite;}
+@keyframes softBlink{
+  0%{opacity:1}
+  50%{opacity:0.4}
+  100%{opacity:1}
 }
 
 /* Responsive */
-@media (max-width:780px){
-  th,td { font-size:11px; padding:7px 6px; white-space:normal; }
-  #searchBar { width:90%; }
-  .btn-row { flex-wrap:wrap; justify-content:center; }
+@media(max-width:780px){
+  #searchBar{width:90%;}
+  th,td{font-size:11px; padding:7px;}
 }
 </style>
 </head>
-
 <body>
 
 <!-- LOGIN BOX -->
 <div class="container" id="loginBox">
-  <h1>DIGDARSHAN ADMIN DASHBOARD</h1>
-
+  <h1>Admin Login</h1>
   <label>Username</label>
   <input id="u">
-
   <label>Password</label>
   <input id="p" type="password">
-
-  <button class="btn" onclick="login()">Login</button>
-  <p id="lmsg" class="error" style="color:#ff7070; font-weight:700;"></p>
+  <button onclick="login()" class="btn" style="margin-top:12px;">Login</button>
+  <p id="lmsg" style="color:#ff7f7f;font-weight:700;"></p>
 </div>
 
 <!-- DATA BOX -->
 <div class="container" id="dataBox" style="display:none;">
 
-  <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-    <div id="counterBox" style="font-weight:800; color:#ffddee;"></div>
-    <div id="upcomingAlert" style="font-weight:700; color:#ffdd99;"></div>
-  </div>
-
   <h1>DIGDARSHAN ADMIN DASHBOARD</h1>
 
-  <input id="searchBar" placeholder="Search by Name / Mobile / DOB / PIN / City / Consult Type...">
+  <div style="text-align:center;font-weight:700;margin-bottom:10px;">
+    <span id="counterBox"></span>
+  </div>
+
+  <div style="text-align:center;margin-bottom:10px;">
+    <input id="searchBar" placeholder="Search by Name / Mobile / DOB / PIN / City / Consult Type...">
+  </div>
 
   <div class="table-box">
     <table id="tbl"></table>
   </div>
 </div>
 
+
 <script type="module">
+/* FIREBASE IMPORT */
 import { db } from "./firebase-config.js";
 import { collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const loginBox  = document.getElementById('loginBox');
-const dataBox   = document.getElementById('dataBox');
-const u         = document.getElementById('u');
-const p         = document.getElementById('p');
-const lmsg      = document.getElementById('lmsg');
-const tbl       = document.getElementById('tbl');
-const counterBox = document.getElementById('counterBox');
-const upcomingAlert = document.getElementById('upcomingAlert');
-const searchBar = document.getElementById('searchBar');
+/* DOM Elements */
+const loginBox = document.getElementById("loginBox");
+const dataBox  = document.getElementById("dataBox");
+const u = document.getElementById("u");
+const p = document.getElementById("p");
+const lmsg = document.getElementById("lmsg");
+const tbl = document.getElementById("tbl");
+const searchBar = document.getElementById("searchBar");
+const counterBox = document.getElementById("counterBox");
 
+/* LOGIN */
 window.login = function(){
   if(u.value==="amitsree.com@gmail.com" && p.value==="alapan@47f"){
     loginBox.style.display="none";
@@ -159,7 +184,9 @@ window.login = function(){
   }
 };
 
+/* DATE HELPERS */
 function pad(n){ return n<10? "0"+n : n; }
+
 function formatDate(s){
   if(!s) return "-";
   if(/^\d{4}-\d{2}-\d{2}$/.test(s)){
@@ -168,21 +195,24 @@ function formatDate(s){
   }
   return s;
 }
+
 function parseDMY(s){
   if(!s) return null;
   if(/^\d{4}-\d{2}-\d{2}$/.test(s)){
-    const [y,m,d]=s.split("-");
-    return {day:+d, month:+m};
+    const [y,m,d] = s.split("-");
+    return { day:+d, month:+m };
   }
   return null;
 }
+
 function daysTo(d,m){
   const now = new Date();
   let ev = new Date(now.getFullYear(), m-1, d);
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   if(ev < today) ev = new Date(now.getFullYear()+1, m-1, d);
-  return Math.ceil((ev - today)/86400000);
+  return Math.ceil((ev - today)/(1000*60*60*24));
 }
+
 function calcAge(iso){
   if(!iso) return "";
   const [y,m,d]=iso.split("-");
@@ -194,6 +224,7 @@ function calcAge(iso){
   return age;
 }
 
+/* LOAD DATA */
 async function loadData(){
   tbl.innerHTML = `
     <tr>
@@ -224,90 +255,79 @@ async function loadData(){
     snap.forEach(d=>{
       const x = d.data();
       x._id = d.id;
-
       x.dobF = formatDate(x.dob);
       x.annF = formatDate(x.anniv);
-      x.age  = calcAge(x.dob);
-      x.tob  = x.tob || "-";
+      x.age = calcAge(x.dob);
 
       const dobP = parseDMY(x.dob);
       const anP  = parseDMY(x.anniv);
-
       x.next = Math.min(
-        dobP?daysTo(dobP.day, dobP.month):9999,
-        anP?daysTo(anP.day, anP.month):9999
+        dobP?daysTo(dobP.day,dobP.month):9999,
+        anP?daysTo(anP.day,anP.month):9999
       );
 
       rows.push(x);
     });
 
-    rows.sort((a,b)=> (a.next||9999)-(b.next||9999));
+    rows.sort((a,b)=>(a.next||9999)-(b.next||9999));
 
-    // Month Counter
-    const thisM = (new Date()).getMonth()+1;
-
+    /* Counter */
+    const thisM=(new Date()).getMonth()+1;
     const bCount = rows.filter(r=>parseDMY(r.dob)?.month===thisM).length;
     const aCount = rows.filter(r=>parseDMY(r.anniv)?.month===thisM).length;
-
-    counterBox.innerText = `🎂 Birthdays: ${bCount} | 💍 Anniversaries: ${aCount}`;
-
-    // Tomorrow alerts
-    const t=new Date(); t.setDate(t.getDate()+1);
-    const td=t.getDate(), tm=t.getMonth()+1;
-
-    const up = rows.filter(r=>{
-      const dob=parseDMY(r.dob);
-      const an =parseDMY(r.anniv);
-      return (dob&&dob.day===td&&dob.month===tm) ||
-             (an &&an.day ===td&&an.month ===tm);
-    });
-
-    upcomingAlert.innerText = up.length ? `Tomorrow: ${up.map(x=>x.name).join(", ")}` : "";
+    counterBox.innerText = `🎂 Birthdays this month: ${bCount}   💍 Anniversaries this month: ${aCount}`;
 
     render(rows);
 
     searchBar.oninput = ()=>{
-      const q = searchBar.value.toLowerCase();
-      render(
-        rows.filter(r=>{
-          return (r.name+" "+r.mobile+" "+r.pin+" "+r.city+" "+r.consultType)
-          .toLowerCase().includes(q);
-        })
-      );
+      const q = searchBar.value.trim().toLowerCase();
+      if(!q) return render(rows);
+      const filtered = rows.filter(r=>{
+        return (
+          (r.name || "").toLowerCase().includes(q) ||
+          (r.mobile || r.phone || "").toLowerCase().includes(q) ||
+          (r.city || "").toLowerCase().includes(q) ||
+          (r.pin || "").toLowerCase().includes(q) ||
+          (r.consultType || "").toLowerCase().includes(q)
+        );
+      });
+      render(filtered);
     };
 
-  } catch(e){
-    console.error(e);
+  }catch(err){
+    console.error(err);
+    tbl.innerHTML += `<tr><td colspan="18" style="color:red;">Error loading data.</td></tr>`;
   }
 }
 
+/* RENDER TABLE */
 function render(list){
-  tbl.querySelectorAll("tr:not(:first-child)").forEach(x=>x.remove());
+  tbl.querySelectorAll("tr:not(:first-child)").forEach(n=>n.remove());
 
-  const base = window.location.origin + window.location.pathname.replace("admin.html", "card.html");
+  const base = window.location.origin + window.location.pathname.replace('admin.html','card.html');
 
   list.forEach(x=>{
     const enc = encodeURIComponent(x.name||"");
-    const ageP = x.age ? `&age=${x.age}` : "";
+    const ageParam = x.age ? `&age=${x.age}` : "";
 
-    const Bf = `${base}?type=birthday&cardType=floral&name=${enc}${ageP}`;
-    const Bs = `${base}?type=birthday&cardType=simple&name=${enc}${ageP}`;
-    const Bm = `${base}?type=birthday&cardType=modern&name=${enc}${ageP}`;
-
+    /* Card URLs */
+    const Bf = `${base}?type=birthday&cardType=floral&name=${enc}${ageParam}`;
+    const Bs = `${base}?type=birthday&cardType=simple&name=${enc}${ageParam}`;
+    const Bm = `${base}?type=birthday&cardType=modern&name=${enc}${ageParam}`;
     const Ac = `${base}?type=anniversary&cardType=cake&name=${enc}`;
     const Ah = `${base}?type=anniversary&cardType=heart&name=${enc}`;
     const Am = `${base}?type=anniversary&cardType=modern&name=${enc}`;
-
     const waText = encodeURIComponent(`Best wishes from Digdarshan Astro to ${x.name}`);
 
-    const tr = document.createElement("tr");
+    const tr=document.createElement("tr");
+    tr.className = x.next<=1 ? "blink" : "";
 
     tr.innerHTML = `
       <td>${x.name||"-"}</td>
-      <td>${x.mobile||"-"}</td>
-      <td>${x.dobF}</td>
+      <td>${x.mobile || x.phone || "-"}</td>
+      <td>${x.dobF||"-"}</td>
       <td>${x.age||"-"}</td>
-      <td>${x.tob}</td>
+      <td>${x.tob||"-"}</td>
       <td>${x.place||"-"}</td>
       <td>${x.gotra||"-"}</td>
       <td>${x.annF||"-"}</td>
@@ -319,34 +339,26 @@ function render(list){
       <td>${x.consultType||"-"}</td>
       <td>${x.consultMode||"-"}</td>
       <td>${x.remedies||"-"}</td>
-      <td style="max-width:220px; white-space:normal;">${x.notes||""}</td>
+      <td style="white-space:normal;max-width:220px;">${(x.notes||"").substring(0,240)}</td>
 
       <td>
-        <div style="display:flex; align-items:center;">
-          
-          <div class="actions-container">
-            <div class="btn-row">
-              <a class="action-btn card-btn" href="${Bf}" target="_blank">B-F</a>
-              <a class="action-btn card-btn" href="${Bs}" target="_blank">B-S</a>
-              <a class="action-btn card-btn" href="${Bm}" target="_blank">B-M</a>
-
-              <a class="action-btn card-btn" href="${Ac}" target="_blank">A-C</a>
-              <a class="action-btn card-btn" href="${Ah}" target="_blank">A-H</a>
-              <a class="action-btn card-btn" href="${Am}" target="_blank">A-M</a>
-            </div>
-
-            <div class="btn-row">
-              <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bf)}" target="_blank">WA B-F</a>
-              <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bs)}" target="_blank">WA B-S</a>
-              <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bm)}" target="_blank">WA B-M</a>
-
-              <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ac)}" target="_blank">WA A-C</a>
-              <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ah)}" target="_blank">WA A-H</a>
-              <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Am)}" target="_blank">WA A-M</a>
-            </div>
-          </div>
-
+        <div class="actions-line">
+          <a class="action-btn card-btn" href="${Bf}" target="_blank">B-Floral</a>
+          <a class="action-btn card-btn" href="${Bs}" target="_blank">B-Simple</a>
+          <a class="action-btn card-btn" href="${Bm}" target="_blank">B-Modern</a>
+          <a class="action-btn card-btn" href="${Ac}" target="_blank">A-Cake</a>
+          <a class="action-btn card-btn" href="${Ah}" target="_blank">A-Heart</a>
+          <a class="action-btn card-btn" href="${Am}" target="_blank">A-Modern</a>
           <span class="delete-btn" onclick="deleteOne('${x._id}')">🗑️</span>
+        </div>
+
+        <div class="actions-line two" style="margin-top:6px;">
+          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bf)}" target="_blank">WA B-F</a>
+          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bs)}" target="_blank">WA B-S</a>
+          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bm)}" target="_blank">WA B-M</a>
+          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ac)}" target="_blank">WA A-C</a>
+          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ah)}" target="_blank">WA A-H</a>
+          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Am)}" target="_blank">WA A-M</a>
         </div>
       </td>
     `;
@@ -357,8 +369,14 @@ function render(list){
 
 window.deleteOne = async function(id){
   if(!confirm("Delete this record?")) return;
-  await deleteDoc(doc(db,"birth_details",id));
-  loadData();
+  try{
+    await deleteDoc(doc(db,"birth_details",id));
+    alert("Deleted!");
+    loadData();
+  }catch(e){
+    alert("Failed!");
+    console.error(e);
+  }
 };
 </script>
 
