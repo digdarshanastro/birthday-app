@@ -98,7 +98,7 @@ textarea { min-height:110px; }
         </div>
         <div class="col">
           <label for="lname">Last Name</label>
-          <input id="lname" placeholder="Last Name">
+          <input id="lname" placeholder="Last Last">
         </div>
       </div>
 
@@ -140,7 +140,7 @@ textarea { min-height:110px; }
         </div>
       </div>
 
-      <div style="text-align:center; margin-top:18px;">
+      <div style="text-align:center;margin-top:18px;">
         <button class="btn" type="button" onclick="nextStep(2)">Next</button>
       </div>
     </div>
@@ -150,11 +150,11 @@ textarea { min-height:110px; }
       <div class="form-row">
         <div class="col">
           <label for="dob">Date of Birth</label>
-          <input id="dob" type="date" placeholder="">
+          <input id="dob" type="date">
         </div>
         <div class="col">
           <label for="tob">Time of Birth</label>
-          <input id="tob" type="time" placeholder="">
+          <input id="tob" type="time">
         </div>
       </div>
 
@@ -164,11 +164,11 @@ textarea { min-height:110px; }
       <div class="form-row">
         <div class="col">
           <label for="gotra">Gotra</label>
-          <input id="gotra" placeholder="Gotra (if known)">
+          <input id="gotra" placeholder="Gotra">
         </div>
         <div class="col">
           <label for="anniv">Date of Marriage</label>
-          <input id="anniv" type="date" placeholder="">
+          <input id="anniv" type="date">
         </div>
       </div>
 
@@ -195,8 +195,15 @@ textarea { min-height:110px; }
         <option>Premium Consultation (Recommended)</option>
       </select>
 
+      <!-- UPDATED FIELD -->
       <label for="remedies">C. Preferred Remedies</label>
-      <textarea id="remedies" placeholder="Gemstone, Rudraksha, Tantra/Kavach, Home Remedies..."></textarea>
+      <select id="remedies">
+        <option value="">Select</option>
+        <option>Gemstone</option>
+        <option>Rudraksha</option>
+        <option>Tantra / Kavach</option>
+        <option>Home based Remedies (Totka)</option>
+      </select>
 
       <label for="notes">Notes (optional)</label>
       <textarea id="notes" placeholder="Anything for the astrologer..."></textarea>
@@ -265,7 +272,7 @@ window.submitForm = async function(){
   const payload = {
     name: (document.getElementById('fname').value + ' ' + document.getElementById('lname').value).trim(),
     mobile: '+91 ' + mobile,
-    phone: '+91 ' + mobile, // keep both keys for admin compatibility
+    phone: '+91 ' + mobile,
     email: document.getElementById('email').value || '',
     address: document.getElementById('address').value || '',
     city: document.getElementById('city').value || '',
