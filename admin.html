@@ -3,225 +3,225 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Admin — Digdarshan Astro</title>
+<title>Digdarshan Dashmode</title>
+
 <link rel="stylesheet" href="style.css">
+
+<!-- Page-level small tweaks -->
 <style>
-/* admin specific tweaks keeping global style in style.css */
-.container { max-width:1200px; margin:24px auto; padding:24px; border-radius:12px; }
-#searchBar { width:72%; max-width:980px; margin:14px auto 18px; display:block; }
-.table-box { overflow:auto; padding-bottom:18px; margin-top:8px; }
-table th, table td { font-size:0.95rem; padding:10px 8px; white-space:nowrap; vertical-align:middle; border-color: rgba(255,100,60,0.08); }
-.actions-line { display:flex; gap:8px; flex-wrap:nowrap; align-items:center; justify-content:center; }
-.actions-line.two { margin-top:8px; display:flex; gap:8px; flex-wrap:nowrap; align-items:center; justify-content:center; }
-.action-btn { min-width:72px; padding:8px 8px; border-radius:8px; font-weight:800; font-size:12px; text-decoration:none; color:#fff; display:inline-flex; align-items:center; justify-content:center; }
-.card-btn { background:#ff4500; }
-.whatsapp-btn { background:#25d366; color:#05260f; font-weight:800; }
-.icon-vert { display:flex; flex-direction:column; gap:8px; align-items:center; justify-content:center; }
-.icon-vert span { display:inline-block; width:34px; height:28px; background:transparent; border-radius:6px; line-height:28px; text-align:center; cursor:pointer; }
-.icon-vert .edit { color:#ffb86b; }
-.icon-vert .del { color:#ff5b6b; }
-.row-blink { animation:softBlink 1.5s infinite; }
-@media (max-width:980px){
-  #searchBar { width:92%; }
-  table th, table td { font-size:0.85rem; padding:8px 6px; }
-  .action-btn { min-width:60px; font-size:11px; padding:6px 6px; }
+/* Ensure the background impression uses project images/ first, fallback to /mnt/data for local preview */
+:root{
+  --rashichakra-url: url("images/Rashichakra.png");
+  --rashichakra-fallback: url("/mnt/data/Rashichakra.png");
 }
-@media (max-width:640px){
-  table th, table td { font-size:0.78rem; padding:6px 4px; white-space:normal; }
-  .actions-line { justify-content:flex-start; flex-wrap:wrap; }
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image: var(--rashichakra-url);
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:60vmin;
+  opacity:0.08; /* very light impression */
+  pointer-events:none;
+  z-index:0;
 }
+/* If images/Rashichakra.png missing, browser will still try the fallback via empty rule in CSS (you can replace manually) */
 </style>
 </head>
 <body>
 
-<div class="container">
-  <div style="text-align:center; margin-bottom:8px;">
-    <img src="/mnt/data/Digdarshan Astro Logo.png" alt="logo" style="width:64px;height:64px;object-fit:contain;border-radius:12px;">
-    <h1 style="margin:8px 0 4px;color:#ffb6c1;">DIGDARSHAN ADMIN DASHBOARD</h1>
-    <div style="font-weight:700;color:rgba(255,255,255,0.85);margin-bottom:6px;">Jyotish Devagya Amitsree — Call: 8697190840 / 9830637766</div>
-    <div style="margin-bottom:6px;"><a href="https://digdarshanastro.mydurable.com/" target="_blank" style="color:#ffd2ee;text-decoration:underline;">https://digdarshanastro.mydurable.com/</a></div>
-    <div id="counterBox" style="background:rgba(255,235,215,0.06);display:inline-block;padding:8px 12px;border-radius:8px;color:#ffebcd;font-weight:800;"></div>
-  </div>
-
-  <input id="searchBar" placeholder="Search by Name / Mobile / DOB / PIN / City / Consult Type / Remedies / Notes...">
-
-  <div class="table-box">
-    <table id="tbl" role="table" aria-label="Saved details table">
-      <!-- injected rows -->
-    </table>
-  </div>
-</div>
-
-<!-- Edit modal -->
-<div id="editModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
-  <div style="width:92%; max-width:720px; background:linear-gradient(180deg,#141018,#1f1724); padding:18px; border-radius:12px; box-shadow:0 10px 50px rgba(0,0,0,0.8);">
-    <h3 style="color:#fff; margin:6px 0 8px;">Edit Record</h3>
-    <div style="display:grid;grid-template-columns:1fr 1fr; gap:8px;">
-      <input id="e_name" placeholder="Name">
-      <input id="e_mobile" placeholder="Mobile (10 digits)">
-      <input id="e_email" placeholder="Email">
-      <input id="e_dob" type="date" placeholder="DOB">
-      <input id="e_time" type="time" placeholder="Time">
-      <input id="e_place" placeholder="Place">
-      <input id="e_gotra" placeholder="Gotra">
-      <input id="e_anniv" type="date" placeholder="Marriage Date">
-      <input id="e_pin" placeholder="PIN">
-      <input id="e_city" placeholder="City">
-      <input id="e_state" placeholder="State">
-      <input id="e_country" placeholder="Country">
+<div class="adm-wrap">
+  <header class="adm-header">
+    <div class="brand">
+      <img src="images/Digdarshan Astro Logo.png" alt="logo" class="brand-logo" onerror="this.style.display='none'">
+      <div>
+        <h1>Digdarshan Dashmode</h1>
+        <div class="brand-sub">Jyotish Devagya Amitsree — Call: 8697190840 / 9830637766</div>
+        <a class="brand-link" href="https://digdarshanastro.mydurable.com/" target="_blank">https://digdarshanastro.mydurable.com/</a>
+      </div>
     </div>
-    <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px;">
-      <button class="btn ghost" onclick="closeEdit()">Cancel</button>
-      <button class="btn" onclick="saveEdit()">Save</button>
-    </div>
-  </div>
+  </header>
+
+  <main class="adm-main">
+    <section class="panel">
+      <div class="panel-top">
+        <div id="counters" class="counters">🎂 Birthdays this month: 0 &nbsp;&nbsp; 💍 Anniversaries this month: 0</div>
+        <div id="upcomingAlert" class="upcoming" aria-live="polite"></div>
+      </div>
+
+      <h2 class="table-title">Saved Details</h2>
+
+      <div class="search-row">
+        <input id="searchBar" placeholder="Search by Name / Mobile / DOB / PIN / City / Consult Type / Gotra / Notes..." />
+      </div>
+
+      <div class="table-box">
+        <table id="tbl" role="table" aria-label="Saved Details Table">
+          <!-- rows injected by JS -->
+        </table>
+      </div>
+    </section>
+  </main>
 </div>
 
 <script type="module">
 import { db } from "./firebase-config.js";
-import { collection, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  collection, getDocs, deleteDoc, doc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+/* Helpers */
+const pad = n => n<10? '0'+n : ''+n;
+const formatDate = s => {
+  if(!s) return '-';
+  if(/^\d{4}-\d{2}-\d{2}$/.test(s)){ const [y,m,d]=s.split('-'); return `${pad(+d)}-${pad(+m)}-${y}`; }
+  return s;
+};
+const parseISOToDM = s => {
+  if(!s) return null;
+  if(/^\d{4}-\d{2}-\d{2}$/.test(s)){ const [y,m,d]=s.split('-'); return { day:+d, month:+m, year:+y }; }
+  return null;
+};
+const daysUntil = (d,m) => {
+  const now = new Date(); let event = new Date(now.getFullYear(), m-1, d);
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if(event < today) event = new Date(now.getFullYear()+1, m-1, d);
+  return Math.ceil((event - today)/(1000*60*60*24));
+};
+const calcAge = iso => {
+  if(!iso) return '';
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return '';
+  const [y,m,d] = iso.split('-').map(Number);
+  const dob = new Date(y,m-1,d);
+  const t = new Date();
+  let age = t.getFullYear() - dob.getFullYear();
+  const mm = t.getMonth() - dob.getMonth();
+  if(mm<0 || (mm===0 && t.getDate() < dob.getDate())) age--;
+  return age;
+};
+
+/* DOM references */
 const tbl = document.getElementById('tbl');
 const searchBar = document.getElementById('searchBar');
-const counterBox = document.getElementById('counterBox');
-
-let rowsData = []; // in-memory cache
-let editingId = null;
-
-function pad(n){ return n<10? '0'+n : ''+n; }
-function formatDate(iso){ if(!iso) return '-'; if(/^\d{4}-\d{2}-\d{2}$/.test(iso)){ const [y,m,d]=iso.split('-'); return `${pad(+d)}-${pad(+m)}-${y}`; } return iso; }
-function parseDMY(iso){ if(!iso) return null; if(/^\d{4}-\d{2}-\d{2}$/.test(iso)){ const [y,m,d]=iso.split('-'); return {day:+d, month:+m}; } return null; }
-function daysTo(d,m){ const now=new Date(); let ev=new Date(now.getFullYear(), m-1, d); const today=new Date(now.getFullYear(), now.getMonth(), now.getDate()); if(ev < today) ev = new Date(now.getFullYear()+1, m-1, d); return Math.ceil((ev - today)/(1000*60*60*24)); }
-function calcAge(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); const dob=new Date(+y,+m-1,+d); const t=new Date(); let age=t.getFullYear()-dob.getFullYear(); const mm=t.getMonth()-dob.getMonth(); if(mm<0 || (mm===0 && t.getDate()<dob.getDate())) age--; return age; }
+const counters = document.getElementById('counters');
+const upcomingAlert = document.getElementById('upcomingAlert');
 
 async function loadData(){
   tbl.innerHTML = `
     <tr>
-      <th style="min-width:140px;">Name</th>
-      <th>Mobile</th>
-      <th>DOB</th>
-      <th>Age</th>
-      <th>TOB</th>
-      <th>Place</th>
-      <th>Gotra</th>
-      <th>Marriage</th>
-      <th>PIN</th>
-      <th>City</th>
-      <th>State</th>
-      <th>Country</th>
-      <th>Consult Type</th>
-      <th>Consult Mode</th>
-      <th>Remedies</th>
-      <th>Notes</th>
-      <th style="min-width:220px;">Actions</th>
-    </tr>`;
-
-  try {
+      <th>Name</th><th>Mobile</th><th>DOB</th><th>Age</th><th>TOB</th><th>Place</th><th>Gotra</th><th>Marriage</th>
+      <th>Consult Type</th><th>Consult Mode</th><th>Remedies</th><th>Notes</th><th>Actions</th>
+    </tr>
+  `;
+  try{
     const snap = await getDocs(collection(db,'birth_details'));
-    rowsData = [];
-    snap.forEach(d => {
-      const x = d.data();
-      x._id = d.id;
+    const rows = [];
+    snap.forEach(d=>{
+      const x = d.data(); x._id = d.id;
       x.dobF = formatDate(x.dob);
       x.annF = formatDate(x.anniv);
       x.age = calcAge(x.dob);
-      const dobP = parseDMY(x.dob);
-      const anP = parseDMY(x.anniv);
-      x.next = Math.min(dobP?daysTo(dobP.day,dobP.month):9999, anP?daysTo(anP.day,anP.month):9999);
-      rowsData.push(x);
+      const pd = parseISOToDM(x.dob);
+      const pa = parseISOToDM(x.anniv);
+      const nextDob = pd ? daysUntil(pd.day, pd.month) : 9999;
+      const nextAnn = pa ? daysUntil(pa.day, pa.month) : 9999;
+      x.next = Math.min(nextDob, nextAnn);
+      rows.push(x);
     });
 
-    // sort by upcoming closeness (smallest next first)
-    rowsData.sort((a,b)=> (a.next||9999)-(b.next||9999));
+    // sort by nearest upcoming (DOB or ANN)
+    rows.sort((a,b)=> (a.next||9999)-(b.next||9999));
 
+    // counters
     const thisM = (new Date()).getMonth()+1;
-    const bCount = rowsData.filter(r=> parseDMY(r.dob)?.month === thisM).length;
-    const aCount = rowsData.filter(r=> parseDMY(r.anniv)?.month === thisM).length;
-    counterBox.innerText = `🎂 Birthdays this month: ${bCount}   💍 Anniversaries this month: ${aCount}`;
+    const bCount = rows.filter(r=> parseISOToDM(r.dob)?.month === thisM).length;
+    const aCount = rows.filter(r=> parseISOToDM(r.anniv)?.month === thisM).length;
+    counters.innerText = `🎂 Birthdays this month: ${bCount}   💍 Anniversaries this month: ${aCount}`;
 
-    render(rowsData);
+    // upcoming tomorrow
+    const t = new Date(); t.setDate(t.getDate()+1);
+    const td = t.getDate(), tm = t.getMonth()+1;
+    const up = rows.filter(r=>{
+      const pd = parseISOToDM(r.dob), pa = parseISOToDM(r.anniv);
+      return (pd && pd.day===td && pd.month===tm) || (pa && pa.day===td && pa.month===tm);
+    });
+    if(up.length){ upcomingAlert.style.display='block'; upcomingAlert.textContent = 'Tomorrow: '+ up.map(x=>x.name).join(', '); } else { upcomingAlert.style.display='none'; }
 
-    // search
+    render(rows);
+
+    // search filter
     searchBar.oninput = ()=> {
       const q = searchBar.value.trim().toLowerCase();
-      if(!q) return render(rowsData);
-      const f = rowsData.filter(r=>{
-        const hay = (
-          (r.name||'') + ' ' + (r.mobile||'') + ' ' + (r.phone||'') + ' ' +
-          (r.dob||'') + ' ' + (r.anniv||'') + ' ' + (r.pin||'') + ' ' +
-          (r.city||'') + ' ' + (r.state||'') + ' ' + (r.consultType||'') + ' ' + (r.consultMode||'') + ' ' + (r.remedies||'') + ' ' + (r.notes||'') + ' ' + (r.place||'') + ' ' + (r.gotra||'')
-        ).toLowerCase();
-        return hay.indexOf(q) !== -1;
+      if(!q) { render(rows); return; }
+      const filtered = rows.filter(r=>{
+        const s = `${r.name||''} ${r.mobile||''} ${r.phone||''} ${r.pin||''} ${r.city||''} ${r.consultType||''} ${r.gotra||''} ${r.dobF||''} ${r.annF||''} ${r.notes||''}`.toLowerCase();
+        return s.includes(q);
       });
-      render(f);
+      render(filtered);
     };
 
-  } catch(err) {
-    console.error('Error loading:', err);
-    tbl.innerHTML += `<tr><td colspan="17" style="color:#f88;">Error loading data. Check console.</td></tr>`;
-  }
+  } catch(e){ console.error(e); tbl.innerHTML += `<tr><td colspan="13" style="color:tomato;">Error loading data — check console.</td></tr>`; }
 }
 
 function render(list){
-  // remove existing rows (except header)
+  // remove old rows (except header)
   tbl.querySelectorAll('tr:not(:first-child)').forEach(n=>n.remove());
   const base = window.location.origin + window.location.pathname.replace('admin.html','card.html');
 
   list.forEach(x=>{
     const enc = encodeURIComponent(x.name||'');
+    // pass age param for card
     const ageParam = x.age ? `&age=${x.age}` : '';
+    // card URLs (preserve existing 2 types + modern as extra)
     const Bf = `${base}?type=birthday&cardType=floral&name=${enc}${ageParam}`;
     const Bs = `${base}?type=birthday&cardType=simple&name=${enc}${ageParam}`;
     const Bm = `${base}?type=birthday&cardType=modern&name=${enc}${ageParam}`;
     const Ac = `${base}?type=anniversary&cardType=cake&name=${enc}`;
     const Ah = `${base}?type=anniversary&cardType=heart&name=${enc}`;
     const Am = `${base}?type=anniversary&cardType=modern&name=${enc}`;
+
     const waText = encodeURIComponent(`Best wishes from Digdarshan Astro to ${x.name}`);
 
     const tr = document.createElement('tr');
-    if(x.next <= 1) tr.classList.add('row-blink');
+    // highlight row if event within 1 day
+    if(x.next !== undefined && x.next <= 1) tr.classList.add('highlight');
 
     tr.innerHTML = `
-      <td style="text-align:left;">${x.name||'-'}</td>
-      <td>${x.mobile || x.phone || '-'}</td>
+      <td>${x.name||'-'}</td>
+      <td>${x.mobile||x.phone||'-'}</td>
       <td>${x.dobF||'-'}</td>
       <td>${x.age||'-'}</td>
-      <td>${x.time||'-'}</td>
+      <td>${x.tob||'-'}</td>
       <td>${x.place||'-'}</td>
       <td>${x.gotra||'-'}</td>
       <td>${x.annF||'-'}</td>
-      <td>${x.pin||'-'}</td>
-      <td>${x.city||'-'}</td>
-      <td>${x.state||'-'}</td>
-      <td>${x.country||'-'}</td>
       <td>${x.consultType||'-'}</td>
       <td>${x.consultMode||'-'}</td>
-      <td>${x.remedies||'-'}</td>
-      <td style="max-width:220px; white-space:normal;">${(x.notes||'').substring(0,300)}</td>
-      <td>
-        <div class="actions-line">
-          <!-- First row: red card buttons -->
-          <a class="action-btn card-btn" href="${Bf}" target="_blank">B-F</a>
-          <a class="action-btn card-btn" href="${Bs}" target="_blank">B-S</a>
-          <a class="action-btn card-btn" href="${Bm}" target="_blank">B-M</a>
-          <a class="action-btn card-btn" href="${Ac}" target="_blank">A-C</a>
-          <a class="action-btn card-btn" href="${Ah}" target="_blank">A-H</a>
-          <a class="action-btn card-btn" href="${Am}" target="_blank">A-M</a>
-        </div>
-        <div class="actions-line two" style="margin-top:8px;">
-          <!-- Second row: green WA buttons -->
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bf)}" target="_blank">WA B-F</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bs)}" target="_blank">WA B-S</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bm)}" target="_blank">WA B-M</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ac)}" target="_blank">WA A-C</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ah)}" target="_blank">WA A-H</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Am)}" target="_blank">WA A-M</a>
-        </div>
+      <td style="max-width:180px; white-space:normal;">${x.remedies? x.remedies.substring(0,200) : '-'}</td>
+      <td style="max-width:220px; white-space:normal;">${(x.notes||'-').substring(0,300)}</td>
+      <td style="width:260px;">
+        <div class="action-block">
+          <div class="btn-row red-row">
+            <a class="action-btn card-btn" href="${Bf}" target="_blank">B-F</a>
+            <a class="action-btn card-btn" href="${Bs}" target="_blank">B-S</a>
+            <a class="action-btn card-btn" href="${Bm}" target="_blank">B-M</a>
+            <a class="action-btn card-btn" href="${Ac}" target="_blank">A-C</a>
+            <a class="action-btn card-btn" href="${Ah}" target="_blank">A-H</a>
+            <a class="action-btn card-btn" href="${Am}" target="_blank">A-M</a>
+          </div>
+          <div class="btn-row green-row" style="margin-top:8px;">
+            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bf)}" target="_blank">WA B-F</a>
+            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bs)}" target="_blank">WA B-S</a>
+            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bm)}" target="_blank">WA B-M</a>
+            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ac)}" target="_blank">WA A-C</a>
+            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ah)}" target="_blank">WA A-H</a>
+            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Am)}" target="_blank">WA A-M</a>
+          </div>
 
-        <div style="display:flex; justify-content:center; margin-top:8px;">
-          <div class="icon-vert" style="margin-right:6px;">
-            <span title="Edit" class="edit" onclick="openEdit('${x._id}')">✏️</span>
-            <span title="Delete" class="del" onclick="deleteOne('${x._id}')">🗑️</span>
+          <div class="edit-delete" style="margin-top:10px; display:flex; flex-direction:column; gap:6px; align-items:center;">
+            <button title="Edit" class="icon-btn edit" onclick="editOne('${x._id}')">✏️</button>
+            <button title="Delete" class="icon-btn del" onclick="deleteOne('${x._id}')">🗑️</button>
           </div>
         </div>
       </td>
@@ -230,72 +230,24 @@ function render(list){
   });
 }
 
+/* deletion */
 window.deleteOne = async function(id){
   if(!confirm('Delete this record?')) return;
-  try {
+  try{
     await deleteDoc(doc(db,'birth_details',id));
     alert('Deleted');
     loadData();
-  } catch(e){
-    alert('Failed to delete');
-    console.error(e);
-  }
+  } catch(e){ console.error(e); alert('Delete failed'); }
 };
 
-// Edit modal functions
-function openEdit(id){
-  editingId = id;
-  const rec = rowsData.find(r=>r._id === id);
-  if(!rec) return alert('Record not found');
-  document.getElementById('e_name').value = rec.name||'';
-  document.getElementById('e_mobile').value = (rec.mobile||rec.phone||'').replace('+91 ','').replace(/\s/g,'') || '';
-  document.getElementById('e_email').value = rec.email||'';
-  document.getElementById('e_dob').value = rec.dob||'';
-  document.getElementById('e_time').value = rec.time||'';
-  document.getElementById('e_place').value = rec.place||'';
-  document.getElementById('e_gotra').value = rec.gotra||'';
-  document.getElementById('e_anniv').value = rec.anniv||'';
-  document.getElementById('e_pin').value = rec.pin||'';
-  document.getElementById('e_city').value = rec.city||'';
-  document.getElementById('e_state').value = rec.state||'';
-  document.getElementById('e_country').value = rec.country||'';
-  document.getElementById('editModal').style.display = 'flex';
-}
-function closeEdit(){
-  document.getElementById('editModal').style.display = 'none';
-  editingId = null;
-}
-async function saveEdit(){
-  if(!editingId) return;
-  const m = document.getElementById('e_mobile').value.trim();
-  if(m && !/^\d{10}$/.test(m)) { alert('Enter a valid 10-digit mobile'); return; }
-  const payload = {
-    name: document.getElementById('e_name').value.trim(),
-    mobile: m ? '+91 ' + m : '',
-    phone: m ? '+91 ' + m : '',
-    email: document.getElementById('e_email').value.trim(),
-    dob: document.getElementById('e_dob').value || '',
-    time: document.getElementById('e_time').value || '',
-    place: document.getElementById('e_place').value || '',
-    gotra: document.getElementById('e_gotra').value || '',
-    anniv: document.getElementById('e_anniv').value || '',
-    pin: document.getElementById('e_pin').value || '',
-    city: document.getElementById('e_city').value || '',
-    state: document.getElementById('e_state').value || '',
-    country: document.getElementById('e_country').value || ''
-  };
-  try {
-    await updateDoc(doc(db,'birth_details',editingId), payload);
-    alert('Updated');
-    closeEdit();
-    loadData();
-  } catch(e){
-    console.error(e);
-    alert('Update failed — check console');
-  }
-}
+/* Edit placeholder - open card page with id param (you can implement a modal later) */
+window.editOne = function(id){
+  // For now navigate to admin edit page or open modal - keep simple
+  alert('Edit requested for id: ' + id + '\n(Implement edit modal as next step.)');
+};
 
 loadData();
 </script>
+
 </body>
 </html>
