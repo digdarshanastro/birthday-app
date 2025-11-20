@@ -7,26 +7,28 @@
 
 html, body {
   height: 100%;
-  font-family: "Inter", Arial, sans-serif;
+  font-family: "Inter", Arial, sans-serif; /* ধরে নিলাম Inter ফন্ট ব্যবহার করছেন */
   color: #fff;
-  background: #0b0710;
+  background: #0b0710; /* ২নং ছবির ব্যাকগ্রাউন্ডের কাছাকাছি কালার */
 }
 
-/* Light Background Watermark */
+/* Light Background Watermark (Rashichakra.png) */
+/* C:\Users\user\Downloads\birthday_app\images\Rashichakra.png ধরে 'images/Rashichakra.png' ব্যবহার করা হয়েছে */
 body::before {
   content: "";
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
   background: url("images/Rashichakra.png") center/480px repeat;
-  opacity: 0.08;
+  opacity: 0.08; /* হালকা ইমপ্রেশন */
   z-index: -1;
 }
 
 /* ===================== GLOBAL CONTAINER ===================== */
 .container {
   width: 95%;
-  max-width: 1450px;
+  /* desktop-এ পুরো screen জুড়ে করার জন্য max-width বাড়ানো হয়েছে */
+  max-width: 1450px; 
   margin: 28px auto;
   padding: 26px;
   border-radius: 16px;
@@ -41,230 +43,166 @@ h1 {
   font-weight: 900;
   text-align: center;
   color: #ffd6e8;
-  margin-bottom: 14px;
-}
-
-/* ===================== INPUTS / LABELS ===================== */
-
-label {
-  display: block;
-  margin-top: 12px;
-  font-weight: 700;
-  font-size: 13px;
-  color: rgba(255,255,255,0.9);
-}
-
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 12px 14px;
-  margin-top: 6px;
-  border-radius: 12px;
-  border: none;
-  outline: none;
-  color: #fff;
-
-  background: rgba(255,255,255,0.06);
-  box-shadow: inset 0 -6px 12px rgba(0,0,0,0.25);
-}
-
-select option {
-  color: #000;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: rgba(255,255,255,0.55);
-}
-
-textarea {
-  min-height: 110px;
-  resize: vertical;
-}
-
-/* Two-column Layout */
-.form-row {
-  display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-}
-.col {
-  flex: 1;
-  min-width: 220px;
-}
-
-/* ===================== BUTTONS ===================== */
-.btn {
-  padding: 12px 26px;
-  border-radius: 26px;
-  font-weight: 800;
-  cursor: pointer;
-  border: none;
-  color: #fff;
-  background: linear-gradient(90deg,#ff6ea6,#ff9d6d);
-  transition: 0.2s;
-}
-.btn:hover {
-  transform: scale(1.04);
-}
-
-.btn.ghost {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.18);
-}
-
-/* ===================== PREVIEW BOX ===================== */
-.preview {
-  margin-top: 12px;
-  padding: 12px 14px;
-  background: rgba(255,255,255,0.03);
-  border-radius: 10px;
-}
-
-/* ===================== STEPPER ===================== */
-.stepper {
-  display: flex;
-  justify-content: center;
-  gap: 28px;
   margin-bottom: 20px;
 }
-
-.step {
-  text-align: center;
-  cursor: pointer;
-  color: rgba(255,255,255,0.45);
-  font-weight: 800;
+p.error {
+    color: #ff4d4d;
+    text-align: center;
+    margin-top: 15px;
+    font-weight: bold;
 }
 
-.step .bar {
-  width: 160px;
-  height: 6px;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.09);
-  margin-bottom: 8px;
+/* ===================== FORM ELEMENTS ===================== */
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 18px;
+  margin-bottom: 6px;
+  color: #c2c2c2;
 }
 
-.step.active {
-  color: #fff;
-}
-.step.active .bar {
-  background: linear-gradient(90deg,#ff6ea6,#ff9d6d);
-  box-shadow: 0 6px 14px rgba(255,90,140,0.18);
-}
-
-/* ===================== TABLE (ADMIN) ===================== */
-
-.table-box {
+input, select, textarea {
   width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 16px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+  outline: none;
+  box-sizing: border-box;
+}
+input:focus, select:focus, textarea:focus {
+  background: rgba(255,255,255,0.15);
+}
+
+button, .action-btn {
+  background: #ff4500;
+  border: none;
+  padding: 12px 20px;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  margin-top: 25px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+
+/* ===================== TABLE STYLES ===================== */
+.table-box {
   overflow-x: auto;
-  margin-top: 12px;
+  /* ডেটাগুলো দেখতে সুবিধা করার জন্য টেবিলের স্টাইল ফিক্স করা হয়েছে */
+  padding-bottom: 10px; 
 }
 
 table {
   width: 100%;
-  border-collapse: collapse;
-  background: rgba(255,255,255,0.02);
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 20px;
+  min-width: 1000px; /* ডেটা ডিসপ্লে করার জন্য মিনিমাম উইডথ */
 }
 
 th, td {
-  padding: 10px 8px;
-  border: 1px solid rgba(255,255,255,0.05);
-  font-size: 0.88rem;
-  text-align: center;
-  white-space: nowrap;
-  color: #fff;
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  white-space: nowrap; /* টেক্সট যাতে না ভাঙে */
 }
 
 th {
-  background: rgba(255,255,255,0.06);
-  font-weight: 900;
-  color: #ffe9f4;
-}
-
-/* ===================== CARD BUTTONS ===================== */
-.card-btn {
-  background: #ff4500;
-  color: #fff !important;
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 12px;
+  background: rgba(255,255,255,0.08);
   font-weight: 800;
-  display: inline-block;
-  margin: 2px;
-  text-decoration: none;
-  min-width:72px;
-  text-align:center;
+  color: #ffd6e8;
+  text-transform: uppercase;
 }
 
-/* ===================== WHATSAPP BUTTONS ===================== */
-.whatsapp-btn {
-  background: #25d366;
-  color: #062c12 !important;
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 800;
-  display: inline-block;
-  margin: 2px;
-  text-decoration: none;
-  min-width:72px;
-  text-align:center;
+/* হাইলাইট করার জন্য নতুন ক্লাস */
+tr.highlight-soon {
+    background-color: rgba(255, 204, 0, 0.15); /* হালকা হলুদ ব্যাকগ্রাউন্ড */
+    color: #fff0b3;
+    font-weight: bold;
+}
+tr.highlight-soon td {
+    border-bottom: 1px solid #ffcc00;
 }
 
-/* ===================== ACTION ICONS ===================== */
-.delete-btn {
-  color: #ff4d4d;
-  font-size: 20px;
-  cursor: pointer;
+
+/* ===================== ACTION BUTTONS (SAME SIZE & ORDER) ===================== */
+.actions-cell {
+    width: 250px; /* ফিক্সড উইডথ */
+    text-align: center !important;
 }
 
-.edit-btn {
-  color: #36c2ff;
-  font-size: 20px;
-  cursor: pointer;
-  margin-right: 4px;
+.actions-grid {
+    display: grid;
+    /* 2 columns for card buttons, 2 for WhatsApp buttons */
+    grid-template-columns: 1fr 1fr 1fr 1fr; 
+    gap: 5px;
+    margin-bottom: 8px;
+    width: 100%;
 }
 
-/* ===================== SEARCH BAR ===================== */
-#searchBar {
-  width: 70%;
-  display: block;
-  margin: 10px auto 20px;
-  padding: 10px 16px;
-  border-radius: 28px;
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.2);
-  outline: none;
-  color: #fff;
+.action-btn {
+    width: 100%; /* সব বাটন সেম সাইজের */
+    padding: 6px 4px;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
 }
 
-/* ===================== BLINK FOR UPCOMING EVENTS ===================== */
-.blink {
-  animation: softblink 1.6s infinite;
+.card-btn { 
+    background: #ff4500; /* লাল বাটন */
+    color: white;
 }
-@keyframes softblink {
-  0% { opacity: 1; }
-  50% { opacity: 0.45; }
-  100% { opacity: 1; }
-}
-
-/* ===================== RESPONSIVE ===================== */
-
-@media (max-width: 900px) {
-  h1 { font-size: 22px; }
-  #searchBar { width: 90%; }
-
-  .step .bar { width: 110px; }
+.whatsapp-btn { 
+    background: #25d366; /* সবুজ বাটন */
+    color: #062c12 !important; 
+    font-weight: 800;
 }
 
-@media (max-width: 600px) {
-  .form-row { flex-direction: column; }
+/* ===================== ACTION ICONS (EDIT/DELETE) ===================== */
+.icon-box {
+    display: flex;
+    justify-content: flex-end; /* ডানদিকে সরানো */
+    gap: 15px;
+    padding-right: 15px;
+    margin-top: 10px;
+}
 
-  table th, table td {
-    white-space: normal;
-    font-size: 0.78rem;
+.delete-btn, .edit-btn {
+    display: block;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+}
+.delete-btn { color: #ff4d4d; }
+.edit-btn { color: #36c2ff; }
+
+/* ===================== MEDIA QUERIES (Mobile) ===================== */
+@media(max-width: 800px){
+  .container {
+      padding: 15px;
   }
-
-  .action-btn { font-size: 11px; padding: 6px 8px; }
+  th, td {
+      padding: 8px 10px;
+      font-size: 12px;
+      white-space: normal;
+  }
+  .actions-grid {
+    grid-template-columns: 1fr 1fr; /* মোবাইলে দুটি কলামে বাটন */
+  }
+  .actions-cell {
+      width: auto;
+  }
+  .icon-box {
+      justify-content: center; /* মোবাইলে আইকন সেন্টারে আনা */
+  }
 }
