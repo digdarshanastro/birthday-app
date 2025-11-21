@@ -9,7 +9,7 @@
 
 <style>
 /* ================================
-   GLOBAL BACKGROUND (Your Zodiac)
+   GLOBAL BACKGROUND
    ================================ */
 body {
   margin: 0;
@@ -22,10 +22,7 @@ body {
 body::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(10, 0, 25, 0.55);
   backdrop-filter: blur(2px);
   z-index: -1;
@@ -109,7 +106,11 @@ textarea { min-height:110px; }
     <img src="/mnt/data/Digdarshan Astro Logo.png" alt="logo">
     <div class="brand-title">DIGDARSHAN ASTRO</div>
     <div class="brand-sub">Jyotish Devagya Amitsree — Call: 8697190840 / 9830637766</div>
-    <div class="brand-link"><a href="https://digdarshanastro.mydurable.com/" target="_blank">https://digdarshanastro.mydurable.com/</a></div>
+    <div class="brand-link">
+      <a href="https://digdarshanastro.mydurable.com/" target="_blank">
+        https://digdarshanastro.mydurable.com/
+      </a>
+    </div>
   </div>
 
   <h3 style="text-align:center; margin-top:10px;">Fill Your Birth Details Consultation Type.</h3>
@@ -188,11 +189,13 @@ textarea { min-height:110px; }
 
     <!-- STEP 2 -->
     <div id="step2" style="display:none;">
+
       <div class="form-row">
         <div class="col">
           <label>Date of Birth</label>
           <input id="dob" type="date">
         </div>
+
         <div class="col">
           <label>Time of Birth</label>
           <input id="tob" type="time">
@@ -207,6 +210,14 @@ textarea { min-height:110px; }
           <label>Gotra</label>
           <input id="gotra">
         </div>
+
+        <div class="col">
+          <label>Maternal Uncle's Gotra</label>
+          <input id="maternal_gotra">
+        </div>
+      </div>
+
+      <div class="form-row">
         <div class="col">
           <label>Date of Marriage</label>
           <input id="anniv" type="date">
@@ -266,7 +277,6 @@ textarea { min-height:110px; }
 import { db } from "./firebase-config.js";
 import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-
 function showStep(n){
   document.getElementById("step1").style.display = n===1 ? "block" : "none";
   document.getElementById("step2").style.display = n===2 ? "block" : "none";
@@ -295,6 +305,8 @@ function buildPreview(){
   p.push(`<b>DOB:</b> ${document.getElementById("dob").value}`);
   p.push(`<b>TOB:</b> ${document.getElementById("tob").value}`);
   p.push(`<b>Place:</b> ${document.getElementById("place").value}`);
+  p.push(`<b>Gotra:</b> ${document.getElementById("gotra").value}`);
+  p.push(`<b>Maternal Gotra:</b> ${document.getElementById("maternal_gotra").value}`);
   p.push(`<b>Consult:</b> ${document.getElementById("consultType").value} / ${document.getElementById("consultMode").value}`);
   document.getElementById("preview").innerHTML = p.join("<br>");
 }
@@ -304,6 +316,7 @@ document.querySelectorAll("input,select,textarea")
 
 
 window.submitForm = async function(){
+
   const mobile=document.getElementById("mobile").value.trim();
   if(!/^\d{10}$/.test(mobile)){ alert("Invalid mobile"); return; }
 
@@ -317,15 +330,21 @@ window.submitForm = async function(){
     state: document.getElementById("state").value,
     pin: document.getElementById("pin").value,
     country: document.getElementById("country").value,
+
     dob: document.getElementById("dob").value,
-    time: document.getElementById("tob").value,     // FIXED time field
+    time: document.getElementById("tob").value,
     place: document.getElementById("place").value,
+
     gotra: document.getElementById("gotra").value,
+    maternal_gotra: document.getElementById("maternal_gotra").value,   // NEW FIELD
+
     anniv: document.getElementById("anniv").value,
+
     consultType: document.getElementById("consultType").value,
     consultMode: document.getElementById("consultMode").value,
     remedies: document.getElementById("remedies").value,
     notes: document.getElementById("notes").value,
+
     createdAt: serverTimestamp()
   };
 
