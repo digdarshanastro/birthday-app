@@ -117,7 +117,7 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
   }
 }
 
-/* ===================== CARD PAGE STYLES ===================== */
+/* ===================== CARD PAGE STYLES (MODIFIED FOR SOCIAL MEDIA) ===================== */
 
 .card-page {
     background-color: #0b0710; /* Dark background for contrast */
@@ -132,8 +132,8 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
 }
 
 .card-border {
-    width: 90%;
-    max-width: 900px; /* Max card width */
+    width: 95%;
+    max-width: 680px; /* **MODIFIED: Reduced max-width for social media focus** */
     background: #fff;
     padding: 6px;
     border-radius: 18px;
@@ -141,23 +141,23 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
 }
 
 .colored-frame {
-    border: 4px solid; /* This will be set by JS (currentTheme.borderColor) */
+    border: 4px solid; 
     padding: 18px;
     border-radius: 12px;
-    background-color: #f7f7f7; /* Light background inside frame */
+    background-color: #f7f7f7; 
 }
 
 .card-content {
-    display: flex; /* Key to make sections side-by-side */
+    display: flex; /* Key: side-by-side */
     gap: 20px;
-    align-items: flex-start; /* Align content to the top */
-    min-height: 350px; /* Min height for a decent card size */
+    align-items: flex-start; 
+    min-height: 350px; 
 }
 
 .left-section {
     flex-shrink: 0;
     width: 40%; /* Image takes 40% of the space */
-    max-width: 320px;
+    max-width: 250px; /* Max image section width */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -166,14 +166,14 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
 .left-section img {
     width: 100%;
     height: auto;
-    max-height: 350px; /* Ensure image doesn't get too tall */
+    max-height: 450px; 
     object-fit: contain;
     border-radius: 8px;
 }
 
 .right-section {
     flex-grow: 1;
-    width: 60%; /* Text takes 60% of the space */
+    width: 60%; 
     color: #333;
     padding-top: 10px;
 }
@@ -184,7 +184,7 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
     line-height: 1.2;
     margin-bottom: 12px;
     padding-bottom: 6px;
-    border-bottom: 2px dashed; /* Color set by JS */
+    border-bottom: 2px dashed; 
 }
 
 .main-message {
@@ -219,7 +219,7 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
 /* CARD RESPONSIVE */
 @media (max-width: 768px) {
     .card-content {
-        flex-direction: column; /* Stack image and text vertically */
+        flex-direction: column; 
         align-items: center;
         min-height: auto;
         padding: 10px;
