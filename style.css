@@ -116,3 +116,133 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
     background: rgba(10,8,12,0.8);
   }
 }
+
+/* ===================== CARD PAGE STYLES ===================== */
+
+.card-page {
+    background-color: #0b0710; /* Dark background for contrast */
+}
+
+#card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.card-border {
+    width: 90%;
+    max-width: 900px; /* Max card width */
+    background: #fff;
+    padding: 6px;
+    border-radius: 18px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.colored-frame {
+    border: 4px solid; /* This will be set by JS (currentTheme.borderColor) */
+    padding: 18px;
+    border-radius: 12px;
+    background-color: #f7f7f7; /* Light background inside frame */
+}
+
+.card-content {
+    display: flex; /* Key to make sections side-by-side */
+    gap: 20px;
+    align-items: flex-start; /* Align content to the top */
+    min-height: 350px; /* Min height for a decent card size */
+}
+
+.left-section {
+    flex-shrink: 0;
+    width: 40%; /* Image takes 40% of the space */
+    max-width: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-section img {
+    width: 100%;
+    height: auto;
+    max-height: 350px; /* Ensure image doesn't get too tall */
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.right-section {
+    flex-grow: 1;
+    width: 60%; /* Text takes 60% of the space */
+    color: #333;
+    padding-top: 10px;
+}
+
+.header-text {
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px dashed; /* Color set by JS */
+}
+
+.main-message {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    color: #555;
+}
+
+.footer-signature {
+    text-align: right;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #777;
+    padding-top: 10px;
+    border-top: 1px dotted #ccc;
+}
+
+.company-name {
+    font-weight: 800;
+    color: #000;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 2px;
+}
+.call-number {
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* CARD RESPONSIVE */
+@media (max-width: 768px) {
+    .card-content {
+        flex-direction: column; /* Stack image and text vertically */
+        align-items: center;
+        min-height: auto;
+        padding: 10px;
+    }
+    .left-section, .right-section {
+        width: 100%;
+        max-width: 90%;
+        padding: 0;
+    }
+    .left-section img {
+        max-height: 300px;
+        margin-bottom: 15px;
+    }
+    .header-text {
+        font-size: 22px;
+        text-align: center;
+        border-bottom: none;
+    }
+    .main-message {
+        text-align: center;
+    }
+    .footer-signature {
+        text-align: center;
+        margin-top: 15px;
+    }
+}
