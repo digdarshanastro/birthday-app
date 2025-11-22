@@ -32,7 +32,6 @@ let name = url.get("name");
 let age = url.get("age");
 
 name = name ? decodeURIComponent(name) : "[Client's Name]";
-// Ensure age is treated as a number
 age = age ? Number(age) : null;
 
 const coloredFrameElement = document.querySelector(".colored-frame"); 
@@ -46,7 +45,7 @@ let imageURL = "";
 let headerText = "";
 let discountText = "";
 
-// themes: প্রতিটি কার্ডের ছবির নাম এবং সেই অনুযায়ী ডিজাইন কালার (borderColor, headerColor)
+// themes: ছবির নাম এবং সেই অনুযায়ী ডিজাইন কালার (borderColor, headerColor)
 const themes = {
   // Birthday Card 1: birthday66.png (floral) - Purple/Blue Theme
   'birthday_floral': { img: 'birthday66.png', borderColor: '#8A2BE2', headerColor: '#A377D6', discount: "a special birthday discount on a birth chart reading & Gemstone!" },
@@ -77,9 +76,14 @@ if (type === "birthday") {
   // Assign theme based on cardType
   currentTheme = cardType === 'cake' ? themes.anniversary_cake : themes.anniversary_heart;
   
-  // Header text with Anniversary Age (Your requested change)
+  // Header text with Anniversary Age (Your requested fix)
   if (age && age > 0) headerText = `Happy ${ordinal(age)} Anniversary, ${decodeURIComponent(name)}! 🎉`;
   else headerText = `Happy Anniversary, ${decodeURIComponent(name)}! 🎉`;
+} else {
+  // Fallback if type is invalid
+  currentTheme = { img: 'birthday66.png', borderColor: '#CCCCCC', headerColor: '#333333', discount: "a special discount on a reading!" };
+  headerText = `Error: Invalid Card Type.`;
+  msgTxtElement.innerHTML = `Please check the URL parameters.`;
 }
 
 
@@ -90,22 +94,11 @@ if (currentTheme) {
   // Apply theme-specific colors
   coloredFrameElement.style.borderColor = currentTheme.borderColor;
   headerTxtElement.style.color = currentTheme.headerColor;
-  // Use headerColor for a border/underline effect for the header text
-  // NOTE: You might need to add CSS rules for 'header-text' to use this.
-  // Example: headerTxtElement.style.borderBottom = `2px dashed ${currentTheme.headerColor}`;
+  headerTxtElement.style.borderColor = currentTheme.headerColor; // For the dashed border
   
-} else {
-  // Fallback for invalid type
-  imageURL = "/mnt/data/Screenshot 2025-11-19 103845.png";
-  headerText = `Hello, ${decodeURIComponent(name)}!`;
-  discountText = "a special discount on a reading!";
-  coloredFrameElement.style.borderColor = "#CCCCCC";
-  headerTxtElement.style.color = "#333333";
-  headerTxtElement.innerHTML = `Error: Invalid Card Type.`;
-  msgTxtElement.innerHTML = `Please check the URL parameters.`;
-}
+} 
 
-// Main message content remains the same
+// Main message content 
 const mainMessage = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get ${discountText}`;
 
 // Apply content
@@ -113,10 +106,10 @@ cardImage.src = imageURL;
 headerTxtElement.innerHTML = headerText;
 msgTxtElement.innerHTML = mainMessage;
 
-// Footer/Signature content (as per previous request)
+// Footer/Signature content 
 footerTxtElement.innerHTML =
   `With Best Wishes from<br>` +
-  `<span class="company-name">Digdarshan Astro</span><br>` +
+  `<span class="company-name" style="color:${currentTheme.headerColor}">Digdarshan Astro</span><br>` +
   `Jyotish Devagya Amitsree<br>` +
   `<span class="call-number">Call : 8697190840 / 9830637766</span>`;
 </script>
