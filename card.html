@@ -45,19 +45,14 @@ let imageURL = "";
 let headerText = "";
 let discountText = "";
 
-// themes: ছবির নাম এবং সেই অনুযায়ী ডিজাইন কালার (borderColor, headerColor)
+// themes
 const themes = {
-  // Birthday Card 1: birthday66.png (floral) - Purple/Blue Theme
   'birthday_floral': { img: 'birthday66.png', borderColor: '#8A2BE2', headerColor: '#A377D6', discount: "a special birthday discount on a birth chart reading & Gemstone!" },
-  // Birthday Card 2: birthday77.png (simple) - Orange/Gold Theme
   'birthday_simple': { img: 'birthday77.png', borderColor: '#FFCC00', headerColor: '#FF8C00', discount: "a special birthday discount on a birth chart reading & Gemstone!" },
-  // Anniversary Card 1: anniversary88.png (cake) - Dark Pink/Ruby Theme
   'anniversary_cake': { img: 'anniversary88.png', borderColor: '#C2185B', headerColor: '#E91E63', discount: "a special anniversary discount on a birth chart reading & Gemstone!" },
-  // Anniversary Card 2: anniversary99.png (heart) - Dark Red/Crimson Theme
   'anniversary_heart': { img: 'anniversary99.png', borderColor: '#8B0000', headerColor: '#DC3545', discount: "a special anniversary discount on a birth chart reading & Gemstone!" }
 };
 
-// Function to add ordinal suffix (1st, 2nd, 3rd, 4th...)
 function ordinal(n) {
   const s = ["th","st","nd","rd"];
   const v = n % 100;
@@ -65,51 +60,43 @@ function ordinal(n) {
 }
 
 if (type === "birthday") {
-  // Assign theme based on cardType
   currentTheme = cardType === 'floral' ? themes.birthday_floral : themes.birthday_simple;
-  
-  // Header text with Age
   if (age && age > 0) headerText = `Happy ${ordinal(age)} Birthday, ${decodeURIComponent(name)}! 🎉`;
   else headerText = `Happy Birthday, ${decodeURIComponent(name)}! 🎉`;
-  
 } else if (type === "anniversary") {
-  // Assign theme based on cardType
   currentTheme = cardType === 'cake' ? themes.anniversary_cake : themes.anniversary_heart;
-  
-  // Header text with Anniversary Age (Your requested fix)
+  // **FIX: Added Anniversary Age logic**
   if (age && age > 0) headerText = `Happy ${ordinal(age)} Anniversary, ${decodeURIComponent(name)}! 🎉`;
   else headerText = `Happy Anniversary, ${decodeURIComponent(name)}! 🎉`;
-} else {
-  // Fallback if type is invalid
-  currentTheme = { img: 'birthday66.png', borderColor: '#CCCCCC', headerColor: '#333333', discount: "a special discount on a reading!" };
-  headerText = `Error: Invalid Card Type.`;
-  msgTxtElement.innerHTML = `Please check the URL parameters.`;
 }
 
 
 if (currentTheme) {
   imageURL = currentTheme.img;
   discountText = currentTheme.discount;
-  
-  // Apply theme-specific colors
   coloredFrameElement.style.borderColor = currentTheme.borderColor;
   headerTxtElement.style.color = currentTheme.headerColor;
-  headerTxtElement.style.borderColor = currentTheme.headerColor; // For the dashed border
-  
-} 
+  headerTxtElement.style.borderColor = currentTheme.headerColor;
+} else {
+  imageURL = "/mnt/data/Screenshot 2025-11-19 103845.png";
+  headerText = `Hello, ${decodeURIComponent(name)}!`;
+  discountText = "a special discount on a reading!";
+  coloredFrameElement.style.borderColor = "#CCCCCC";
+  headerTxtElement.style.color = "#333333";
+  headerTxtElement.style.borderColor = "#333333";
+  msgTxtElement.innerHTML = `Error: Invalid Card Type.`;
+}
 
-// Main message content 
 const mainMessage = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get ${discountText}`;
 
-// Apply content
 cardImage.src = imageURL;
 headerTxtElement.innerHTML = headerText;
 msgTxtElement.innerHTML = mainMessage;
 
-// Footer/Signature content 
+// **FIX: Added dynamic color to company-name**
 footerTxtElement.innerHTML =
   `With Best Wishes from<br>` +
-  `<span class="company-name" style="color:${currentTheme.headerColor}">Digdarshan Astro</span><br>` +
+  `<span class="company-name" style="color:${currentTheme ? currentTheme.headerColor : '#000'}">Digdarshan Astro</span><br>` +
   `Jyotish Devagya Amitsree<br>` +
   `<span class="call-number">Call : 8697190840 / 9830637766</span>`;
 </script>
