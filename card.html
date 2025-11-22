@@ -1,143 +1,125 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Digdarshan Astro Wishes</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body { margin:0; overflow-x:hidden; background:#120e14; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:20px; box-sizing:border-box; }
-        .card-wrapper { position:relative; width:100%; max-width:700px; background:#fff; border-radius:20px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.5); overflow:hidden; border:6px solid #ff4d94; display:flex; flex-direction:column; align-items:center; text-align:center; }
-        .card-inner { display:flex; flex-direction:column; gap:15px; width:100%; }
-        .header-section { margin-bottom:10px; }
-        h1 { font-family: 'Georgia', serif; font-size:42px; color:#ff4d94; margin:0; line-height:1.2; }
-        h2 { font-family: 'Arial', sans-serif; font-size:28px; color:#ff0066; margin:5px 0 10px; border-bottom:2px dashed #ffb8d1; padding-bottom:5px; display:inline-block; max-width:80%; word-wrap:break-word; }
-        .greeting-text { font-family: 'Arial', sans-serif; font-size:18px; color:#333; line-height:1.6; margin-bottom:20px; }
-        .signature { font-family: 'Georgia', serif; font-size:20px; color:#666; margin-top:20px; text-align:right; width:100%; }
-        .logo-section { margin-top:20px; display:flex; justify-content:center; }
-        .logo-section img { width:80px; height:80px; object-fit:contain; border-radius:12px; }
-        .contact-info { font-size:14px; color:#555; margin-top:5px; }
-
-        /* Card Type Specific Styles */
-        .card-type-floral .main-image { background:url('floral-bg.png') no-repeat center center/cover; min-height:250px; border-radius:15px; margin-bottom:20px; }
-        .card-type-simple { background:#f9f9f9; padding:30px; }
-        .card-type-simple h1 { color:#333; }
-        .card-type-simple h2 { color:#555; border-bottom:1px solid #ccc; }
-        .card-type-simple .greeting-text { color:#444; }
-        .card-type-modern { background:linear-gradient(135deg, #f0f0f0, #e0e0e0); padding:35px; }
-        .card-type-modern h1 { color:#8e2de2; }
-        .card-type-modern h2 { color:#4a00e0; border-bottom:2px solid #b39ddb; }
-        .card-type-modern .greeting-text { color:#222; }
-
-        /* Anniversary Heart Card Specifics */
-        .card-type-heart .heart-image { width:180px; height:auto; margin-bottom:15px; float:left; margin-right:20px; }
-        .card-type-heart .content-area { display:flex; flex-direction:row; align-items:flex-start; text-align:left; }
-        .card-type-heart .text-content { flex-grow:1; }
-        .card-type-heart .greeting-text { margin-top:0; }
-        .card-type-heart h1 { color:#cc0066; }
-        .card-type-heart h2 { color:#a30052; border-bottom-color:#ff99c2; }
-        .card-type-heart .signature { margin-top:10px; text-align:right; }
-        
-        /* New wishes section */
-        .wishes-section { font-family: 'Brush Script MT', cursive; font-size:26px; color:#888; text-align:left; margin-top:20px; width:100%; }
-
-        @media (max-width: 600px) {
-            h1 { font-size:32px; }
-            h2 { font-size:24px; }
-            .greeting-text { font-size:16px; }
-            .signature { font-size:18px; }
-            .card-type-heart .heart-image { width:120px; float:none; margin:0 auto 15px; display:block; }
-            .card-type-heart .content-area { flex-direction:column; align-items:center; text-align:center; }
-            .card-type-heart .text-content { width:100%; }
-            .wishes-section { font-size:20px; text-align:center; }
-        }
-    </style>
+<title>Wish Card</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css"> 
 </head>
-<body>
-    <div class="card-wrapper" id="cardWrapper">
-        <div class="card-inner">
-            <div class="header-section">
-                <h1 id="cardTitle"></h1> 
-                <h2 id="cardName"></h2> 
-            </div>
+<body class="card-page"> 
 
-            <div id="cardContent" class="content-area">
-                </div>
+<div id="card">
+  <div class="card-border"> 
+      <div class="colored-frame"> 
+          <div class="card-content">
+              <div class="left-section">
+                  <img id="cardImage" src="" alt="card image">
+              </div>
+              <div class="right-section">
+                  <div class="header-text" id="headerTxt"></div>
+                  <div class="main-message" id="msgTxt"></div>
+                  <div class="footer-signature" id="footerTxt"></div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
 
-            <div class="wishes-section">
-                <span>With best Wishes from</span> 
-                <span style="font-family: 'Times New Roman', serif; font-size:18px; color:#333; display:block; margin-top:5px;">Digdarshan Astro</span>
-                <span style="font-family: 'Times New Roman', serif; font-size:16px; color:#555; display:block;">Jyotish Devagya Amitsree</span>
-                <span style="font-family: 'Times New Roman', serif; font-size:14px; color:#666; display:block;">Call: 8697190840 / 9830637766</span>
-            </div>
-            
-        </div>
-    </div>
+<script>
+const url = new URLSearchParams(window.location.search);
+const type = url.get("type"); 
+const cardType = url.get("cardType"); 
+let name = url.get("name");
+let age = url.get("age");
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const type = urlParams.get('type') || 'birthday'; // 'birthday' or 'anniversary'
-            const cardType = urlParams.get('cardType') || 'floral'; // 'floral', 'simple', 'modern', 'cake', 'heart'
-            const name = urlParams.get('name') || 'Dear Client';
-            const age = urlParams.get('age'); // Optional age parameter for anniversaries
+name = name ? decodeURIComponent(name) : "[Client's Name]";
+// Ensure age is treated as a number
+age = age ? Number(age) : null;
 
-            const cardWrapper = document.getElementById('cardWrapper');
-            const cardTitle = document.getElementById('cardTitle');
-            const cardName = document.getElementById('cardName');
-            const cardContent = document.getElementById('cardContent');
+const coloredFrameElement = document.querySelector(".colored-frame"); 
+const cardImage = document.getElementById("cardImage");
+const headerTxtElement = document.getElementById("headerTxt");
+const msgTxtElement = document.getElementById("msgTxt");
+const footerTxtElement = document.getElementById("footerTxt");
 
-            // Apply base card type class
-            cardWrapper.classList.add(`card-type-${cardType}`);
+let currentTheme = null;
+let imageURL = "";
+let headerText = "";
+let discountText = "";
 
-            let titleText = '';
-            let greetingMessage = '';
-            let imageHtml = '';
+// themes: প্রতিটি কার্ডের ছবির নাম এবং সেই অনুযায়ী ডিজাইন কালার (borderColor, headerColor)
+const themes = {
+  // Birthday Card 1: birthday66.png (floral) - Purple/Blue Theme
+  'birthday_floral': { img: 'birthday66.png', borderColor: '#8A2BE2', headerColor: '#A377D6', discount: "a special birthday discount on a birth chart reading & Gemstone!" },
+  // Birthday Card 2: birthday77.png (simple) - Orange/Gold Theme
+  'birthday_simple': { img: 'birthday77.png', borderColor: '#FFCC00', headerColor: '#FF8C00', discount: "a special birthday discount on a birth chart reading & Gemstone!" },
+  // Anniversary Card 1: anniversary88.png (cake) - Dark Pink/Ruby Theme
+  'anniversary_cake': { img: 'anniversary88.png', borderColor: '#C2185B', headerColor: '#E91E63', discount: "a special anniversary discount on a birth chart reading & Gemstone!" },
+  // Anniversary Card 2: anniversary99.png (heart) - Dark Red/Crimson Theme
+  'anniversary_heart': { img: 'anniversary99.png', borderColor: '#8B0000', headerColor: '#DC3545', discount: "a special anniversary discount on a birth chart reading & Gemstone!" }
+};
 
-            if (type === 'anniversary') {
-                titleText = 'Happy Anniversary!';
-                if (age) {
-                    titleText = `Happy ${age}th Anniversary!`; // Happy (Age) Anniversary!
-                }
-                cardTitle.innerHTML = titleText;
-                cardName.textContent = name; // Name below the title
+// Function to add ordinal suffix (1st, 2nd, 3rd, 4th...)
+function ordinal(n) {
+  const s = ["th","st","nd","rd"];
+  const v = n % 100;
+  return n + (s[(v-20)%10] || s[v] || s[0]);
+}
 
-                greetingMessage = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get a special anniversary discount on a birth chart reading & Gemstone!`;
+if (type === "birthday") {
+  // Assign theme based on cardType
+  currentTheme = cardType === 'floral' ? themes.birthday_floral : themes.birthday_simple;
+  
+  // Header text with Age
+  if (age && age > 0) headerText = `Happy ${ordinal(age)} Birthday, ${decodeURIComponent(name)}! 🎉`;
+  else headerText = `Happy Birthday, ${decodeURIComponent(name)}! 🎉`;
+  
+} else if (type === "anniversary") {
+  // Assign theme based on cardType
+  currentTheme = cardType === 'cake' ? themes.anniversary_cake : themes.anniversary_heart;
+  
+  // Header text with Anniversary Age (Your requested change)
+  if (age && age > 0) headerText = `Happy ${ordinal(age)} Anniversary, ${decodeURIComponent(name)}! 🎉`;
+  else headerText = `Happy Anniversary, ${decodeURIComponent(name)}! 🎉`;
+}
 
-                if (cardType === 'cake') {
-                    imageHtml = `<img src="anniversary_cake.png" alt="Anniversary Cake" style="width:100%; max-width:250px; margin:0 auto 20px; display:block;" />`;
-                } else if (cardType === 'heart') {
-                    // For heart type, image is floated left, text content flexes
-                    imageHtml = `<img src="happy_anniversary_heart.png" alt="Happy Anniversary Heart" class="heart-image" />`;
-                    cardContent.innerHTML = `${imageHtml}<div class="text-content"><div class="greeting-text">${greetingMessage}</div></div>`;
-                    return; // Exit early as content is custom for heart type
-                } else {
-                    imageHtml = `<img src="anniversary_cake.png" alt="Anniversary" style="width:100%; max-width:250px; margin:0 auto 20px; display:block;" />`; // Default for anniversary
-                }
 
-            } else { // Birthday
-                titleText = 'Happy Birthday!';
-                if (age) {
-                    titleText = `Happy ${age}th Birthday!`;
-                }
-                cardTitle.innerHTML = titleText;
-                cardName.textContent = name; // Name below the title
+if (currentTheme) {
+  imageURL = currentTheme.img;
+  discountText = currentTheme.discount;
+  
+  // Apply theme-specific colors
+  coloredFrameElement.style.borderColor = currentTheme.borderColor;
+  headerTxtElement.style.color = currentTheme.headerColor;
+  // Use headerColor for a border/underline effect for the header text
+  // NOTE: You might need to add CSS rules for 'header-text' to use this.
+  // Example: headerTxtElement.style.borderBottom = `2px dashed ${currentTheme.headerColor}`;
+  
+} else {
+  // Fallback for invalid type
+  imageURL = "/mnt/data/Screenshot 2025-11-19 103845.png";
+  headerText = `Hello, ${decodeURIComponent(name)}!`;
+  discountText = "a special discount on a reading!";
+  coloredFrameElement.style.borderColor = "#CCCCCC";
+  headerTxtElement.style.color = "#333333";
+  headerTxtElement.innerHTML = `Error: Invalid Card Type.`;
+  msgTxtElement.innerHTML = `Please check the URL parameters.`;
+}
 
-                greetingMessage = `May this special day bring you joy, prosperity, and cosmic blessings. Get your personalized birth chart analysis and guidance from Jyotish Devagya Amitsree. Enjoy a special birthday discount on your first consultation!`;
+// Main message content remains the same
+const mainMessage = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get ${discountText}`;
 
-                if (cardType === 'floral') {
-                    imageHtml = `<div class="main-image"></div>`;
-                } else if (cardType === 'simple') {
-                    imageHtml = `<img src="birthday_cake.png" alt="Birthday Cake" style="width:100%; max-width:250px; margin:0 auto 20px; display:block;" />`;
-                } else if (cardType === 'modern') {
-                    imageHtml = `<img src="birthday_balloons.png" alt="Birthday Balloons" style="width:100%; max-width:250px; margin:0 auto 20px; display:block;" />`;
-                } else {
-                    imageHtml = `<img src="birthday_cake.png" alt="Birthday" style="width:100%; max-width:250px; margin:0 auto 20px; display:block;" />`; // Default for birthday
-                }
-            }
+// Apply content
+cardImage.src = imageURL;
+headerTxtElement.innerHTML = headerText;
+msgTxtElement.innerHTML = mainMessage;
 
-            cardContent.innerHTML = `${imageHtml}<div class="greeting-text">${greetingMessage}</div>`;
-        });
-    </script>
+// Footer/Signature content (as per previous request)
+footerTxtElement.innerHTML =
+  `With Best Wishes from<br>` +
+  `<span class="company-name">Digdarshan Astro</span><br>` +
+  `Jyotish Devagya Amitsree<br>` +
+  `<span class="call-number">Call : 8697190840 / 9830637766</span>`;
+</script>
+
 </body>
 </html>
