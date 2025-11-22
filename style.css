@@ -133,7 +133,7 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
 
 .card-border {
     width: 95%;
-    max-width: 680px; /* **MODIFIED: Reduced max-width for social media focus** */
+    max-width: 680px; /* MODIFIED: Reduced max-width for social media focus */
     background: #fff;
     padding: 6px;
     border-radius: 18px;
