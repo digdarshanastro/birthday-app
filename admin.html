@@ -20,48 +20,79 @@ table{width:100%; border-collapse:collapse}
 th, td { padding:10px 8px; border:1px solid rgba(255,255,255,0.03); font-size:13px; white-space:nowrap; text-align:center; vertical-align:middle; }
 th { background:rgba(255,255,255,0.02); color:#ffe3f0; font-weight:800; }
 
-/* 🌟 UPDATED: Smaller, sleeker buttons and action lines */
-.actions-line { display:flex; gap:6px; align-items:center; justify-content:center; flex-wrap:nowrap; margin-bottom:6px; }
-.actions-line.two { margin-top:0; justify-content:center; }
+/* 🌟 UPDATED: Main action area layout for two rows */
+.actions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Space between the two main rows */
+    align-items: center;
+    min-width: 320px; /* Ensure enough space for the buttons */
+}
+
+/* 🌟 UPDATED: Styles for the two action rows */
+.actions-line { 
+    display:flex; 
+    gap:4px; /* Reduced gap between buttons */
+    align-items:center; 
+    justify-content:center; 
+    flex-wrap:nowrap; 
+    width:100%; /* Ensure both rows span the full width of the cell */
+}
+
+/* 🌟 UPDATED: Button design for smaller, sleeker look */
 .action-btn { 
-    min-width:60px !important; /* Smaller width */
-    height:28px; /* Smaller height */
+    min-width:30px !important; /* Very small width */
+    height:22px; /* Smaller height */
     display:inline-flex; 
     align-items:center; 
     justify-content:center; 
-    border-radius:6px; /* Sliker border radius */
-    font-weight:700; /* Slightly less bold */
-    font-size:11px; /* Smaller font */
+    border-radius:4px; /* Sliker border radius */
+    font-weight:700; 
+    font-size:10px; /* Smaller font */
     text-decoration:none; 
     color:#fff; 
-    padding:4px 6px; /* Smaller padding */
+    padding:2px 4px; /* Smaller padding */
     transition: all 0.2s;
+    line-height:1; /* Fix line height for better alignment */
+    flex-shrink: 0; /* Prevents shrinking */
 }
 .card-btn{background:#ff4500; border:1px solid #ff4500;}
 .whatsapp-btn{background:#25d366;color:#05260f; border:1px solid #25d366;}
 .action-btn:hover { opacity: 0.8; }
 .card-btn:hover { background: #e03c00; }
 .whatsapp-btn:hover { background: #20b056; }
-/* 🌟 UPDATED: Icon styles */
-.icon-line{display:flex; gap:8px; justify-content:center; align-items:center; margin-top:6px;}
-.icon-line span{display:inline-block;width:30px;height:30px;background:rgba(255,255,255,0.05);border-radius:6px;line-height:30px;text-align:center;cursor:pointer;font-size:16px;transition:background 0.2s;}
-.icon-line span:hover{background:rgba(255,255,255,0.15);}
-.icon-line .edit{color:#ffb86b;}
-.icon-line .del{color:#ff5b6b;}
+
+/* 🌟 NEW: Style for the separate Icon buttons */
+.action-icon {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+.action-icon:hover { background: rgba(255, 255, 255, 0.15); }
+.action-icon.edit { color: #ffb86b; margin-left: auto; } /* Push Edit to the right */
+.action-icon.del { color: #ff5b6b; margin-left: auto; } /* Push Delete to the right */
 
 .row-blink{animation:softBlink 1.5s infinite}
 @keyframes softBlink{0%{opacity:1}50%{opacity:0.45}100%{opacity:1}}
 @media(max-width:980px){
   #searchBar{width:92%}
   th,td{font-size:12px;padding:8px}
-  .action-btn{min-width:48px !important;font-size:10px;padding:3px 5px;}
+  .actions-container{min-width:280px}
+  .action-btn{min-width:26px !important;font-size:9px;padding:2px 3px;}
 }
 @media(max-width:640px){
   th,td{font-size:11px;padding:8px;white-space:normal}
-  .actions-line, .actions-line.two{justify-content:flex-start;flex-wrap:wrap}
-  .icon-line{justify-content:flex-start;margin-top:4px}
-  .icon-line span{width:auto;height:24px;padding:0 6px;line-height:24px;font-size:14px}
-  .action-btn{height:24px;}
+  .actions-container{min-width:auto}
+  .actions-line{justify-content:flex-start; flex-wrap:wrap;}
+  .action-icon{margin-left:8px !important;}
 }
 </style>
 </head>
@@ -135,13 +166,27 @@ let editingId = null;
 window.openEdit = openEdit;
 window.closeEdit = closeEdit;
 window.saveEdit = saveEdit;
-window.deleteOne = deleteOne; // 🌟 Exporting deleteOne
+window.deleteOne = deleteOne;
 
 function pad(n){ return n<10? '0'+n : ''+n; }
 function formatDate(iso){ if(!iso) return '-'; if(/^\d{4}-\d{2}-\d{2}$/.test(iso)){ const [y,m,d]=iso.split('-'); return `${pad(+d)}-${pad(+m)}-${y}`; } return iso; }
 function parseDMY(iso){ if(!iso) return null; if(/^\d{4}-\d{2}-\d{2}$/.test(iso)){ const [y,m,d]=iso.split('-'); return {day:+d, month:+m}; } return null; }
 function daysTo(d,m){ const now=new Date(); let ev=new Date(now.getFullYear(), m-1, d); const today=new Date(now.getFullYear(), now.getMonth(), now.getDate()); if(ev < today) ev = new Date(now.getFullYear()+1, m-1, d); return Math.ceil((ev - today)/(1000*60*60*24)); }
 function calcAge(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); const dob=new Date(+y,+m-1,+d); const t=new Date(); let age=t.getFullYear()-dob.getFullYear(); const mm=t.getMonth()-dob.getMonth(); if(mm<0 || (mm===0 && t.getDate()<dob.getDate())) age--; return age; }
+// Calculate age difference for anniversary
+function calcAnnivAge(iso){
+  if(!iso) return '';
+  const [y,m,d]=iso.split('-');
+  const annivDate=new Date(+y,+m-1,+d);
+  const t=new Date();
+  let years=t.getFullYear()-annivDate.getFullYear();
+  // Check if anniversary this year has passed
+  if(t.getMonth() < annivDate.getMonth() || (t.getMonth() === annivDate.getMonth() && t.getDate() < annivDate.getDate())) {
+      years--;
+  }
+  return years > 0 ? years : 0;
+}
+
 
 async function loadData(){
   // header (including Maternal Gotra)
@@ -164,7 +209,7 @@ async function loadData(){
       <th>Consult Mode</th>
       <th>Remedies</th>
       <th>Notes</th>
-      <th style="min-width:260px;">Actions</th>
+      <th style="min-width:320px;">Actions</th>
     </tr>`;
 
   try {
@@ -176,6 +221,7 @@ async function loadData(){
       x.dobF = formatDate(x.dob);
       x.annF = formatDate(x.anniv);
       x.age = calcAge(x.dob);
+      x.annivAge = calcAnnivAge(x.anniv); // Calculate anniversary age
       // ensure both possible keys for maternal gotra (if older data used different naming)
       x.maternal_gotra = x.maternal_gotra || x.maternalGotra || '';
       const dobP = parseDMY(x.dob);
@@ -240,12 +286,17 @@ function render(list){
   list.forEach(x=>{
     const enc = encodeURIComponent(x.name||'');
     const ageParam = x.age ? `&age=${x.age}` : '';
+    const annivAgeParam = x.annivAge ? `&age=${x.annivAge}` : '';
+
+    // Birthday Card Links
     const Bf = `${base}?type=birthday&cardType=floral&name=${enc}${ageParam}`;
     const Bs = `${base}?type=birthday&cardType=simple&name=${enc}${ageParam}`;
     const Bm = `${base}?type=birthday&cardType=modern&name=${enc}${ageParam}`;
-    const Ac = `${base}?type=anniversary&cardType=cake&name=${enc}`;
-    const Ah = `${base}?type=anniversary&cardType=heart&name=${enc}`;
-    const Am = `${base}?type=anniversary&cardType=modern&name=${enc}`;
+    // Anniversary Card Links (Now passing annivAge)
+    const Ac = `${base}?type=anniversary&cardType=cake&name=${enc}${annivAgeParam}`;
+    const Ah = `${base}?type=anniversary&cardType=heart&name=${enc}${annivAgeParam}`;
+    const Am = `${base}?type=anniversary&cardType=modern&name=${enc}${annivAgeParam}`;
+    
     const waText = encodeURIComponent(`Best wishes from Digdarshan Astro to ${x.name}`);
 
     const tr = document.createElement('tr');
@@ -270,36 +321,34 @@ function render(list){
       <td>${x.remedies||'-'}</td>
       <td style="max-width:220px; white-space:normal;">${(x.notes||'').substring(0,300)}</td>
       <td>
-        <div class="actions-line" aria-hidden="true">
-          <span class="action-btn card-btn" title="Edit" onclick="openEdit('${x._id}')">✏️ Edit</span>
-          <a class="action-btn card-btn" href="${Bf}" target="_blank" title="Birthday - Floral">B-F</a>
-          <a class="action-btn card-btn" href="${Bs}" target="_blank" title="Birthday - Simple">B-S</a>
-          <a class="action-btn card-btn" href="${Bm}" target="_blank" title="Birthday - Modern">B-M</a>
-        </div>
+        <div class="actions-container">
+          <div class="actions-line" aria-label="Card Links">
+            <a class="action-btn card-btn" href="${Bf}" target="_blank" title="Birthday - Floral">B-F</a>
+            <a class="action-btn card-btn" href="${Bs}" target="_blank" title="Birthday - Simple">B-S</a>
+            <a class="action-btn card-btn" href="${Bm}" target="_blank" title="Birthday - Modern">B-M</a>
+            <a class="action-btn card-btn" href="${Ac}" target="_blank" title="Anniversary - Cake">A-C</a>
+            <a class="action-btn card-btn" href="${Ah}" target="_blank" title="Anniversary - Heart">A-H</a>
+            <a class="action-btn card-btn" href="${Am}" target="_blank" title="Anniversary - Modern">A-M</a>
+            <span class="action-icon edit" title="Edit Record" onclick="openEdit('${x._id}')">✏️</span>
+          </div>
 
-        <div class="actions-line" aria-hidden="true">
-          <a class="action-btn card-btn" href="${Ac}" target="_blank" title="Anniversary - Cake">A-C</a>
-          <a class="action-btn card-btn" href="${Ah}" target="_blank" title="Anniversary - Heart">A-H</a>
-          <a class="action-btn card-btn" href="${Am}" target="_blank" title="Anniversary - Modern">A-M</a>
-          <span class="action-btn whatsapp-btn" title="Delete" onclick="deleteOne('${x._id}')">🗑️ Delete</span>
+          <div class="actions-line" aria-label="WhatsApp Links">
+            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bf)}" target="_blank" title="WhatsApp B-F">WA B-F</a>
+            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bs)}" target="_blank" title="WhatsApp B-S">WA B-S</a>
+            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bm)}" target="_blank" title="WhatsApp B-M">WA B-M</a>
+            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ac)}" target="_blank" title="WhatsApp A-C">WA A-C</a>
+            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ah)}" target="_blank" title="WhatsApp A-H">WA A-H</a>
+            <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Am)}" target="_blank" title="WhatsApp A-M">WA A-M</a>
+            <span class="action-icon del" title="Delete Record" onclick="deleteOne('${x._id}')">🗑️</span>
+          </div>
         </div>
-
-        <div class="actions-line two" aria-hidden="true">
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bf)}" target="_blank">WA B-F</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bs)}" target="_blank">WA B-S</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Bm)}" target="_blank">WA B-M</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ac)}" target="_blank">WA A-C</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Ah)}" target="_blank">WA A-H</a>
-          <a class="action-btn whatsapp-btn" href="https://wa.me/?text=${waText}%0A${encodeURIComponent(Am)}" target="_blank">WA A-M</a>
-        </div>
-        
       </td>
     `;
     tbl.appendChild(tr);
   });
 }
 
-// 🌟 FIX: deleteOne moved inside the module to access 'db'
+// 🌟 deleteOne and Edit functions remain as fixed in the previous step, ensuring 'db' access
 async function deleteOne(id){
   if(!confirm('Delete this record?')) return;
   try {
@@ -366,7 +415,7 @@ async function saveEdit(){
     notes: document.getElementById('e_notes').value || ''
   };
   try {
-    // 🌟 Crucial: updateDoc is used to save changes
+    // updateDoc is used to save changes
     await updateDoc(doc(db,'birth_details',editingId), payload);
     alert('Updated');
     closeEdit();
