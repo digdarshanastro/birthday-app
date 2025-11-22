@@ -20,7 +20,7 @@ table{width:100%; border-collapse:collapse}
 th, td { padding:10px 8px; border:1px solid rgba(255,255,255,0.03); font-size:13px; white-space:nowrap; text-align:center; vertical-align:middle; }
 th { background:rgba(255,255,255,0.02); color:#ffe3f0; font-weight:800; }
 
-/* **MODIFIED: Action area layout for two rows, optimized for 4 buttons** */
+/* MODIFIED: Action area layout for two rows, optimized for 4 buttons */
 .actions-container {
     display: flex;
     flex-direction: column;
@@ -168,7 +168,7 @@ function parseDMY(iso){ if(!iso) return null; if(/^\d{4}-\d{2}-\d{2}$/.test(iso)
 function daysTo(d,m){ const now=new Date(); let ev=new Date(now.getFullYear(), m-1, d); const today=new Date(now.getFullYear(), now.getMonth(), now.getDate()); if(ev < today) ev = new Date(now.getFullYear()+1, m-1, d); return Math.ceil((ev - today)/(1000*60*60*24)); }
 function calcAge(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); const dob=new Date(+y,+m-1,+d); const t=new Date(); let age=t.getFullYear()-dob.getFullYear(); const mm=t.getMonth()-dob.getMonth(); if(mm<0 || (mm===0 && t.getDate()<dob.getDate())) age--; return age; }
 
-// Function: Calculate age difference for anniversary (same logic as calcAge but for anniv)
+// Function: Calculate age difference for anniversary 
 function calcAnnivAge(iso){
   if(!iso) return '';
   const [y,m,d]=iso.split('-');
@@ -208,6 +208,7 @@ async function loadData(){
     </tr>`;
 
   try {
+    // THIS LINE ATTEMPTS TO FETCH DATA FROM FIREBASE
     const snap = await getDocs(collection(db,'birth_details'));
     rowsData = [];
     snap.forEach(d => {
@@ -216,8 +217,7 @@ async function loadData(){
       x.dobF = formatDate(x.dob);
       x.annF = formatDate(x.anniv);
       x.age = calcAge(x.dob);
-      x.annivAge = calcAnnivAge(x.anniv); // **ADDED: Calculate anniversary age**
-      // ensure both possible keys for maternal gotra (if older data used different naming)
+      x.annivAge = calcAnnivAge(x.anniv); 
       x.maternal_gotra = x.maternal_gotra || x.maternalGotra || '';
       const dobP = parseDMY(x.dob);
       const anP = parseDMY(x.anniv);
@@ -268,8 +268,9 @@ async function loadData(){
     };
 
   } catch(err) {
+    // If there is an error (e.g., firebase-config.js missing), it lands here.
     console.error('Error loading data:', err);
-    tbl.innerHTML += `<tr><td colspan="18" style="color:#f88;">Error loading data. Check console.</td></tr>`;
+    tbl.innerHTML += `<tr><td colspan="18" style="color:#f88; text-align:center;">Error loading data. Please check "firebase-config.js" and Browser Console (F12) for details.</td></tr>`;
   }
 }
 
@@ -283,15 +284,15 @@ function render(list){
     const ageParam = x.age ? `&age=${x.age}` : '';
     const annivAgeParam = x.annivAge ? `&age=${x.annivAge}` : ''; 
     
-    // **ONLY 2 Birthday Card Links**
+    // ONLY 2 Birthday Card Links
     const Bf = `${base}?type=birthday&cardType=floral&name=${enc}${ageParam}`;
     const Bs = `${base}?type=birthday&cardType=simple&name=${enc}${ageParam}`;
     
-    // **ONLY 2 Anniversary Card Links (passing annivAge)**
+    // ONLY 2 Anniversary Card Links (passing annivAge)
     const Ac = `${base}?type=anniversary&cardType=cake&name=${enc}${annivAgeParam}`;
     const Ah = `${base}?type=anniversary&cardType=heart&name=${enc}${annivAgeParam}`;
     
-    // **MODIFIED: New WhatsApp Text**
+    // MODIFIED: New WhatsApp Text
     const waText = encodeURIComponent(`*DIGDARSHAN ASTRO* Visit our site: https://digdarshanastro.mydurable.com/ "Ask about your *Today's Offer*" Call : 8697190840/9830637766`);
 
 
@@ -342,7 +343,7 @@ function render(list){
   });
 }
 
-// **DELETE & EDIT FUNCTIONS ARE UNCHANGED**
+// DELETE & EDIT FUNCTIONS ARE UNCHANGED
 window.deleteOne = async function(id){
   if(!confirm('Delete this record?')) return;
   try {
