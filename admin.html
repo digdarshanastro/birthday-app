@@ -173,7 +173,8 @@ function formatDate(iso){ if(!iso) return '-'; if(/^\d{4}-\d{2}-\d{2}$/.test(iso
 function parseDMY(iso){ if(!iso) return null; if(/^\d{4}-\d{2}-\d{2}$/.test(iso)){ const [y,m,d]=iso.split('-'); return {day:+d, month:+m}; } return null; }
 function daysTo(d,m){ const now=new Date(); let ev=new Date(now.getFullYear(), m-1, d); const today=new Date(now.getFullYear(), now.getMonth(), now.getDate()); if(ev < today) ev = new Date(now.getFullYear()+1, m-1, d); return Math.ceil((ev - today)/(1000*60*60*24)); }
 function calcAge(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); const dob=new Date(+y,+m-1,+d); const t=new Date(); let age=t.getFullYear()-dob.getFullYear(); const mm=t.getMonth()-dob.getMonth(); if(mm<0 || (mm===0 && t.getDate()<dob.getDate())) age--; return age; }
-// Calculate age difference for anniversary
+
+// 🌟 New Function: Calculate age difference for anniversary
 function calcAnnivAge(iso){
   if(!iso) return '';
   const [y,m,d]=iso.split('-');
@@ -221,7 +222,7 @@ async function loadData(){
       x.dobF = formatDate(x.dob);
       x.annF = formatDate(x.anniv);
       x.age = calcAge(x.dob);
-      x.annivAge = calcAnnivAge(x.anniv); // Calculate anniversary age
+      x.annivAge = calcAnnivAge(x.anniv); // 🌟 Calculate anniversary age
       // ensure both possible keys for maternal gotra (if older data used different naming)
       x.maternal_gotra = x.maternal_gotra || x.maternalGotra || '';
       const dobP = parseDMY(x.dob);
@@ -286,7 +287,7 @@ function render(list){
   list.forEach(x=>{
     const enc = encodeURIComponent(x.name||'');
     const ageParam = x.age ? `&age=${x.age}` : '';
-    const annivAgeParam = x.annivAge ? `&age=${x.annivAge}` : '';
+    const annivAgeParam = x.annivAge ? `&age=${x.annivAge}` : ''; // 🌟 New parameter for anniversary age
 
     // Birthday Card Links
     const Bf = `${base}?type=birthday&cardType=floral&name=${enc}${ageParam}`;
@@ -323,12 +324,12 @@ function render(list){
       <td>
         <div class="actions-container">
           <div class="actions-line" aria-label="Card Links">
-            <a class="action-btn card-btn" href="${Bf}" target="_blank" title="Birthday - Floral">B-F</a>
-            <a class="action-btn card-btn" href="${Bs}" target="_blank" title="Birthday - Simple">B-S</a>
-            <a class="action-btn card-btn" href="${Bm}" target="_blank" title="Birthday - Modern">B-M</a>
-            <a class="action-btn card-btn" href="${Ac}" target="_blank" title="Anniversary - Cake">A-C</a>
-            <a class="action-btn card-btn" href="${Ah}" target="_blank" title="Anniversary - Heart">A-H</a>
-            <a class="action-btn card-btn" href="${Am}" target="_blank" title="Anniversary - Modern">A-M</a>
+            <a class="action-btn card-btn" href="${Bf}" target="_blank" title="Birthday - Floral (birthday66)">B-F</a>
+            <a class="action-btn card-btn" href="${Bs}" target="_blank" title="Birthday - Simple (birthday77)">B-S</a>
+            <a class="action-btn card-btn" href="${Bm}" target="_blank" title="Birthday - Modern - Fallback">B-M</a>
+            <a class="action-btn card-btn" href="${Ac}" target="_blank" title="Anniversary - Cake (anniversary88)">A-C</a>
+            <a class="action-btn card-btn" href="${Ah}" target="_blank" title="Anniversary - Heart (anniversary99)">A-H</a>
+            <a class="action-btn card-btn" href="${Am}" target="_blank" title="Anniversary - Modern - Fallback">A-M</a>
             <span class="action-icon edit" title="Edit Record" onclick="openEdit('${x._id}')">✏️</span>
           </div>
 
@@ -348,7 +349,7 @@ function render(list){
   });
 }
 
-// 🌟 deleteOne and Edit functions remain as fixed in the previous step, ensuring 'db' access
+// 🌟 deleteOne and Edit functions remain as fixed
 async function deleteOne(id){
   if(!confirm('Delete this record?')) return;
   try {
