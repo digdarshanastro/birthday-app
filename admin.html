@@ -107,7 +107,7 @@ th { background:rgba(255,255,255,0.02); color:#ffe3f0; font-weight:800; }
 
   <div class="controls">
     <div id="counterBox" style="font-weight:800;color:#ffe3f0;background:rgba(255,255,255,0.02);padding:8px 12px;border-radius:8px;"></div>
-    <input id="searchBar" placeholder="Search by Name / Mobile / DOB / PIN / City / Consult Type / Remedies / Notes / Gotra...">
+    <input id="searchBar" placeholder="Search by Name / Mobile / DOB / PIN / City / Consult Type / Remedies / Notes / Gotra / Plan...">
     <div id="upcomingAlert" class="alert-box" style="display:none;"></div>
   </div>
 
@@ -136,6 +136,13 @@ th { background:rgba(255,255,255,0.02); color:#ffe3f0; font-weight:800; }
       <input id="e_country" placeholder="Country">
       <select id="e_consultType"><option value="">Consult Type</option><option>Physical Visit</option><option>Online Consultation</option></select>
       <select id="e_consultMode"><option value="">Consult Mode</option><option>Free Consultation (Offline)</option><option>Paid Consultation</option><option>Premium Consultation (Recommended)</option></select>
+      <select id="e_plan">
+        <option value="">Plan for Consultation</option>
+        <option>Within 48 Hours</option>
+        <option>Within a Week</option>
+        <option>Within a Month</option>
+        <option>After few Months</option>
+      </select>
       <select id="e_remedies"><option value="">Preferred Remedies</option><option>Gemstone</option><option>Rudraksha</option><option>Tantra/Kavach</option><option>Home-based Remedies (Totka)</option></select>
       <textarea id="e_notes" placeholder="Notes"></textarea>
     </div>
@@ -187,7 +194,7 @@ function calcAnnivAge(iso){
 
 
 async function loadData(){
-  // header (including Maternal Gotra)
+  // header (including Maternal Gotra AND Plan)
   tbl.innerHTML = `
     <tr>
       <th style="min-width:160px;text-align:left;">Name</th>
@@ -205,7 +212,7 @@ async function loadData(){
       <th>Country</th>
       <th>Consult Type</th>
       <th>Consult Mode</th>
-      <th>Remedies</th>
+      <th>Plan</th> <th>Remedies</th>
       <th>Notes</th>
       <th style="min-width:250px;">Actions</th>
     </tr>`;
@@ -222,6 +229,7 @@ async function loadData(){
       x.annivAge = calcAnnivAge(x.anniv); // 🌟 Calculate anniversary age
       // ensure both possible keys for maternal gotra (if older data used different naming)
       x.maternal_gotra = x.maternal_gotra || x.maternalGotra || '';
+      x.plan = x.plan || '-'; // ⭐ ADDED PLAN DEFAULT
       const dobP = parseDMY(x.dob);
       const anP = parseDMY(x.anniv);
       x.next = Math.min(dobP?daysTo(dobP.day,dobP.month):9999, anP?daysTo(anP.day,anP.month):9999);
@@ -262,7 +270,8 @@ async function loadData(){
           (r.name||'') + ' ' + (r.mobile||'') + ' ' + (r.phone||'') + ' ' +
           (r.dob||'') + ' ' + (r.anniv||'') + ' ' + (r.pin||'') + ' ' +
           (r.city||'') + ' ' + (r.state||'') + ' ' + (r.consultType||'') + ' ' +
-          (r.consultMode||'') + ' ' + (r.remedies||'') + ' ' + (r.notes||'') + ' ' +
+          (r.consultMode||'') + ' ' + (r.plan||'') + ' ' +  // ⭐ ADDED PLAN TO SEARCH
+          (r.remedies||'') + ' ' + (r.notes||'') + ' ' +
           (r.place||'') + ' ' + (r.gotra||'') + ' ' + (r.maternal_gotra||'')
         ).toLowerCase();
         return hay.indexOf(q) !== -1;
@@ -315,7 +324,7 @@ function render(list){
       <td>${x.country||'-'}</td>
       <td>${x.consultType||'-'}</td>
       <td>${x.consultMode||'-'}</td>
-      <td>${x.remedies||'-'}</td>
+      <td>${x.plan||'-'}</td> <td>${x.remedies||'-'}</td>
       <td style="max-width:220px; white-space:normal;">${(x.notes||'').substring(0,300)}</td>
       <td>
         <div class="actions-container">
@@ -376,6 +385,7 @@ function openEdit(id){
   document.getElementById('e_country').value = rec.country||'';
   document.getElementById('e_consultType').value = rec.consultType||'';
   document.getElementById('e_consultMode').value = rec.consultMode||'';
+  document.getElementById('e_plan').value = rec.plan||''; // ⭐ SET PLAN VALUE
   document.getElementById('e_remedies').value = rec.remedies||'';
   document.getElementById('e_notes').value = rec.notes||'';
   document.getElementById('editModal').style.display = 'flex';
@@ -406,6 +416,7 @@ async function saveEdit(){
     country: document.getElementById('e_country').value || '',
     consultType: document.getElementById('e_consultType').value || '',
     consultMode: document.getElementById('e_consultMode').value || '',
+    plan: document.getElementById('e_plan').value || '', // ⭐ ADDED PLAN TO PAYLOAD
     remedies: document.getElementById('e_remedies').value || '',
     notes: document.getElementById('e_notes').value || ''
   };
