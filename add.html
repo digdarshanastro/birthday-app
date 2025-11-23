@@ -57,7 +57,7 @@ body::before {
 /* FORM INPUTS */
 .form-row { display:flex; gap:18px; flex-wrap:wrap; }
 .col { flex:1; min-width:220px; }
-label { font-size:13px; font-weight:700; margin-top:12px; }
+label { font-size:13px; font-weight:700; margin-top:12px; display:block; }
 input, select, textarea {
   width:100%; padding:12px 14px; border-radius:12px; border:none;
   background:rgba(255,255,255,0.08);
@@ -113,7 +113,10 @@ textarea { min-height:110px; }
     </div>
   </div>
 
-  <h3 style="text-align:center; margin-top:10px;">Fill Your Birth Details Consultation Type.</h3>
+  <!-- ⭐ Added margin-bottom -->
+  <h3 style="text-align:center; margin-top:10px; margin-bottom:20px;">
+    Fill Your Birth Details Consultation Type.
+  </h3>
 
   <div class="stepper">
     <div class="step active" id="tab1" onclick="showStep(1)">
@@ -212,7 +215,7 @@ textarea { min-height:110px; }
         </div>
 
         <div class="col">
-          <label>Maternal Gotra</label>
+          <label>Maternal Uncle's Gotra</label>
           <input id="maternal_gotra">
         </div>
       </div>
@@ -246,6 +249,16 @@ textarea { min-height:110px; }
         <option>Free Consultation (Offline)</option>
         <option>Paid Consultation</option>
         <option>Premium Consultation (Recommended)</option>
+      </select>
+
+      <!-- ⭐ NEW FIELD -->
+      <label>Plan for Consultation</label>
+      <select id="plan">
+        <option value="">Select</option>
+        <option>Within 48 Hours</option>
+        <option>Within a Week</option>
+        <option>Within a Month</option>
+        <option>After few Months</option>
       </select>
 
       <label>Preferred Remedies</label>
@@ -308,6 +321,7 @@ function buildPreview(){
   p.push(`<b>Gotra:</b> ${document.getElementById("gotra").value}`);
   p.push(`<b>Maternal Gotra:</b> ${document.getElementById("maternal_gotra").value}`);
   p.push(`<b>Consult:</b> ${document.getElementById("consultType").value} / ${document.getElementById("consultMode").value}`);
+  p.push(`<b>Plan:</b> ${document.getElementById("plan").value}`);
   document.getElementById("preview").innerHTML = p.join("<br>");
 }
 
@@ -336,12 +350,15 @@ window.submitForm = async function(){
     place: document.getElementById("place").value,
 
     gotra: document.getElementById("gotra").value,
-    maternal_gotra: document.getElementById("maternal_gotra").value,   // NEW FIELD
+    maternal_gotra: document.getElementById("maternal_gotra").value,
 
     anniv: document.getElementById("anniv").value,
 
     consultType: document.getElementById("consultType").value,
     consultMode: document.getElementById("consultMode").value,
+
+    plan: document.getElementById("plan").value,   // ⭐ NEW FIELD
+
     remedies: document.getElementById("remedies").value,
     notes: document.getElementById("notes").value,
 
