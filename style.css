@@ -2,7 +2,7 @@
 /* Reset & base */
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family: "Inter", Arial, sans-serif;background:#0b0710;color:#fff;-webkit-font-smoothing:antialiased}
-a{color:inherit}
+a{color:inherit;text-decoration:none}
 
 /* Watermark (Rashichakra) — light impression across pages */
 body::before{
@@ -13,7 +13,8 @@ body::before{
   width:70vmin;
   height:70vmin;
   transform:translate(-50%,-50%);
-  background-image:url('/mnt/data/Rashichakra.png');
+  /* Placeholder for a symbolic background image */
+  background-image:url('https://placehold.co/700x700/0b0710/ffd6e8?text=Rashichakra'); 
   background-size:contain;
   background-position:center;
   background-repeat:no-repeat;
@@ -23,226 +24,325 @@ body::before{
   z-index:0;
 }
 
-/* Global container */
+/* Global container (Admin/Dashboard) */
 .container{
   width:95%;
-  max-width:1180px;
+  max-width:1400px;
   margin:28px auto;
   padding:22px;
   border-radius:14px;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border:1px solid rgba(255,255,255,0.03);
-  box-shadow: 0 16px 60px rgba(2,6,20,0.6);
+  border:1px solid rgba(255,255,255,0.05);
   position:relative;
   z-index:1;
 }
 
-/* Headings */
-h1{font-size:24px;color:#ffd6e8;text-align:center;margin-bottom:12px}
+/* Header Block */
+.header-top { text-align:left; margin-bottom:15px; position:relative; z-index:2; }
+.header-title { display:inline-block; vertical-align:middle; text-align:left; }
+.header-title h1 { margin:0; font-size:24px; color:#ffd6e8; }
+.header-title .sub { font-weight:500; color:rgba(255,255,255,0.7); font-size:14px; margin-top:4px; }
 
-/* Inputs */
-input,select,textarea{width:100%;padding:12px;border-radius:12px;border:none;background:rgba(255,255,255,0.06);color:#fff;outline:none;font-size:14px}
-textarea{min-height:110px;resize:vertical}
-
-/* Rows */
-.row{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
-.col{flex:1;min-width:220px}
-
-/* Buttons */
-.btn{display:inline-block;padding:12px 26px;border-radius:28px;background:linear-gradient(90deg,#ff6ea6,#ff9d6d);color:#fff;font-weight:800;border:none;cursor:pointer}
-.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.08);color:#fff}
-
-/* Stepper small */
-.stepper{display:flex;justify-content:center;gap:24px;margin-bottom:18px}
-.step{color:rgba(255,255,255,0.55);font-weight:800;text-align:center;cursor:pointer}
-.step .bar{width:140px;height:6px;border-radius:10px;background:rgba(255,255,255,0.06);margin-bottom:8px}
-.step.active .bar{background:linear-gradient(90deg,#ff6ea6,#ff9d6d);box-shadow:0 8px 20px rgba(255,90,140,0.12);color:#fff}
-
-/* PREVIEW */
-.preview{padding:12px;border-radius:8px;background:rgba(255,255,255,0.03);color:#fff;margin-top:8px}
-
-/* ALERT (admin upcoming) */
-.alert-box{background:#ffedd7;border-left:6px solid #ff6b9a;padding:10px 12px;color:#7a2d00;border-radius:6px}
-
-/* SEARCH */
-#searchBar{display:block;margin:12px auto 18px;padding:12px 16px;border-radius:26px;border:1px solid rgba(255,255,255,0.04);width:68%;background:rgba(255,255,255,0.03);color:#fff;box-shadow:inset 0 2px 6px rgba(0,0,0,0.6)}
-
-/* TABLE styles (admin) */
-.table-box{overflow:auto}
-table{width:100%;border-collapse:collapse;margin-top:14px}
-th,td{padding:10px 8px;border:1px solid rgba(255,255,255,0.03);text-align:center;vertical-align:middle;white-space:nowrap;font-size:13px}
-th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
-
-/* Action Buttons grouping */
-.action-btn{display:inline-block;padding:6px 10px;border-radius:8px;text-decoration:none;font-weight:800;color:#fff;font-size:12px;margin:0 4px}
-.card-btn{background:#ff4500}
-.whatsapp-btn{background:#25d366;color:#05260f}
-.delete-btn{color:#ff5555;cursor:pointer;font-size:18px}
-
-/* blink */
-.blink{animation:softBlink 1.5s infinite}
-@keyframes softBlink{0%{opacity:1}50%{opacity:0.45}100%{opacity:1}}
-
-/* Edit / delete icons stack */
-.icon-vert{display:flex;flex-direction:column;gap:8px;align-items:center}
-.icon-vert span{display:inline-block;width:34px;height:28px;background:transparent;border-radius:6px;line-height:28px;text-align:center;cursor:pointer}
-
-/* responsive */
-@media (max-width:980px){
-  #searchBar{width:86%}
-  .step .bar{width:110px}
-  th,td{font-size:12px;padding:8px}
-}
-@media (max-width:640px){
-  .row{flex-direction:column}
-  .col{min-width:100%}
-  th,td{font-size:11px;padding:7px;white-space:normal}
-  .action-btn{font-size:11px;padding:6px 8px}
+/* =============================== FORM CARD (add.html specific styles, included for completeness) =============================== */
+.form-card {
+  max-width:920px;
+  margin:36px auto 80px;
+  padding:34px 40px;
+  border-radius:20px;
+  background: rgba(8,6,18,0.78);
+  box-shadow: 0 20px 60px rgba(2,6,20,0.6);
+  color:#fff;
+  border:1px solid rgba(255,255,255,0.05);
 }
 
-/* ensure main content sits above watermark */
-.form-card, .container { position: relative; z-index: 2; }
-
-/* make buttons uniform size */
-.action-btn { min-width:72px !important; height:34px; display:inline-flex; align-items:center; justify-content:center; }
-
-/* ensure table header sticky on larger devices */
-@media (min-width:900px){
-  table thead th {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 72px;
-    z-index: 3;
-    background: rgba(10,8,12,0.8);
-  }
+.form-card h2 {
+  font-size: 20px;
+  color: #ff99cc;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 1px dashed rgba(255,255,255,0.1);
 }
 
-/* ===================== CARD PAGE STYLES ===================== */
-
-.card-page {
-    background-color: #0b0710; /* Dark background for contrast */
+.form-card h3 {
+  font-size: 16px;
+  color: #ffd6e8;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 4px solid #ff99cc;
+  border-radius: 4px;
 }
 
-#card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
+/* Form Elements */
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #ffd6e8;
 }
 
-.card-border {
-    width: 90%;
-    max-width: 900px; /* Max card width */
-    background: #fff;
-    padding: 6px;
-    border-radius: 18px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="time"], textarea, select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  background: rgba(2, 4, 12, 0.5);
+  color: #fff;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  -webkit-appearance: none; 
+}
+input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="date"]:focus, input[type="time"]:focus, textarea:focus, select:focus {
+  border-color: #ff99cc;
+  box-shadow: 0 0 0 3px rgba(255, 153, 204, 0.2);
+  background: rgba(2, 4, 12, 0.7);
+  outline: none;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+.col {
+  flex: 1;
+  min-width: 250px;
+}
+textarea {
+  min-height: 80px;
+  resize: vertical;
 }
 
-.colored-frame {
-    border: 4px solid; /* This will be set by JS (currentTheme.borderColor) */
-    padding: 18px;
-    border-radius: 12px;
-    background-color: #f7f7f7; /* Light background inside frame */
+.submit-btn {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  margin-top: 30px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ff6b9a, #ff99cc);
+  color: #0b0710;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 154, 0.4);
+}
+.submit-btn:hover {
+  background: linear-gradient(90deg, #ff99cc, #ff6b9a);
+  box-shadow: 0 6px 20px rgba(255, 107, 154, 0.6);
+  transform: translateY(-1px);
 }
 
-.card-content {
-    display: flex; /* Key to make sections side-by-side */
-    gap: 20px;
-    align-items: flex-start; /* Align content to the top */
-    min-height: 350px; /* Min height for a decent card size */
-}
+/* =============================== DASHBOARD / TABLE (admin.html) =============================== */
+.controls { display:flex; gap:12px; justify-content:space-between; align-items:center; margin:8px 0 20px; flex-wrap:wrap; z-index:2; position:relative; }
+#searchBar{width:300px; padding:10px 16px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#fff; min-width:200px;}
+#searchBar::placeholder { color:rgba(255,255,255,0.6); }
 
-.left-section {
-    flex-shrink: 0;
-    width: 40%; /* Image takes 40% of the space */
-    max-width: 320px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.left-section img {
-    width: 100%;
-    height: auto;
-    max-height: 350px; /* Ensure image doesn't get too tall */
-    object-fit: contain;
+.add-new-btn {
+    padding: 10px 20px;
+    background: linear-gradient(90deg, #3c71ff, #73aaff);
+    color: white;
+    font-weight: 700;
     border-radius: 8px;
+    white-space: nowrap;
+    transition: background 0.3s;
+}
+.add-new-btn:hover { background: linear-gradient(90deg, #73aaff, #3c71ff); }
+
+/* Table styles */
+.table-container {
+    overflow-x: auto;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    padding: 1px;
 }
 
-.right-section {
-    flex-grow: 1;
-    width: 60%; /* Text takes 60% of the space */
-    color: #333;
-    padding-top: 10px;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1300px; 
 }
 
-.header-text {
-    font-size: 26px;
-    font-weight: 900;
-    line-height: 1.2;
-    margin-bottom: 12px;
-    padding-bottom: 6px;
-    border-bottom: 2px dashed; /* Color set by JS */
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.main-message {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 24px;
-    color: #555;
-}
-
-.footer-signature {
-    text-align: right;
-    font-size: 13px;
-    line-height: 1.4;
-    color: #777;
-    padding-top: 10px;
-    border-top: 1px dotted #ccc;
-}
-
-.company-name {
-    font-weight: 800;
-    color: #000;
+th {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffd6e8;
     font-size: 14px;
-    display: block;
-    margin-bottom: 2px;
+    font-weight: 700;
+    white-space: nowrap;
 }
-.call-number {
-    font-size: 11px;
-    font-weight: 600;
+
+td {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    vertical-align: top;
+}
+tr:hover td {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.action-btns {
+    display: flex;
+    gap: 8px;
+    white-space: nowrap;
+}
+.action-icon {
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.2s;
+    line-height: 1; /* Ensure vertical alignment is correct for icons */
+}
+.action-icon.edit:hover { color: #ff99cc; }
+.action-icon.delete:hover { color: #ff5555; }
+.action-icon.card { color: #25d366; }
+.action-icon.card:hover { color: #1e8745; }
+.action-icon.wish:hover { color: #ffcc66; }
+
+
+/* =============================== MODAL (Edit) =============================== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    overflow-y: auto;
+}
+
+.modal-content {
+    background: #0b0710;
+    border: 2px solid #ff99cc;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 800px;
+    margin: 5% auto;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 0 50px rgba(255, 153, 204, 0.3);
+}
+
+.modal-content h2 {
+    color: #ff99cc;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 30px;
+    font-weight: 100;
+    cursor: pointer;
+    color: #ffd6e8;
+    line-height: 1;
+}
+
+.modal-save-btn {
+    margin-top: 20px;
+}
+
+/* Custom Alert/Confirmation Modal (Replaces built-in alerts) */
+.custom-alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #1c1527;
+    border: 1px solid #ff99cc;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(255, 153, 204, 0.4);
+    z-index: 1001;
+    display: none;
+    text-align: center;
+}
+.custom-alert p {
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+.custom-alert button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.2s;
+}
+.custom-alert .confirm-yes {
+    background: #ff6b9a;
+    color: #fff;
+}
+.custom-alert .confirm-yes:hover {
+    background: #ff99cc;
+}
+.custom-alert .confirm-no {
+    background: #3c71ff;
+    color: #fff;
+}
+.custom-alert .confirm-no:hover {
+    background: #73aaff;
 }
 
 
-/* CARD RESPONSIVE */
-@media (max-width: 768px) {
-    .card-content {
-        flex-direction: column; /* Stack image and text vertically */
-        align-items: center;
-        min-height: auto;
+/* =============================== RESPONSIVE ADJUSTMENTS =============================== */
+@media (max-width: 980px) {
+    .row {
+        gap: 15px;
+        margin-bottom: 10px;
+    }
+    .col {
+        min-width: 100%;
+    }
+    .form-card {
+        padding: 20px;
+    }
+    th, td {
         padding: 10px;
     }
-    .left-section, .right-section {
+    .action-btns {
+        gap: 4px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 640px) {
+    .header-top { text-align: center; }
+    .header-title h1 {
+        font-size: 20px;
+    }
+    .header-title .sub {
+        font-size: 12px;
+    }
+    .controls {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    #searchBar {
         width: 100%;
-        max-width: 90%;
-        padding: 0;
+        order: 2;
     }
-    .left-section img {
-        max-height: 300px;
-        margin-bottom: 15px;
-    }
-    .header-text {
-        font-size: 22px;
+    .add-new-btn {
+        width: 100%;
         text-align: center;
-        border-bottom: none;
+        order: 1;
     }
-    .main-message {
-        text-align: center;
-    }
-    .footer-signature {
-        text-align: center;
-        margin-top: 15px;
+    .form-card {
+        margin: 20px auto 50px;
     }
 }
