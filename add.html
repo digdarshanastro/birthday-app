@@ -113,7 +113,6 @@ textarea { min-height:110px; }
     </div>
   </div>
 
-  <!-- ⭐ Added margin-bottom -->
   <h3 style="text-align:center; margin-top:10px; margin-bottom:20px;">
     Fill Your Birth Details Consultation Type.
   </h3>
@@ -132,7 +131,6 @@ textarea { min-height:110px; }
 
   <form id="theForm" onsubmit="return false;">
 
-    <!-- STEP 1 -->
     <div id="step1">
 
       <div class="form-row">
@@ -190,7 +188,6 @@ textarea { min-height:110px; }
       </div>
     </div>
 
-    <!-- STEP 2 -->
     <div id="step2" style="display:none;">
 
       <div class="form-row">
@@ -233,7 +230,6 @@ textarea { min-height:110px; }
       </div>
     </div>
 
-    <!-- STEP 3 -->
     <div id="step3" style="display:none;">
 
       <label>Consultation Type</label>
@@ -251,7 +247,6 @@ textarea { min-height:110px; }
         <option>Premium Consultation (Recommended)</option>
       </select>
 
-      <!-- ⭐ NEW FIELD -->
       <label>Plan for Consultation</label>
       <select id="plan">
         <option value="">Select</option>
@@ -285,7 +280,6 @@ textarea { min-height:110px; }
 </div>
 
 
-<!-- FIREBASE SCRIPT -->
 <script type="module">
 import { db } from "./firebase-config.js";
 import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -321,7 +315,7 @@ function buildPreview(){
   p.push(`<b>Gotra:</b> ${document.getElementById("gotra").value}`);
   p.push(`<b>Maternal Gotra:</b> ${document.getElementById("maternal_gotra").value}`);
   p.push(`<b>Consult:</b> ${document.getElementById("consultType").value} / ${document.getElementById("consultMode").value}`);
-  p.push(`<b>Plan:</b> ${document.getElementById("plan").value}`);
+  p.push(`<b>Plan:</b> ${document.getElementById("plan").value}`); // ⭐ ADDED PREVIEW
   document.getElementById("preview").innerHTML = p.join("<br>");
 }
 
@@ -357,7 +351,7 @@ window.submitForm = async function(){
     consultType: document.getElementById("consultType").value,
     consultMode: document.getElementById("consultMode").value,
 
-    plan: document.getElementById("plan").value,   // ⭐ NEW FIELD
+    plan: document.getElementById("plan").value,   // ⭐ ADDED PAYLOAD
 
     remedies: document.getElementById("remedies").value,
     notes: document.getElementById("notes").value,
