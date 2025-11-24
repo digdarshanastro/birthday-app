@@ -120,8 +120,29 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
 /* ===================== CARD PAGE STYLES (Social Media Optimized) ===================== */
 
 .card-page {
-    background-color: #0b0710; 
+    background-color: #0b0710;
+    font-family: 'Poppins', sans-serif; /* A more modern, clean font */
+    position: relative; /* For watermark */
 }
+
+/* Digdarshan Logo Watermark for Card */
+.card-page::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 60%; /* Adjusted size */
+    height: 60%; /* Adjusted size */
+    transform: translate(-50%, -50%);
+    background-image: url('Digdarshan Astro Logo.png'); /* Your logo */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.1; /* More visible watermark */
+    pointer-events: none;
+    z-index: 0;
+}
+
 
 #card {
     display: flex;
@@ -133,104 +154,118 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
 
 .card-border {
     width: 90%;
-    max-width: 800px; /* Max card width reduced for better post size */
-    aspect-ratio: 4/3; /* Set a fixed aspect ratio for social media posts (4:3) */
+    max-width: 800px; 
+    aspect-ratio: 4/3; /* Fixed aspect ratio for social media posts */
     background: #fff;
-    padding: 8px; /* Slightly thicker border for visual punch */
+    padding: 8px; 
     border-radius: 20px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-    display: flex; /* Allow content to fill the border */
+    display: flex;
     flex-direction: column; 
+    position: relative; /* For content to sit above watermark */
+    z-index: 1; /* To ensure content is above the watermark */
 }
 
 .colored-frame {
-    flex-grow: 1; /* Make the frame fill the border */
-    border: 6px solid; /* Thicker border set by JS */
-    padding: 24px; /* Increased inner padding */
+    flex-grow: 1;
+    border: 6px solid;
+    padding: 24px; 
     border-radius: 12px;
     background-color: #ffffff; /* Pure white background for high contrast */
+    position: relative;
+    overflow: hidden; /* Important for image positioning */
 }
 
 .card-content {
     height: 100%;
     display: flex; 
     gap: 24px;
-    align-items: flex-start;
-    padding: 10px 0;
+    align-items: flex-start; /* Align items to the top */
+    padding: 0; /* Remove padding from here, added to sections */
 }
 
 .left-section {
     flex-shrink: 0;
-    width: 35%; /* Image takes 35% of the space */
-    max-width: 250px;
+    width: 30%; /* Image takes 30% of the space */
+    max-width: 220px; /* Reduced max-width for image */
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 15px; /* Pushed image slightly down for better alignment */
 }
 
 .left-section img {
     width: 100%;
     height: auto;
-    max-height: 100%; /* Ensure it fits vertically within the card-content */
+    max-height: 100%; 
     object-fit: contain;
     border-radius: 12px;
 }
 
 .right-section {
     flex-grow: 1;
-    width: 65%; /* Text takes 65% of the space */
-    color: #111; /* Darker text for better visibility */
+    width: 70%; /* Text takes 70% of the space */
+    color: #111;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Push signature to the bottom */
+    justify-content: space-between; 
     height: 100%;
+    padding: 15px 0; /* Added vertical padding */
 }
 
 .header-text {
-    font-size: 30px; /* Larger heading */
-    font-family: 'Georgia', serif; /* Use a distinct font for impact */
+    font-size: 32px; /* Slightly larger heading */
+    font-family: 'Playfair Display', serif; /* Elegant font for headings */
     font-weight: 900;
-    line-height: 1.1;
+    line-height: 1.2;
     margin-bottom: 15px;
     padding-bottom: 8px;
-    border-bottom: 3px solid; /* Solid border for better look */
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.05);
+    border-bottom: 3px solid; 
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.08); /* More subtle shadow */
+    color: #8B0000; /* Darker red for headings */
 }
 
 .main-message {
-    font-size: 18px; /* Larger body text */
-    line-height: 1.5;
+    font-size: 19px; /* Larger body text */
+    line-height: 1.6;
     margin-bottom: 30px;
     color: #333;
+    flex-grow: 1; /* Allow message to take available space */
 }
 
 .footer-signature {
     text-align: right;
-    font-size: 14px;
-    line-height: 1.4;
-    color: #444;
+    font-size: 15px; /* Slightly larger font */
+    line-height: 1.5;
+    color: #555;
     padding-top: 10px;
-    border-top: 1px dashed #aaa; /* Dashed separator */
+    border-top: 1px dashed #bbb; /* Lighter dashed separator */
 }
 
 .company-name {
     font-weight: 900;
     color: #000;
-    font-size: 16px;
+    font-size: 17px;
     display: block;
     margin-bottom: 4px;
 }
+.address-text { /* New style for address */
+    font-size: 13px;
+    color: #666;
+    margin-top: 5px;
+    display: block;
+}
 .call-number {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
-    color: #a00; /* Red color for phone number */
+    color: #a00;
 }
 
 
 /* CARD RESPONSIVE */
 @media (max-width: 768px) {
     .card-border {
-        aspect-ratio: auto; /* Remove aspect ratio on small screens */
+        aspect-ratio: auto; 
         max-width: 95%;
     }
     .colored-frame {
@@ -241,28 +276,52 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
         align-items: center;
         gap: 15px;
         min-height: auto;
-        padding: 0;
     }
     .left-section, .right-section {
-        width: 100%;
-        max-width: 90%;
+        width: 90%; /* Wider on small screens */
+        max-width: none;
         padding: 0;
     }
+    .left-section {
+        padding-top: 10px; /* Adjust padding for mobile */
+    }
     .left-section img {
-        max-height: 250px;
+        max-height: 200px; /* Smaller image on mobile */
         margin-bottom: 10px;
     }
     .header-text {
-        font-size: 24px;
+        font-size: 26px; /* Smaller header on mobile */
         text-align: center;
         border-bottom: 2px solid;
     }
     .main-message {
         text-align: center;
-        font-size: 16px;
+        font-size: 17px; /* Smaller body text on mobile */
     }
     .footer-signature {
         text-align: center;
         margin-top: 15px;
+        font-size: 14px;
+    }
+    .company-name {
+        font-size: 15px;
+    }
+    .address-text, .call-number {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .colored-frame {
+        padding: 12px;
+    }
+    .header-text {
+        font-size: 22px;
+    }
+    .main-message {
+        font-size: 15px;
+    }
+    .left-section img {
+        max-height: 150px;
     }
 }
