@@ -4,12 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Special Wishes — Digdarshan Astro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="new style.css">
 
     <meta property="og:title" content="Special Wishes from Digdarshan Astro!" />
     <meta property="og:description" content="Wishing you immense joy and success from Jyotish Devagya Amitsree." />
-    <meta property="og:image" content="https://digdarshanastro.mydurable.com/Digdarshan%20Astro%20Logo.png" /> <meta property="og:url" content="https://your-app-domain.vercel.app/card.html" /> <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://digdarshanastro.mydurable.com/Digdarshan%20Astro%20Logo.png" /> 
+    <meta property="og:url" content="https://your-app-domain.vercel.app/card.html" /> 
+    <meta property="og:type" content="website" />
 </head>
 
 <body class="card-page">
@@ -29,7 +31,8 @@
                         <div class="footer-signature">
                             With Best Wishes from
                             <strong class="company-name">Digdarshan Astro</strong>
-                            <span class="address-text">47F Raja Rammohan Roy Road, Kolkata-8.</span> Jyotish Devagya Amitsree
+                            <span class="address-text">47F Raja Rammohan Roy Road, Kolkata-8.</span> 
+                            Jyotish Devagya Amitsree
                             <span class="call-number">Call : 8697190840 / 9830637766</span>
                         </div>
                     </div>
@@ -38,20 +41,17 @@
         </div>
     </div>
 
-    <canvas id="hiddenCanvas" style="display:none;"></canvas>
-
     <script>
         const params = new URLSearchParams(window.location.search);
         const type = params.get('type') || 'birthday';
         const cardType = params.get('cardType') || 'floral';
         const name = params.get('name') || 'Dear Client';
-        const age = params.get('age'); // Can be birthday age or anniversary years
+        const age = params.get('age'); 
 
         const cardImage = document.getElementById('cardImage');
         const headerText = document.getElementById('headerText');
         const mainMessage = document.getElementById('mainMessage');
         const coloredFrame = document.getElementById('coloredFrame');
-        const body = document.body;
 
         let imageSrc = '';
         let headerMsg = '';
@@ -63,12 +63,12 @@
             switch (cardType) {
                 case 'floral':
                     imageSrc = 'birthday66.png';
-                    frameColor = '#A3333D'; // Darker red/maroon
+                    frameColor = '#A3333D'; 
                     headerBorderColor = '#A3333D';
                     break;
                 case 'simple':
                     imageSrc = 'birthday77.png';
-                    frameColor = '#4A69A3'; // A nice blue
+                    frameColor = '#4A69A3'; 
                     headerBorderColor = '#4A69A3';
                     break;
                 default:
@@ -83,12 +83,12 @@
             switch (cardType) {
                 case 'cake':
                     imageSrc = 'anniversary88.png';
-                    frameColor = '#7A2D00'; // Darker orange/brown
+                    frameColor = '#7A2D00'; 
                     headerBorderColor = '#7A2D00';
                     break;
                 case 'heart':
                     imageSrc = 'anniversary99.png';
-                    frameColor = '#A3333D'; // Darker red/maroon
+                    frameColor = '#A3333D'; 
                     headerBorderColor = '#A3333D';
                     break;
                 default:
@@ -96,7 +96,7 @@
                     frameColor = '#A3333D';
                     headerBorderColor = '#A3333D';
             }
-            headerMsg = `Happy ${age ? age + 'th ' : ''} Anniversary, ${name}! 🥂`; // Changed emoji to clinking glasses
+            headerMsg = `Happy ${age ? age + 'th ' : ''} Anniversary, ${name}! 🥂`;
             message = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get a special anniversary discount on a birth chart reading & Gemstone!`;
         }
 
@@ -105,50 +105,21 @@
         mainMessage.textContent = message;
         coloredFrame.style.borderColor = frameColor;
         headerText.style.borderColor = headerBorderColor;
-        // Optionally set header text color as well for consistency
-        headerText.style.color = frameColor; // This will make the heading text match the border color
+        // Also set header text color for better contrast
+        headerText.style.color = frameColor; 
 
-        // Function to convert the card div to an image and share via WhatsApp
-        async function shareCardOnWhatsApp() {
-            const cardElement = document.getElementById('card'); // The main card div
-
-            // Use html2canvas to convert the div to a canvas
-            const canvas = await html2canvas(cardElement, {
-                useCORS: true, // If images are from external sources
-                scale: 2, // Increase scale for better quality
-                allowTaint: true, // Allow tainting for external images if useCORS fails
-            });
-
-            // Get the image data as a Blob
-            canvas.toBlob(async function(blob) {
-                const item = new ClipboardItem({'image/png': blob});
-                try {
-                    await navigator.clipboard.write([item]);
-                    alert("Image copied to clipboard! You can now paste it into WhatsApp or other apps.");
-
-                    // Construct the WhatsApp text message
-                    const whatsappMessage = `*DIGDARSHAN ASTRO*\nIn Partnership with Parashmoni (Gems & Jewellery).\nVisit our site for *exciting offers*: https://digdarshanastro.mydurable.com/`;
-                    
-                    // You might still want to open WhatsApp with the text, even if the image is manually pasted
-                    // Note: Direct image sharing with text via URL scheme is often not supported across all devices
-                    // It's better to tell the user to paste the image manually.
-                    window.open(`https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
-
-                } catch (err) {
-                    console.error('Failed to copy image or open WhatsApp:', err);
-                    alert("Failed to copy image to clipboard. Please try manually capturing and sharing. Opening WhatsApp with text only.");
-                    
-                    // Fallback to text-only WhatsApp if image copy fails
-                    const whatsappMessage = `*DIGDARSHAN ASTRO*\nIn Partnership with Parashmoni (Gems & Jewellery).\nVisit our site for *exciting offers*: https://digdarshanastro.mydurable.com/\n\n${headerText.textContent}\n${mainMessage.textContent}\n${window.location.href}`;
-                    window.open(`https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
-                }
-            }, 'image/png');
+        // Function to generate the WhatsApp text with the new message
+        function getWhatsAppMessage(cardLink) {
+             const baseText = `*DIGDARSHAN ASTRO*\nIn Partnership with Parashmoni (Gems & Jewellery).\nVisit our site for *exciting offers*: https://digdarshanastro.mydurable.com/`;
+             
+             // The WhatsApp button in admin.html already passes the card URL, 
+             // so the final message will be: BaseText + Line Break + CardLink
+             return `${baseText}\n\n${cardLink}`;
         }
-
-        // Expose the function globally so admin.html can call it
-        window.shareCardOnWhatsApp = shareCardOnWhatsApp;
-
+        
+        // Expose function globally for admin.html to use
+        window.getWhatsAppMessage = getWhatsAppMessage;
+        
     </script>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </body>
 </html>
