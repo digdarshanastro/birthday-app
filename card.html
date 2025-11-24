@@ -1,118 +1,154 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<title>Wish Card</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style.css"> 
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Special Wishes — Digdarshan Astro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="new style.css">
+
+    <meta property="og:title" content="Special Wishes from Digdarshan Astro!" />
+    <meta property="og:description" content="Wishing you immense joy and success from Jyotish Devagya Amitsree." />
+    <meta property="og:image" content="https://digdarshanastro.mydurable.com/Digdarshan%20Astro%20Logo.png" /> <meta property="og:url" content="https://your-app-domain.vercel.app/card.html" /> <meta property="og:type" content="website" />
 </head>
-<body class="card-page"> 
 
-<div id="card">
-  <div class="card-border"> 
-      <div class="colored-frame"> 
-          <div class="card-content">
-              <div class="left-section">
-                  <img id="cardImage" src="" alt="card image">
-              </div>
-              <div class="right-section">
-                  <div class="header-text" id="headerTxt"></div>
-                  <div class="main-message" id="msgTxt"></div>
-                  <div class="footer-signature" id="footerTxt"></div>
-              </div>
-          </div>
-      </div>
-  </div>
-</div>
+<body class="card-page">
 
-<script>
-const url = new URLSearchParams(window.location.search);
-const type = url.get("type"); 
-const cardType = url.get("cardType"); 
-let name = url.get("name");
-let age = url.get("age");
+    <div id="card">
+        <div class="card-border">
+            <div id="coloredFrame" class="colored-frame">
+                <div class="card-content">
+                    <div class="left-section">
+                        <img id="cardImage" src="" alt="Greeting Image">
+                    </div>
+                    <div class="right-section">
+                        <div>
+                            <h2 id="headerText" class="header-text"></h2>
+                            <p id="mainMessage" class="main-message"></p>
+                        </div>
+                        <div class="footer-signature">
+                            With Best Wishes from
+                            <strong class="company-name">Digdarshan Astro</strong>
+                            <span class="address-text">47F Raja Rammohan Roy Road, Kolkata-8.</span> Jyotish Devagya Amitsree
+                            <span class="call-number">Call : 8697190840 / 9830637766</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-name = name ? decodeURIComponent(name) : "[Client's Name]";
-age = age ? Number(age) : null;
+    <canvas id="hiddenCanvas" style="display:none;"></canvas>
 
-const coloredFrameElement = document.querySelector(".colored-frame"); 
-const cardImage = document.getElementById("cardImage");
-const headerTxtElement = document.getElementById("headerTxt");
-const msgTxtElement = document.getElementById("msgTxt");
-const footerTxtElement = document.getElementById("footerTxt");
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get('type') || 'birthday';
+        const cardType = params.get('cardType') || 'floral';
+        const name = params.get('name') || 'Dear Client';
+        const age = params.get('age'); // Can be birthday age or anniversary years
 
-let currentTheme = null;
-let imageURL = "";
-let headerText = "";
-let discountText = "";
+        const cardImage = document.getElementById('cardImage');
+        const headerText = document.getElementById('headerText');
+        const mainMessage = document.getElementById('mainMessage');
+        const coloredFrame = document.getElementById('coloredFrame');
+        const body = document.body;
 
-// themes: ছবির নাম এবং সেই অনুযায়ী ডিজাইন কালার (borderColor, headerColor)
-const themes = {
-  // Birthday Card 1: birthday66.png (floral) - Purple/Blue Theme
-  'birthday_floral': { img: 'birthday66.png', borderColor: '#8A2BE2', headerColor: '#A377D6', discount: "a special birthday discount on a birth chart reading & Gemstone!" },
-  // Birthday Card 2: birthday77.png (simple) - Orange/Gold Theme
-  'birthday_simple': { img: 'birthday77.png', borderColor: '#FFCC00', headerColor: '#FF8C00', discount: "a special birthday discount on a birth chart reading & Gemstone!" },
-  // Anniversary Card 1: anniversary88.png (cake) - Dark Pink/Ruby Theme
-  'anniversary_cake': { img: 'anniversary88.png', borderColor: '#C2185B', headerColor: '#E91E63', discount: "a special anniversary discount on a birth chart reading & Gemstone!" },
-  // Anniversary Card 2: anniversary99.png (heart) - Dark Red/Crimson Theme
-  'anniversary_heart': { img: 'anniversary99.png', borderColor: '#8B0000', headerColor: '#DC3545', discount: "a special anniversary discount on a birth chart reading & Gemstone!" }
-};
+        let imageSrc = '';
+        let headerMsg = '';
+        let message = '';
+        let frameColor = '';
+        let headerBorderColor = '';
 
-// Function to add ordinal suffix (1st, 2nd, 3rd, 4th...)
-function ordinal(n) {
-  const s = ["th","st","nd","rd"];
-  const v = n % 100;
-  return n + (s[(v-20)%10] || s[v] || s[0]);
-}
+        if (type === 'birthday') {
+            switch (cardType) {
+                case 'floral':
+                    imageSrc = 'birthday66.png';
+                    frameColor = '#A3333D'; // Darker red/maroon
+                    headerBorderColor = '#A3333D';
+                    break;
+                case 'simple':
+                    imageSrc = 'birthday77.png';
+                    frameColor = '#4A69A3'; // A nice blue
+                    headerBorderColor = '#4A69A3';
+                    break;
+                default:
+                    imageSrc = 'birthday66.png';
+                    frameColor = '#A3333D';
+                    headerBorderColor = '#A3333D';
+            }
+            headerMsg = `Happy ${age ? age + 'th ' : ''} Birthday, ${name}! 🎉`;
+            message = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get a special birthday discount on a birth chart reading & Gemstone!`;
 
-if (type === "birthday") {
-  // Assign theme based on cardType
-  currentTheme = cardType === 'floral' ? themes.birthday_floral : themes.birthday_simple;
-  
-  // Header text with Age
-  if (age && age > 0) headerText = `Happy ${ordinal(age)} Birthday, ${decodeURIComponent(name)}! 🎉`;
-  else headerText = `Happy Birthday, ${decodeURIComponent(name)}! 🎉`;
-  
-} else if (type === "anniversary") {
-  // Assign theme based on cardType
-  currentTheme = cardType === 'cake' ? themes.anniversary_cake : themes.anniversary_heart;
-  
-  // Header text with Anniversary Age (Your requested fix)
-  if (age && age > 0) headerText = `Happy ${ordinal(age)} Anniversary, ${decodeURIComponent(name)}! 🎉`;
-  else headerText = `Happy Anniversary, ${decodeURIComponent(name)}! 🎉`;
-} else {
-  // Fallback if type is invalid
-  currentTheme = { img: 'birthday66.png', borderColor: '#CCCCCC', headerColor: '#333333', discount: "a special discount on a reading!" };
-  headerText = `Error: Invalid Card Type.`;
-  msgTxtElement.innerHTML = `Please check the URL parameters.`;
-}
+        } else if (type === 'anniversary') {
+            switch (cardType) {
+                case 'cake':
+                    imageSrc = 'anniversary88.png';
+                    frameColor = '#7A2D00'; // Darker orange/brown
+                    headerBorderColor = '#7A2D00';
+                    break;
+                case 'heart':
+                    imageSrc = 'anniversary99.png';
+                    frameColor = '#A3333D'; // Darker red/maroon
+                    headerBorderColor = '#A3333D';
+                    break;
+                default:
+                    imageSrc = 'anniversary99.png';
+                    frameColor = '#A3333D';
+                    headerBorderColor = '#A3333D';
+            }
+            headerMsg = `Happy ${age ? age + 'th ' : ''} Anniversary, ${name}! 🥂`; // Changed emoji to clinking glasses
+            message = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get a special anniversary discount on a birth chart reading & Gemstone!`;
+        }
 
+        cardImage.src = imageSrc;
+        headerText.innerHTML = headerMsg;
+        mainMessage.textContent = message;
+        coloredFrame.style.borderColor = frameColor;
+        headerText.style.borderColor = headerBorderColor;
+        // Optionally set header text color as well for consistency
+        headerText.style.color = frameColor; // This will make the heading text match the border color
 
-if (currentTheme) {
-  imageURL = currentTheme.img;
-  discountText = currentTheme.discount;
-  
-  // Apply theme-specific colors
-  coloredFrameElement.style.borderColor = currentTheme.borderColor;
-  headerTxtElement.style.color = currentTheme.headerColor;
-  headerTxtElement.style.borderColor = currentTheme.headerColor; // For the dashed border
-  
-} 
+        // Function to convert the card div to an image and share via WhatsApp
+        async function shareCardOnWhatsApp() {
+            const cardElement = document.getElementById('card'); // The main card div
 
-// Main message content 
-const mainMessage = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get ${discountText}`;
+            // Use html2canvas to convert the div to a canvas
+            const canvas = await html2canvas(cardElement, {
+                useCORS: true, // If images are from external sources
+                scale: 2, // Increase scale for better quality
+                allowTaint: true, // Allow tainting for external images if useCORS fails
+            });
 
-// Apply content
-cardImage.src = imageURL;
-headerTxtElement.innerHTML = headerText;
-msgTxtElement.innerHTML = mainMessage;
+            // Get the image data as a Blob
+            canvas.toBlob(async function(blob) {
+                const item = new ClipboardItem({'image/png': blob});
+                try {
+                    await navigator.clipboard.write([item]);
+                    alert("Image copied to clipboard! You can now paste it into WhatsApp or other apps.");
 
-// Footer/Signature content 
-footerTxtElement.innerHTML =
-  `With Best Wishes from<br>` +
-  `<span class="company-name" style="color:${currentTheme.headerColor}">Digdarshan Astro</span><br>` +
-  `Jyotish Devagya Amitsree<br>` +
-  `<span class="call-number">Call : 8697190840 / 9830637766</span>`;
-</script>
+                    // Construct the WhatsApp text message
+                    const whatsappMessage = `*DIGDARSHAN ASTRO*\nIn Partnership with Parashmoni (Gems & Jewellery).\nVisit our site for *exciting offers*: https://digdarshanastro.mydurable.com/`;
+                    
+                    // You might still want to open WhatsApp with the text, even if the image is manually pasted
+                    // Note: Direct image sharing with text via URL scheme is often not supported across all devices
+                    // It's better to tell the user to paste the image manually.
+                    window.open(`https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
 
+                } catch (err) {
+                    console.error('Failed to copy image or open WhatsApp:', err);
+                    alert("Failed to copy image to clipboard. Please try manually capturing and sharing. Opening WhatsApp with text only.");
+                    
+                    // Fallback to text-only WhatsApp if image copy fails
+                    const whatsappMessage = `*DIGDARSHAN ASTRO*\nIn Partnership with Parashmoni (Gems & Jewellery).\nVisit our site for *exciting offers*: https://digdarshanastro.mydurable.com/\n\n${headerText.textContent}\n${mainMessage.textContent}\n${window.location.href}`;
+                    window.open(`https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
+                }
+            }, 'image/png');
+        }
+
+        // Expose the function globally so admin.html can call it
+        window.shareCardOnWhatsApp = shareCardOnWhatsApp;
+
+    </script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </body>
 </html>
