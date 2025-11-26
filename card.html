@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Special Wishes — Digdarshan Astro</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="new style.css">
+    <link rel="stylesheet" href="new style.css"> 
 
     <meta property="og:title" content="Special Wishes from Digdarshan Astro!" />
     <meta property="og:description" content="Wishing you immense joy and success from Jyotish Devagya Amitsree." />
@@ -19,9 +19,9 @@
     <div id="card">
         <div class="card-border">
             <div id="coloredFrame" class="colored-frame">
+                
                 <div class="card-top-section">
                     <img id="cardImage" src="" alt="Greeting Image" class="card-top-image">
-                    <div id="imageOverlayText" class="image-overlay-text"></div>
                 </div>
 
                 <div class="card-content-section">
@@ -43,55 +43,89 @@
 
     <script>
         const params = new URLSearchParams(window.location.search);
-        const type = params.get('type') || 'birthday';
-        const cardType = params.get('cardType') || 'floral';
+        const type = params.get('type') || 'birthday'; // birthday or anniversary
+        const cardType = params.get('cardType') || 'balloons'; // balloons or ribbon
         const name = params.get('name') || 'Dear Client';
         const age = params.get('age'); 
 
         const cardImage = document.getElementById('cardImage');
-        const imageOverlayText = document.getElementById('imageOverlayText'); // New element for text on image
         const headerText = document.getElementById('headerText');
         const mainMessage = document.getElementById('mainMessage');
         const coloredFrame = document.getElementById('coloredFrame');
+        const cardBody = document.querySelector('.card-page');
 
         let imageUrl = '';
-        let overlayMsg = ''; // Message for the overlay
-        let headerMsg = ''; // Message for the content section
+        let headerMsg = '';
         let message = '';
         let frameColor = '';
-        let headerTextColor = ''; // Color for headerText in content section
+        let headerTextColor = ''; 
 
+        // --- THEMES ---
+        const themes = {
+            birthday: {
+                balloons: {
+                    imageUrl: 'Birthday Card Sample.jpg', // Your neon balloons image
+                    frameColor: '#531B8A', // Deep Purple
+                    headerTextColor: '#C137F0', // Neon Pink/Purple
+                    cssClass: 'card-type-bday'
+                },
+                cake: { // Assuming this is your old Cake image (Screenshot 2025-11-24 064829.png)
+                    imageUrl: 'cake.png', 
+                    frameColor: '#531B8A',
+                    headerTextColor: '#C137F0',
+                    cssClass: 'card-type-bday'
+                }
+            },
+            anniversary: {
+                ribbon: {
+                    imageUrl: 'Anniversary Card Sample.png', // Your ribbon image
+                    frameColor: '#A30000', // Deep Red
+                    headerTextColor: '#A30000',
+                    cssClass: 'card-type-anniv'
+                },
+                heart: { // Assuming this is your old Heart image (Screenshot 2025-11-24 063338.png)
+                    imageUrl: 'heart.png', 
+                    frameColor: '#800000',
+                    headerTextColor: '#A30000',
+                    cssClass: 'card-type-anniv'
+                }
+            }
+        };
+
+        const currentTheme = themes[type]?.[cardType] || themes.birthday.balloons;
+
+        imageUrl = currentTheme.imageUrl;
+        frameColor = currentTheme.frameColor;
+        headerTextColor = currentTheme.headerTextColor;
+
+        // --- MESSAGE LOGIC ---
         if (type === 'birthday') {
-            imageUrl = 'Image 2.png'; // Your provided birthday image
-            overlayMsg = 'Happy Birthday'; // Text for the image overlay
-            frameColor = '#A3333D'; // Darker red/maroon for frame
-            headerTextColor = '#A3333D'; // Matching color for content header
             headerMsg = `Happy ${age ? age + 'th ' : ''} Birthday, ${name}! 🎉`;
             message = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get a special birthday discount on a birth chart reading & Gemstone!`;
 
         } else if (type === 'anniversary') {
-            imageUrl = 'Image 1.png'; // Your provided anniversary image
-            overlayMsg = 'Happy Anniversary'; // Text for the image overlay
-            frameColor = '#7A2D00'; // Darker orange/brown for frame
-            headerTextColor = '#7A2D00'; // Matching color for content header
             headerMsg = `Happy ${age ? age + 'th ' : ''} Anniversary, ${name}! 🥂`;
             message = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get a special anniversary discount on a birth chart reading & Gemstone!`;
         }
 
+        // --- RENDERING ---
         cardImage.src = imageUrl;
-        imageOverlayText.textContent = overlayMsg; // Set the overlay text
-        headerText.innerHTML = headerMsg; // Use innerHTML for emoji
+        cardImage.alt = `${type} card image`;
+        cardImage.classList.add(currentTheme.cssClass); // Add specific class for styling
+        
+        headerText.innerHTML = headerMsg;
         mainMessage.textContent = message;
         coloredFrame.style.borderColor = frameColor;
-        headerText.style.color = headerTextColor; // Apply specific color to content header
-        // imageOverlayText.style.color will default to white from CSS
+        headerText.style.color = headerTextColor; 
+
+        // Set the frame class for specific image styling
+        coloredFrame.classList.add(currentTheme.cssClass);
 
         // Function to generate the WhatsApp text with the new message
         function getWhatsAppMessage(cardLink) {
-             const baseText = `*DIGDARSHAN ASTRO*\nIn Partnership with Parashmoni (Gems & Jewellery).\nVisit our site for *exciting offers*: https://digdarshanastro.mydurable.com/`;
+             const baseText = `*DIGDARSHAN ASTRO* wants to wish you a very happy ${type === 'birthday' ? 'Birthday' : 'Anniversary'}! \n\n*Special Offer just for you* - Get cosmic guidance from Jyotish Devagya Amitsree. \n\n_Visit our site for exciting offers_: https://digdarshanastro.mydurable.com/`;
              
-             // The WhatsApp button in admin.html already passes the card URL, 
-             // so the final message will be: BaseText + Line Break + CardLink
+             // The WhatsApp button in admin.html already passes the card URL
              return `${baseText}\n\n${cardLink}`;
         }
         
