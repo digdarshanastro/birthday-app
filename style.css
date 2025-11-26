@@ -1,28 +1,4 @@
-/* ===================== GLOBAL THEME STYLE (shared) ===================== */
-/* Reset & base */
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family: "Inter", Arial, sans-serif;background:#0b0710;color:#fff;-webkit-font-smoothing:antialiased}
-a{color:inherit}
 
-/* Watermark (Rashichakra) — light impression across pages */
-body::before{
-  content:"";
-  position:fixed;
-  left:50%;
-  top:40%;
-  width:70vmin;
-  height:70vmin;
-  transform:translate(-50%,-50%);
-  /* Ensure this image path is correct */
-  background-image:url('/mnt/data/Rashichakra.png'); 
-  background-size:contain;
-  background-position:center;
-  background-repeat:no-repeat;
-  opacity:0.06;
-  pointer-events:none;
-  filter:grayscale(10%) contrast(0.9);
-  z-index:0;
-}
 
 /* Global container */
 .container{
@@ -38,196 +14,258 @@ body::before{
   z-index:1;
 }
 
-/* ... [Admin/Form Styles (Headings, Inputs, Buttons, Stepper, Table etc.) should be here - assuming they are correctly included in your full file] ... */
+/* Headings */
+h1{font-size:24px;color:#ffd6e8;text-align:center;margin-bottom:12px}
 
+/* Inputs */
+input,select,textarea{width:100%;padding:12px;border-radius:12px;border:none;background:rgba(255,255,255,0.06);color:#fff;outline:none;font-size:14px}
+textarea{min-height:110px;resize:vertical}
 
-/* ===================== CARD PAGE STYLES (COMPACT & DOWNLOAD FORMAT) ===================== */
+/* Rows */
+.row{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.col{flex:1;min-width:220px}
 
-.card-page {
-    background-color: #0b0710; 
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 15px; 
-    box-sizing: border-box;
+/* Buttons */
+.btn{display:inline-block;padding:12px 26px;border-radius:28px;background:linear-gradient(90deg,#ff6ea6,#ff9d6d);color:#fff;font-weight:800;border:none;cursor:pointer}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.08);color:#fff}
+
+/* Stepper small */
+.stepper{display:flex;justify-content:center;gap:24px;margin-bottom:18px}
+.step{color:rgba(255,255,255,0.55);font-weight:800;text-align:center;cursor:pointer}
+.step .bar{width:140px;height:6px;border-radius:10px;background:rgba(255,255,255,0.06);margin-bottom:8px}
+.step.active .bar{background:linear-gradient(90deg,#ff6ea6,#ff9d6d);box-shadow:0 8px 20px rgba(255,90,140,0.12);color:#fff}
+
+/* PREVIEW */
+.preview{padding:12px;border-radius:8px;background:rgba(255,255,255,0.03);color:#fff;margin-top:8px}
+
+/* ALERT (admin upcoming) */
+.alert-box{background:#ffedd7;border-left:6px solid #ff6b9a;padding:10px 12px;color:#7a2d00;border-radius:6px}
+
+/* SEARCH */
+#searchBar{display:block;margin:12px auto 18px;padding:12px 16px;border-radius:26px;border:1px solid rgba(255,255,255,0.04);width:68%;background:rgba(255,255,255,0.03);color:#fff;box-shadow:inset 0 2px 6px rgba(0,0,0,0.6)}
+
+/* TABLE styles (admin) */
+.table-box{overflow:auto}
+table{width:100%;border-collapse:collapse;margin-top:14px}
+th,td{padding:10px 8px;border:1px solid rgba(255,255,255,0.03);text-align:center;vertical-align:middle;white-space:nowrap;font-size:13px}
+th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
+
+/* Action Buttons grouping */
+.action-btn{display:inline-block;padding:6px 10px;border-radius:8px;text-decoration:none;font-weight:800;color:#fff;font-size:12px;margin:0 4px}
+.card-btn{background:#ff4500}
+.whatsapp-btn{background:#25d366;color:#05260f}
+.delete-btn{color:#ff5555;cursor:pointer;font-size:18px}
+
+/* blink */
+.blink{animation:softBlink 1.5s infinite}
+@keyframes softBlink{0%{opacity:1}50%{opacity:0.45}100%{opacity:1}}
+
+/* Edit / delete icons stack */
+.icon-vert{display:flex;flex-direction:column;gap:8px;align-items:center}
+.icon-vert span{display:inline-block;width:34px;height:28px;background:transparent;border-radius:6px;line-height:28px;text-align:center;cursor:pointer}
+
+/* responsive */
+@media (max-width:980px){
+  #searchBar{width:86%}
+  .step .bar{width:110px}
+  th,td{font-size:12px;padding:8px}
+}
+@media (max-width:640px){
+  .row{flex-direction:column}
+  .col{min-width:100%}
+  th,td{font-size:11px;padding:7px;white-space:normal}
+  .action-btn{font-size:11px;padding:6px 8px}
 }
 
-/* Digdarshan Logo Watermark for Card - on the entire page */
-.card-page::before {
+/* ensure main content sits above watermark */
+.form-card, .container { position: relative; z-index: 2; }
+
+/* make buttons uniform size */
+.action-btn { min-width:72px !important; height:34px; display:inline-flex; align-items:center; justify-content:center; }
+
+/* ensure table header sticky on larger devices */
+@media (min-width:900px){
+  table thead th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 72px;
+    z-index: 3;
+    background: rgba(10,8,12,0.8);
+  }
+}
+
+/* ===================== CARD PAGE STYLES (Restored and Enhanced) ===================== */
+
+.card-page {
+    background-color: #0b0710;
+    position: relative;
+}
+
+/* Digdarshan Logo Watermark for Card */
+.colored-frame::before {
     content: "";
-    position: fixed;
+    position: absolute;
     left: 50%;
     top: 50%;
-    width: 60%;
-    height: 60%;
+    width: 60%; /* Watermark size */
+    height: 60%; 
     transform: translate(-50%, -50%);
-    /* Ensure 'Digdarshan Astro Logo.png' is available */
-    background-image: url('Digdarshan Astro Logo.png'); 
+    background-image: url('Digdarshan Astro Logo.png'); /* Your logo */
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.08;
+    opacity: 0.08; /* Subtle opacity */
     pointer-events: none;
     z-index: 0;
 }
 
 
 #card {
-    width: 95%; 
-    max-width: 580px; /* **More compact max-width for social media friendly ratio** */
-    background: #fff;
-    padding: 4px; /* Reduced outer padding */
-    border-radius: 16px; 
-    box-shadow: 0 0 18px rgba(0, 0, 0, 0.3); 
-    position: relative;
-    z-index: 1; 
-}
-
-.colored-frame {
-    border: 3px solid; /* Thinner border */
-    padding: 0; 
-    border-radius: 12px; 
-    background-color: #fff; 
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column; /* **Stack image on top, text below for compact look** */
-    min-height: 480px; 
-}
-
-/* --- Image Section (Top) --- */
-.card-top-section {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 10; /* Fixed aspect ratio for better social media fit */
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    overflow: hidden;
-    background-color: #f0f0f0; 
-    padding: 10px; 
-    cursor: pointer; /* **Indicate clickability for download** */
-}
-
-.card-top-section img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; 
-    object-position: center; 
-}
-
-/* --- Download Icon Overlay --- */
-#downloadIcon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
-    opacity: 0; /* Hidden by default */
-    transition: opacity 0.3s;
-    pointer-events: none; 
+    min-height: 100vh;
+    padding: 20px;
 }
 
-/* Show download icon on hover over the image section */
-.card-top-section:hover #downloadIcon {
-    opacity: 1;
-    pointer-events: auto; 
+.card-border {
+    width: 90%;
+    max-width: 900px; 
+    background: #fff;
+    padding: 6px;
+    border-radius: 18px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 }
 
-#downloadIcon img {
-    width: 32px;
-    height: 32px;
-    filter: invert(1); /* Makes the icon white */
+.colored-frame {
+    border: 4px solid; 
+    padding: 18px;
+    border-radius: 12px;
+    background-color: #f7f7f7; 
+    position: relative; /* To contain the ::before watermark */
+    z-index: 1; /* To keep card content on top */
 }
 
+.card-content {
+    display: flex;
+    gap: 20px;
+    /* align-items: flex-start;  <-- REMOVED TO PREVENT IMAGE GOING TOO HIGH */
+    align-items: center; /* Centered alignment for better balance (fixes the image issue) */
+    min-height: 350px; 
+    position: relative; /* For content to sit above watermark */
+    z-index: 2;
+}
 
-/* --- Content Section (Bottom) --- */
-.card-content-section {
-    flex-grow: 1; 
-    padding: 18px 25px; /* **Reduced padding for compactness** */
+.left-section {
+    flex-shrink: 0;
+    width: 40%;
+    max-width: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-section img {
+    width: 100%;
+    height: auto;
+    max-height: 350px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.right-section {
+    flex-grow: 1;
+    width: 60%;
+    color: #333;
+    padding-top: 0; /* Adjusted padding-top */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    color: #333;
+    justify-content: space-between; /* To push signature to the bottom */
+    height: 350px; /* Same as min-height of content to control layout */
 }
 
 .header-text {
-    font-size: 24px; /* **Reduced font size** */
+    font-size: 26px;
     font-weight: 900;
     line-height: 1.2;
-    margin-bottom: 12px; 
-    text-align: center; 
-    font-family: 'Playfair Display', serif; 
-    border-bottom: none; /* Removed dashed border for cleaner look */
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px dashed; 
 }
 
 .main-message {
-    font-size: 14px; /* **Reduced font size** */
-    line-height: 1.5;
-    margin-bottom: 18px;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 24px;
     color: #555;
-    text-align: center;
-    flex-grow: 1;
+    flex-grow: 1; /* Allows message area to push footer down */
 }
 
 .footer-signature {
-    text-align: center;
-    font-size: 12px; /* **Reduced font size** */
-    line-height: 1.3;
+    text-align: right;
+    font-size: 13px;
+    line-height: 1.4;
     color: #777;
-    padding-top: 8px; /* Reduced padding */
+    padding-top: 10px;
     border-top: 1px dotted #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align all footer text to the right */
 }
 
 .company-name {
     font-weight: 800;
     color: #000;
-    font-size: 13px; /* **Reduced font size** */
+    font-size: 14px;
     display: block;
     margin-bottom: 2px;
 }
-.address-text {
-    font-size: 11px;
+.address-text { /* NEW STYLE for Address */
+    font-size: 12px;
     color: #555;
     margin-top: 2px;
-    margin-bottom: 4px; 
+    margin-bottom: 4px; /* Space between address and signature */
     display: block;
     line-height: 1.3;
 }
 .call-number {
-    font-size: 10px; /* **Reduced font size** */
+    font-size: 11px;
     font-weight: 600;
-    /* Color set by JS */
 }
 
+
 /* CARD RESPONSIVE */
-@media (max-width: 480px) {
-    #card {
-        padding: 3px;
+@media (max-width: 768px) {
+    .card-content {
+        flex-direction: column; 
+        align-items: center;
+        min-height: auto;
+        padding: 10px;
     }
-    .colored-frame {
-        min-height: 420px;
+    .left-section, .right-section {
+        width: 100%;
+        max-width: 90%;
+        padding: 0;
     }
-    .card-content-section {
-        padding: 15px 15px;
-    }
-    .header-text {
-        font-size: 20px;
-    }
-    .main-message {
-        font-size: 13px;
+    .left-section img {
+        max-height: 300px;
         margin-bottom: 15px;
     }
+    .header-text {
+        font-size: 22px;
+        text-align: center;
+        border-bottom: none;
+    }
+    .main-message {
+        text-align: center;
+        /* margin-bottom: 15px; */
+    }
     .footer-signature {
-        font-size: 11px;
+        text-align: center;
+        margin-top: 15px;
+        align-items: center; /* Center align footer on mobile */
+    }
+    .right-section {
+        height: auto;
     }
 }
