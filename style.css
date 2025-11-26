@@ -1,4 +1,45 @@
-/* ... [Existing GLOBAL THEME STYLE and Admin Style remains unchanged] ... */
+/* ===================== GLOBAL THEME STYLE (shared) ===================== */
+/* Reset & base */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family: "Inter", Arial, sans-serif;background:#0b0710;color:#fff;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+
+/* Watermark (Rashichakra) — light impression across pages */
+body::before{
+  content:"";
+  position:fixed;
+  left:50%;
+  top:40%;
+  width:70vmin;
+  height:70vmin;
+  transform:translate(-50%,-50%);
+  /* Ensure this image path is correct */
+  background-image:url('/mnt/data/Rashichakra.png'); 
+  background-size:contain;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:0.06;
+  pointer-events:none;
+  filter:grayscale(10%) contrast(0.9);
+  z-index:0;
+}
+
+/* Global container */
+.container{
+  width:95%;
+  max-width:1180px;
+  margin:28px auto;
+  padding:22px;
+  border-radius:14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 16px 60px rgba(2,6,20,0.6);
+  position:relative;
+  z-index:1;
+}
+
+/* ... [Admin/Form Styles (Headings, Inputs, Buttons, Stepper, Table etc.) should be here - assuming they are correctly included in your full file] ... */
+
 
 /* ===================== CARD PAGE STYLES (COMPACT & DOWNLOAD FORMAT) ===================== */
 
@@ -9,7 +50,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 15px; /* Slightly reduced page padding */
+    padding: 15px; 
     box-sizing: border-box;
 }
 
@@ -60,8 +101,7 @@
 .card-top-section {
     position: relative;
     width: 100%;
-    /* Fixed aspect ratio close to square for better social media fit */
-    aspect-ratio: 16 / 10; 
+    aspect-ratio: 16 / 10; /* Fixed aspect ratio for better social media fit */
     display: flex;
     justify-content: center;
     align-items: center; 
@@ -71,12 +111,44 @@
     cursor: pointer; /* **Indicate clickability for download** */
 }
 
-.card-top-image {
+.card-top-section img {
     width: 100%;
     height: 100%;
     object-fit: contain; 
     object-position: center; 
 }
+
+/* --- Download Icon Overlay --- */
+#downloadIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s;
+    pointer-events: none; 
+}
+
+/* Show download icon on hover over the image section */
+.card-top-section:hover #downloadIcon {
+    opacity: 1;
+    pointer-events: auto; 
+}
+
+#downloadIcon img {
+    width: 32px;
+    height: 32px;
+    filter: invert(1); /* Makes the icon white */
+}
+
 
 /* --- Content Section (Bottom) --- */
 .card-content-section {
@@ -95,6 +167,7 @@
     margin-bottom: 12px; 
     text-align: center; 
     font-family: 'Playfair Display', serif; 
+    border-bottom: none; /* Removed dashed border for cleaner look */
 }
 
 .main-message {
@@ -111,7 +184,7 @@
     font-size: 12px; /* **Reduced font size** */
     line-height: 1.3;
     color: #777;
-    padding-top: 8px;
+    padding-top: 8px; /* Reduced padding */
     border-top: 1px dotted #ccc;
 }
 
@@ -133,39 +206,8 @@
 .call-number {
     font-size: 10px; /* **Reduced font size** */
     font-weight: 600;
+    /* Color set by JS */
 }
-
-/* --- Download Icon Overlay --- */
-#downloadIcon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    opacity: 0; /* Hidden by default */
-    transition: opacity 0.3s;
-    pointer-events: none; /* Allows clicks to go through to the image when hidden */
-}
-
-/* Show download icon on hover over the image section */
-.card-top-section:hover #downloadIcon {
-    opacity: 1;
-    pointer-events: auto; /* Enable clicks when visible */
-}
-
-#downloadIcon img {
-    width: 32px;
-    height: 32px;
-    filter: invert(1); /* Makes the icon white */
-}
-
 
 /* CARD RESPONSIVE */
 @media (max-width: 480px) {
