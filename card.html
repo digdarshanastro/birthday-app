@@ -34,7 +34,7 @@
                         <strong class="company-name">Digdarshan Astro</strong>
                         <span class="address-text">47F Raja Rammohan Roy Road, Kolkata-8.</span> 
                         Jyotish Devagya Amitsree
-                        <span class="call-number">Call : 8697190840 / 9830637766</span>
+                        <span id="callNumber" class="call-number">Call : 8697190840 / 9830637766</span>
                     </div>
                 </div>
             </div>
@@ -44,7 +44,8 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         const type = params.get('type') || 'birthday'; // birthday or anniversary
-        const cardType = params.get('cardType') || 'balloons'; // balloons or ribbon
+        // cardType: Bday -> candle, floral | Anniv -> cake, heart
+        const cardType = params.get('cardType') || (type === 'birthday' ? 'candle' : 'cake'); 
         const name = params.get('name') || 'Dear Client';
         const age = params.get('age'); 
 
@@ -52,51 +53,57 @@
         const headerText = document.getElementById('headerText');
         const mainMessage = document.getElementById('mainMessage');
         const coloredFrame = document.getElementById('coloredFrame');
-        const cardBody = document.querySelector('.card-page');
+        const callNumber = document.getElementById('callNumber');
 
         let imageUrl = '';
         let headerMsg = '';
         let message = '';
         let frameColor = '';
         let headerTextColor = ''; 
+        let callNumberColor = '';
 
         // --- THEMES ---
         const themes = {
             birthday: {
-                balloons: {
-                    imageUrl: 'Birthday Card Sample.jpg', // Your neon balloons image
-                    frameColor: '#531B8A', // Deep Purple
-                    headerTextColor: '#C137F0', // Neon Pink/Purple
-                    cssClass: 'card-type-bday'
+                // Image 4: birthday77.png (Candles Cake)
+                candle: {
+                    imageUrl: 'birthday77.png', 
+                    frameColor: '#A0522D', // Sienna/Brown (from cake base)
+                    headerTextColor: '#B8860B', // DarkGoldenrod (for visibility)
+                    callNumberColor: '#B8860B'
                 },
-                cake: { // Assuming this is your old Cake image (Screenshot 2025-11-24 064829.png)
-                    imageUrl: 'cake.png', 
-                    frameColor: '#531B8A',
-                    headerTextColor: '#C137F0',
-                    cssClass: 'card-type-bday'
+                // Image 5: birthday66.jpg (Floral Cake)
+                floral: { 
+                    imageUrl: 'birthday66.jpg', 
+                    frameColor: '#53005A', // Deep Purple (from cake)
+                    headerTextColor: '#993399', // Medium Purple
+                    callNumberColor: '#993399'
                 }
             },
             anniversary: {
-                ribbon: {
-                    imageUrl: 'Anniversary Card Sample.png', // Your ribbon image
-                    frameColor: '#A30000', // Deep Red
-                    headerTextColor: '#A30000',
-                    cssClass: 'card-type-anniv'
+                // Image 2: anniversary88.jpg (Wedding Cake)
+                cake: {
+                    imageUrl: 'anniversary88.jpg', 
+                    frameColor: '#8B0000', // Deep Red (from roses)
+                    headerTextColor: '#DAA520', // Goldenrod (from topper)
+                    callNumberColor: '#8B0000'
                 },
-                heart: { // Assuming this is your old Heart image (Screenshot 2025-11-24 063338.png)
-                    imageUrl: 'heart.png', 
-                    frameColor: '#800000',
-                    headerTextColor: '#A30000',
-                    cssClass: 'card-type-anniv'
+                // Image 3: anniversary99.jpg (Heart)
+                heart: { 
+                    imageUrl: 'anniversary99.jpg', 
+                    frameColor: '#CC0000', // Bright Red (from heart)
+                    headerTextColor: '#B8860B', // DarkGoldenrod (from text)
+                    callNumberColor: '#CC0000'
                 }
             }
         };
 
-        const currentTheme = themes[type]?.[cardType] || themes.birthday.balloons;
+        const currentTheme = themes[type]?.[cardType] || themes.birthday.candle;
 
         imageUrl = currentTheme.imageUrl;
         frameColor = currentTheme.frameColor;
         headerTextColor = currentTheme.headerTextColor;
+        callNumberColor = currentTheme.callNumberColor;
 
         // --- MESSAGE LOGIC ---
         if (type === 'birthday') {
@@ -111,25 +118,18 @@
         // --- RENDERING ---
         cardImage.src = imageUrl;
         cardImage.alt = `${type} card image`;
-        cardImage.classList.add(currentTheme.cssClass); // Add specific class for styling
         
         headerText.innerHTML = headerMsg;
         mainMessage.textContent = message;
         coloredFrame.style.borderColor = frameColor;
         headerText.style.color = headerTextColor; 
-
-        // Set the frame class for specific image styling
-        coloredFrame.classList.add(currentTheme.cssClass);
-
-        // Function to generate the WhatsApp text with the new message
+        callNumber.style.color = callNumberColor;
+        
+        // Expose function globally for admin.html to use (unchanged)
         function getWhatsAppMessage(cardLink) {
              const baseText = `*DIGDARSHAN ASTRO* wants to wish you a very happy ${type === 'birthday' ? 'Birthday' : 'Anniversary'}! \n\n*Special Offer just for you* - Get cosmic guidance from Jyotish Devagya Amitsree. \n\n_Visit our site for exciting offers_: https://digdarshanastro.mydurable.com/`;
-             
-             // The WhatsApp button in admin.html already passes the card URL
              return `${baseText}\n\n${cardLink}`;
         }
-        
-        // Expose function globally for admin.html to use
         window.getWhatsAppMessage = getWhatsAppMessage;
         
     </script>
