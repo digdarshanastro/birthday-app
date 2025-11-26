@@ -1,101 +1,171 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<title>Wish Card</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style.css"> 
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Special Wishes — Digdarshan Astro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="new style.css"> 
+
+    <meta property="og:title" content="Special Wishes from Digdarshan Astro!" />
+    <meta property="og:description" content="Wishing you immense joy and success from Jyotish Devagya Amitsree." />
+    <meta property="og:image" content="https://digdarshanastro.mydurable.com/Digdarshan%20Astro%20Logo.png" /> 
+    <meta property="og:url" content="https://your-app-domain.vercel.app/card.html" /> 
+    <meta property="og:type" content="website" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> 
 </head>
-<body class="card-page"> 
 
-<div id="card">
-  <div class="card-border"> 
-      <div class="colored-frame"> 
-          <div class="card-content">
-              <div class="left-section">
-                  <img id="cardImage" src="/mnt/data/Screenshot 2025-11-19 103845.png" alt="card image">
-              </div>
-              <div class="right-section">
-                  <div class="header-text" id="headerTxt"></div>
-                  <div class="main-message" id="msgTxt"></div>
-                  <div class="footer-signature" id="footerTxt"></div>
-              </div>
-          </div>
-      </div>
-  </div>
-</div>
+<body class="card-page">
 
-<script>
-const url = new URLSearchParams(window.location.search);
-const type = url.get("type"); 
-const cardType = url.get("cardType"); 
-let name = url.get("name");
-let age = url.get("age");
+    <div id="card">
+        <div class="card-border">
+            <div id="coloredFrame" class="colored-frame">
+                
+                <div class="card-top-section" id="cardImageSection" onclick="downloadCard()">
+                    <img id="cardImage" src="" alt="Greeting Image" class="card-top-image">
+                    
+                    <div id="downloadIcon">
+                        <img src="download_icon.png" alt="Download PNG Icon">
+                    </div>
+                </div>
 
-name = name ? decodeURIComponent(name) : "[Client's Name]";
-age = age ? Number(age) : null;
+                <div class="card-content-section">
+                    <div>
+                        <h2 id="headerText" class="header-text"></h2>
+                        <p id="mainMessage" class="main-message"></p>
+                    </div>
+                    <div class="footer-signature">
+                        With Best Wishes from
+                        <strong class="company-name">Digdarshan Astro</strong>
+                        <span class="address-text">47F Raja Rammohan Roy Road, Kolkata-8.</span> 
+                        Jyotish Devagya Amitsree
+                        <span id="callNumber" class="call-number">Call : 8697190840 / 9830637766</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-const coloredFrameElement = document.querySelector(".colored-frame"); 
-const cardImage = document.getElementById("cardImage");
-const headerTxtElement = document.getElementById("headerTxt");
-const msgTxtElement = document.getElementById("msgTxt");
-const footerTxtElement = document.getElementById("footerTxt");
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get('type') || 'birthday'; 
+        // cardType: Bday -> floral, simple | Anniv -> cake, heart
+        const cardType = params.get('cardType') || (type === 'birthday' ? 'simple' : 'cake'); 
+        const name = params.get('name') || 'Dear Client';
+        const age = params.get('age'); 
 
-let currentTheme = null;
-let imageURL = "";
-let headerText = "";
-let discountText = "";
+        const cardImage = document.getElementById('cardImage');
+        const headerText = document.getElementById('headerText');
+        const mainMessage = document.getElementById('mainMessage');
+        const coloredFrame = document.getElementById('coloredFrame');
+        const callNumber = document.getElementById('callNumber');
+        const cardContainer = document.getElementById('card'); // Element to capture
 
-// themes
-const themes = {
-  'birthday_floral': { img: 'birthday66.png', borderColor: '#8A2BE2', headerColor: '#A377D6', discount: "a special birthday discount on a birth chart reading & Gemstone!" },
-  'birthday_simple': { img: 'birthday77.png', borderColor: '#FFCC00', headerColor: '#FF8C00', discount: "a special birthday discount on a birth chart reading & Gemstone!" },
-  'anniversary_cake': { img: 'anniversary88.png', borderColor: '#C2185B', headerColor: '#E91E63', discount: "a special anniversary discount on a birth chart reading & Gemstone!" },
-  'anniversary_heart': { img: 'anniversary99.png', borderColor: '#8B0000', headerColor: '#DC3545', discount: "a special anniversary discount on a birth chart reading & Gemstone!" }
-};
+        let imageUrl = '';
+        let headerMsg = '';
+        let message = '';
+        let frameColor = '';
+        let headerTextColor = ''; 
+        let callNumberColor = '';
 
-function ordinal(n) {
-  const s = ["th","st","nd","rd"];
-  const v = n % 100;
-  return n + (s[(v-20)%10] || s[v] || s[0]);
-}
+        // --- THEMES (Adjusted to match previous BD/AC types) ---
+        const themes = {
+            birthday: {
+                // Image (birthday77.png - Simple/Candles)
+                simple: {
+                    imageUrl: 'birthday77.png', 
+                    frameColor: '#A0522D', // Sienna/Brown
+                    headerTextColor: '#B8860B', // DarkGoldenrod
+                    callNumberColor: '#B8860B'
+                },
+                // Image (birthday66.jpg - Floral/Purple)
+                floral: { 
+                    imageUrl: 'birthday66.jpg', 
+                    frameColor: '#53005A', // Deep Purple
+                    headerTextColor: '#993399', // Medium Purple
+                    callNumberColor: '#993399'
+                }
+            },
+            anniversary: {
+                // Image (anniversary88.jpg - Cake)
+                cake: {
+                    imageUrl: 'anniversary88.jpg', 
+                    frameColor: '#8B0000', // Deep Red
+                    headerTextColor: '#DAA520', // Goldenrod
+                    callNumberColor: '#8B0000'
+                },
+                // Image (anniversary99.jpg - Heart)
+                heart: { 
+                    imageUrl: 'anniversary99.jpg', 
+                    frameColor: '#CC0000', // Bright Red
+                    headerTextColor: '#B8860B', // DarkGoldenrod
+                    callNumberColor: '#CC0000'
+                }
+            }
+        };
 
-if (type === "birthday") {
-  currentTheme = cardType === 'floral' ? themes.birthday_floral : themes.birthday_simple;
-  if (age && age > 0) headerText = `Happy ${ordinal(age)} Birthday, ${decodeURIComponent(name)}! 🎉`;
-  else headerText = `Happy Birthday, ${decodeURIComponent(name)}! 🎉`;
-} else if (type === "anniversary") {
-  currentTheme = cardType === 'cake' ? themes.anniversary_cake : themes.anniversary_heart;
-  headerText = `Happy Anniversary, ${decodeURIComponent(name)}! 🎉`;
-}
+        const currentTheme = themes[type]?.[cardType] || themes.birthday.simple;
 
-if (currentTheme) {
-  imageURL = currentTheme.img;
-  discountText = currentTheme.discount;
-  coloredFrameElement.style.borderColor = currentTheme.borderColor;
-  headerTxtElement.style.color = currentTheme.headerColor;
-  headerTxtElement.style.borderColor = currentTheme.headerColor;
-} else {
-  imageURL = "/mnt/data/Screenshot 2025-11-19 103845.png";
-  headerText = `Hello, ${decodeURIComponent(name)}!`;
-  discountText = "a special discount on a reading!";
-  coloredFrameElement.style.borderColor = "#CCCCCC";
-  headerTxtElement.style.color = "#333333";
-  headerTxtElement.style.borderColor = "#333333";
-  msgTxtElement.innerHTML = `Error: Invalid Card Type.`;
-}
+        imageUrl = currentTheme.imageUrl;
+        frameColor = currentTheme.frameColor;
+        headerTextColor = currentTheme.headerTextColor;
+        callNumberColor = currentTheme.callNumberColor;
 
-const mainMessage = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get ${discountText}`;
+        // --- MESSAGE LOGIC ---
+        if (type === 'birthday') {
+            headerMsg = `Happy ${age ? age + 'th ' : ''} Birthday, ${name}! 🎉`;
+            message = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get a special birthday discount on a birth chart reading & Gemstone!`;
 
-cardImage.src = imageURL;
-headerTxtElement.innerHTML = headerText;
-msgTxtElement.innerHTML = mainMessage;
+        } else if (type === 'anniversary') {
+            headerMsg = `Happy ${age ? age + 'th ' : ''} Anniversary, ${name}! 🥂`;
+            message = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree. Get a special anniversary discount on a birth chart reading & Gemstone!`;
+        }
 
-footerTxtElement.innerHTML =
-  `With Best Wishes from<br>` +
-  `<span class="company-name">Digdarshan Astro</span><br>` +
-  `Jyotish Devagya Amitsree<br>` +
-  `<span class="call-number">Call : 8697190840 / 9830637766</span>`;
-</script>
+        // --- RENDERING ---
+        cardImage.src = imageUrl;
+        cardImage.alt = `${type} card image`;
+        
+        headerText.innerHTML = headerMsg;
+        mainMessage.textContent = message;
+        coloredFrame.style.borderColor = frameColor;
+        headerText.style.color = headerTextColor; 
+        callNumber.style.color = callNumberColor;
+        
+        // --- DOWNLOAD FUNCTION (NEW) ---
+        window.downloadCard = function() {
+            // Temporarily hide elements that shouldn't be in the final image (like the download icon itself)
+            const downloadIcon = document.getElementById('downloadIcon');
+            downloadIcon.style.opacity = '0';
+            downloadIcon.style.pointerEvents = 'none';
 
+            html2canvas(cardContainer, {
+                allowTaint: true,
+                useCORS: true,
+                scale: 2, // Capture at a higher resolution for better quality
+                backgroundColor: null // Ensure background is transparent if needed, or controlled by CSS
+            }).then(canvas => {
+                // Create a link element to trigger the download
+                const link = document.createElement('a');
+                // Use the card type and name for the filename
+                const fileName = `${type.toUpperCase()}_Card_${name.replace(/\s/g, '_')}_${cardType}.png`;
+                link.download = fileName;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).finally(() => {
+                // Restore the download icon state after capture
+                downloadIcon.style.opacity = '';
+                downloadIcon.style.pointerEvents = '';
+            });
+        };
+        
+        // Expose function globally for admin.html to use (unchanged)
+        function getWhatsAppMessage(cardLink) {
+             const baseText = `*DIGDARSHAN ASTRO* wants to wish you a very happy ${type === 'birthday' ? 'Birthday' : 'Anniversary'}! \n\n*Special Offer just for you* - Get cosmic guidance from Jyotish Devagya Amitsree. \n\n_Visit our site for exciting offers_: https://digdarshanastro.mydurable.com/`;
+             return `${baseText}\n\n${cardLink}`;
+        }
+        window.getWhatsAppMessage = getWhatsAppMessage;
+        
+    </script>
 </body>
 </html>
