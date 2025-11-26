@@ -1,4 +1,27 @@
+/* ===================== GLOBAL THEME STYLE (shared) ===================== */
+/* Reset & base */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family: "Inter", Arial, sans-serif;background:#0b0710;color:#fff;-webkit-font-smoothing:antialiased}
+a{color:inherit}
 
+/* Watermark (Rashichakra) — light impression across pages */
+body::before{
+  content:"";
+  position:fixed;
+  left:50%;
+  top:40%;
+  width:70vmin;
+  height:70vmin;
+  transform:translate(-50%,-50%);
+  background-image:url('/mnt/data/Rashichakra.png');
+  background-size:contain;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:0.06;
+  pointer-events:none;
+  filter:grayscale(10%) contrast(0.9);
+  z-index:0;
+}
 
 /* Global container */
 .container{
@@ -94,31 +117,11 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
   }
 }
 
-/* ===================== CARD PAGE STYLES (Restored and Enhanced) ===================== */
+/* ===================== CARD PAGE STYLES ===================== */
 
 .card-page {
-    background-color: #0b0710;
-    position: relative;
+    background-color: #0b0710; /* Dark background for contrast */
 }
-
-/* Digdarshan Logo Watermark for Card */
-.colored-frame::before {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 60%; /* Watermark size */
-    height: 60%; 
-    transform: translate(-50%, -50%);
-    background-image: url('Digdarshan Astro Logo.png'); /* Your logo */
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0.08; /* Subtle opacity */
-    pointer-events: none;
-    z-index: 0;
-}
-
 
 #card {
     display: flex;
@@ -130,7 +133,7 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
 
 .card-border {
     width: 90%;
-    max-width: 900px; 
+    max-width: 900px; /* Max card width */
     background: #fff;
     padding: 6px;
     border-radius: 18px;
@@ -138,27 +141,22 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
 }
 
 .colored-frame {
-    border: 4px solid; 
+    border: 4px solid; /* This will be set by JS (currentTheme.borderColor) */
     padding: 18px;
     border-radius: 12px;
-    background-color: #f7f7f7; 
-    position: relative; /* To contain the ::before watermark */
-    z-index: 1; /* To keep card content on top */
+    background-color: #f7f7f7; /* Light background inside frame */
 }
 
 .card-content {
-    display: flex;
+    display: flex; /* Key to make sections side-by-side */
     gap: 20px;
-    /* align-items: flex-start;  <-- REMOVED TO PREVENT IMAGE GOING TOO HIGH */
-    align-items: center; /* Centered alignment for better balance (fixes the image issue) */
-    min-height: 350px; 
-    position: relative; /* For content to sit above watermark */
-    z-index: 2;
+    align-items: flex-start; /* Align content to the top */
+    min-height: 350px; /* Min height for a decent card size */
 }
 
 .left-section {
     flex-shrink: 0;
-    width: 40%;
+    width: 40%; /* Image takes 40% of the space */
     max-width: 320px;
     display: flex;
     justify-content: center;
@@ -168,20 +166,16 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
 .left-section img {
     width: 100%;
     height: auto;
-    max-height: 350px;
+    max-height: 350px; /* Ensure image doesn't get too tall */
     object-fit: contain;
     border-radius: 8px;
 }
 
 .right-section {
     flex-grow: 1;
-    width: 60%;
+    width: 60%; /* Text takes 60% of the space */
     color: #333;
-    padding-top: 0; /* Adjusted padding-top */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* To push signature to the bottom */
-    height: 350px; /* Same as min-height of content to control layout */
+    padding-top: 10px;
 }
 
 .header-text {
@@ -190,7 +184,7 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
     line-height: 1.2;
     margin-bottom: 12px;
     padding-bottom: 6px;
-    border-bottom: 2px dashed; 
+    border-bottom: 2px dashed; /* Color set by JS */
 }
 
 .main-message {
@@ -198,7 +192,6 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
     line-height: 1.6;
     margin-bottom: 24px;
     color: #555;
-    flex-grow: 1; /* Allows message area to push footer down */
 }
 
 .footer-signature {
@@ -208,9 +201,6 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
     color: #777;
     padding-top: 10px;
     border-top: 1px dotted #ccc;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end; /* Align all footer text to the right */
 }
 
 .company-name {
@@ -219,14 +209,6 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
     font-size: 14px;
     display: block;
     margin-bottom: 2px;
-}
-.address-text { /* NEW STYLE for Address */
-    font-size: 12px;
-    color: #555;
-    margin-top: 2px;
-    margin-bottom: 4px; /* Space between address and signature */
-    display: block;
-    line-height: 1.3;
 }
 .call-number {
     font-size: 11px;
@@ -237,7 +219,7 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
 /* CARD RESPONSIVE */
 @media (max-width: 768px) {
     .card-content {
-        flex-direction: column; 
+        flex-direction: column; /* Stack image and text vertically */
         align-items: center;
         min-height: auto;
         padding: 10px;
@@ -258,14 +240,9 @@ th{background:rgba(255,255,255,0.02);color:#ffe3f0;font-weight:800}
     }
     .main-message {
         text-align: center;
-        /* margin-bottom: 15px; */
     }
     .footer-signature {
         text-align: center;
         margin-top: 15px;
-        align-items: center; /* Center align footer on mobile */
-    }
-    .right-section {
-        height: auto;
     }
 }
