@@ -3,7 +3,7 @@
 <head>
 <title>Wish Card</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style (3).css"> 
+<link rel="stylesheet" href="card-style.css"> 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> 
 
@@ -76,40 +76,36 @@ let frameColor = '';
 let headerColor = '';
 let callNumberColor = '';
 
-// **THEME DEFINITIONS** - 2 Birthday, 2 Anniversary
+// **THEME DEFINITIONS** - 2 Birthday, 2 Anniversary (unchanged)
 const themes = {
     birthday: {
-        // Theme 1: Elegant (using birthday66.jpg)
         elegant: {
             img: 'birthday66.jpg', 
             discount: "a special *birthday discount* on a birth chart reading & Gemstone!",
-            borderColor: '#5D4037', // Brown/Coffee
+            borderColor: '#5D4037', 
             headerColor: '#5D4037', 
             callColor: '#5D4037'
         },
-        // Theme 2: Vibrant (using birthday77.png)
         vibrant: {
             img: 'birthday77.png',
             discount: "a special *birthday discount* on a birth chart reading & Gemstone!",
-            borderColor: '#9C27B0', // Deep Purple
+            borderColor: '#9C27B0', 
             headerColor: '#9C27B0', 
             callColor: '#9C27B0'
         }
     },
     anniversary: {
-        // Theme 3: Classic (using anniversary88.jpg)
         cake: {
             img: 'anniversary88.jpg',
             discount: "a special *anniversary discount* on a birth chart reading & Gemstone!",
-            borderColor: '#D32F2F', // Deep Red
+            borderColor: '#D32F2F', 
             headerColor: '#D32F2F',
             callColor: '#D32F2F'
         },
-        // Theme 4: Romantic (using anniversary99.jpg)
         heart: { 
             img: 'anniversary99.jpg',
             discount: "a special *anniversary discount* on a birth chart reading & Gemstone!",
-            borderColor: '#FFC107', // Amber/Gold
+            borderColor: '#FFC107', 
             headerColor: '#FFC107', 
             callColor: '#FFC107'
         }
@@ -180,7 +176,6 @@ window.downloadCard = function() {
 
 // --- WHATSAPP SHARE FUNCTION ---
 function shareToWhatsApp() {
-    // Generate the message with the current card URL
     const cardLink = window.location.href;
     const shareMessage = getWhatsAppMessage(cardLink);
     
@@ -191,7 +186,6 @@ window.shareToWhatsApp = shareToWhatsApp;
 
 // --- WHATSAPP MESSAGE GENERATOR (for Admin Panel) ---
 window.getWhatsAppMessage = function(cardLink) {
-     // Text starts with Digdarshan Astro, followed by company details.
      const baseText = `*DIGDARSHAN ASTRO* wants to wish you a very happy ${type === 'birthday' ? 'Birthday' : 'Anniversary'}! \n\n*Special Offer just for you* - Get cosmic guidance from Jyotish Devagya Amitsree.\n\n_Visit our site for exciting offers_:\nhttps://digdarshanastro.mydurable.com/`;
      
      return `${baseText}\n\n${cardLink}`;
