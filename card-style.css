@@ -1,0 +1,207 @@
+/* ===================== CARD PAGE STYLES (SMART & COMPACT) ===================== */
+
+.card-page {
+    /* Assuming dark background for contrast (from previous global styles) */
+    background-color: #0b0710; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 15px; 
+    box-sizing: border-box;
+}
+
+#card {
+    width: 95%; 
+    max-width: 500px; /* Smart, compact max-width for social media square ratio */
+    background: #fff;
+    padding: 4px; 
+    border-radius: 16px; 
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.3); 
+    position: relative;
+    z-index: 1; 
+}
+
+.card-border {
+    padding: 0;
+}
+
+.colored-frame {
+    border: 3px solid; 
+    padding: 0; 
+    border-radius: 12px; 
+    background-color: #fff; 
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column; 
+    min-height: 480px; 
+}
+
+/* --- Content Structure (Vertical Stack) --- */
+.card-content {
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+    gap: 0;
+}
+
+/* --- Image Section (Top) --- */
+.left-section {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 1 / 0.7; /* 10:7 aspect ratio, wide rectangle */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: #f0f0f0; 
+    cursor: pointer; 
+}
+
+.left-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+    object-position: center; 
+    border-radius: 0;
+}
+
+/* --- Download Icon Overlay --- */
+#downloadIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0; 
+    transition: opacity 0.3s;
+    z-index: 5;
+    pointer-events: none; 
+}
+
+.left-section:hover #downloadIcon {
+    opacity: 1;
+    pointer-events: auto; 
+}
+
+#downloadIcon img {
+    width: 28px;
+    height: 28px;
+    filter: invert(1); 
+}
+
+/* --- Text Content Section (Bottom) --- */
+.right-section {
+    width: 100%;
+    flex-grow: 1;
+    color: #333;
+    padding: 20px 25px 15px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.header-text {
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 10px; 
+    padding-bottom: 5px;
+    border-bottom: 2px dashed; 
+    text-align: center; 
+}
+
+.main-message {
+    font-size: 14px; 
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #555;
+    text-align: center; 
+    flex-grow: 1;
+}
+
+.footer-signature {
+    text-align: center; 
+    font-size: 12px; 
+    line-height: 1.3;
+    color: #777;
+    padding-top: 8px; 
+    border-top: 1px dotted #ccc;
+    margin-top: 10px; 
+}
+
+.company-name {
+    font-weight: 800;
+    color: #000;
+    font-size: 13px; 
+    display: block;
+    margin-bottom: 2px;
+}
+.address-text {
+    font-size: 11px;
+    color: #555;
+    margin-top: 2px;
+    margin-bottom: 4px; 
+    display: block;
+    line-height: 1.3;
+}
+.call-number {
+    font-size: 10px; 
+    font-weight: 600;
+}
+
+/* --- WhatsApp Button Style --- */
+#whatsappButton {
+    display: block;
+    width: 80%;
+    max-width: 280px;
+    margin: 15px auto 0;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: #25d366; 
+    color: #fff;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+    transition: background 0.2s, transform 0.2s;
+}
+
+#whatsappButton:hover {
+    background: #128c7e;
+    transform: translateY(-1px);
+}
+
+/* CARD RESPONSIVE */
+@media (max-width: 640px) {
+    #card {
+        max-width: 95%;
+        padding: 3px;
+    }
+    .colored-frame {
+        min-height: 400px;
+    }
+    .left-section {
+        aspect-ratio: 16 / 10;
+    }
+    .right-section {
+        padding: 15px 15px 10px;
+    }
+    .header-text {
+        font-size: 20px;
+    }
+    .main-message {
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+}
