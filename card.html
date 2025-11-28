@@ -5,49 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="card-style.css"> 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> 
 
 <meta property="og:title" content="Special Wishes from Digdarshan Astro!" />
 <meta property="og:description" content="Wishing you immense joy and success from Jyotish Devagya Amitsree." />
-<meta property="og:image" content="https://digdarshanastro.mydurable.com/Digdarshan%20Astro%20Logo.png" /> 
 <meta property="og:url" content="https://your-app-domain.vercel.app/card.html" /> 
 <meta property="og:type" content="website" />
 </head>
 
-<body class="card-page"> 
+<body> 
 
 <div id="card">
-  <div class="card-border"> 
-      <div id="coloredFrame" class="colored-frame"> 
-          <div class="card-content">
-              <div class="left-section" id="cardImageSection"> 
-                  <img id="cardImage" src="" alt="Greeting Image">
-                  <div id="downloadIcon">
-                      <img src="download_icon.png" alt="Download PNG Icon">
-                  </div>
+  <div id="coloredFrame" class="colored-frame"> 
+      <div class="card-content">
+          <div class="top-section"> 
+              <img id="cardImage" src="" alt="Greeting Image">
+          </div>
+          
+          <div class="bottom-section">
+              <div>
+                  <h2 id="headerText" class="header-text"></h2>
+                  
+                  <p id="mainMessage" class="main-message">
+                      <span id="greetingText"></span>
+                      <span id="offerHighlight" class="offer-highlight"></span>
+                  </p>
               </div>
               
-              <div class="right-section">
-                  <div>
-                      <h2 id="headerText" class="header-text"></h2>
-                      
-                      <p id="mainMessage" class="main-message">
-                          <span id="greetingText"></span>
-                          <span id="offerHighlight" class="offer-highlight"></span>
-                      </p>
-                  </div>
-                  
-                  <a id="whatsappButton" href="#" target="_blank" onclick="event.preventDefault(); shareToWhatsApp()">
-                    ডাউনলোড ও WhatsApp এ শেয়ার করুন
-                  </a>
+              <a id="whatsappButton" href="#" target="_blank">
+                Share on WhatsApp
+              </a>
 
-                  <div class="footer-signature">
-                    With Best Wishes from
-                    <strong class="company-name">Digdarshan Astro</strong>
-                    <span class="address-text">47F Raja Rammohan Roy Road, Kolkata-8.</span> 
-                    Jyotish Devagya Amitsree
-                    <span class="call-number" id="callNumber">Call : 8697190840 / 9830637766</span>
-                  </div>
+              <div class="footer-section">
+                With Best Wishes from
+                <strong class="company-name">Digdarshan Astro</strong>
+                <span class="address-text">47F Raja Rammohan Roy Road, Kolkata-8.</span> 
+                Jyotish Devagya Amitsree
+                <span class="call-number" id="callNumber">Call : 8697190840 / 9830637766</span>
               </div>
           </div>
       </div>
@@ -71,35 +64,27 @@ const headerTxtElement = document.getElementById("headerText");
 const greetingTxtElement = document.getElementById("greetingText"); 
 const offerHighlightElement = document.getElementById("offerHighlight"); 
 const callNumberElement = document.getElementById("callNumber");
-const cardContainer = document.getElementById('card'); 
 const whatsappButton = document.getElementById('whatsappButton');
 
 let headerText = '';
 let discountText = '';
-let imageURL = '';
-let frameColor = '';
-let headerColor = '';
-let headerBg = ''; 
-let callNumberColor = '';
 
 // **THEME DEFINITIONS (Updated with correct .png names and refined colors)**
 const themes = {
     birthday: {
-        // Theme 1: Elegant (matching birthday66.png - Purple/Gold)
+        // Theme 1: Elegant (matching birthday66.png - Deep Purple)
         elegant: {
             img: 'birthday66.png', 
-            discount: "আপনার জন্মদিনে একটি বিশেষ *ডিসকাউন্ট* পান বার্থ চার্ট রিডিং ও জেমস্টোনের উপর!",
+            discount: "a special *discount* on birth chart reading and gemstones!",
             borderColor: '#8E24AA', // Deep Purple
-            headerColor: '#FFFFFF', 
             headerBg: '#BA68C8',    // Light Purple for header background
             callColor: '#8E24AA'
         },
-        // Theme 2: Vibrant (matching birthday77.png - Bright/Colorful)
+        // Theme 2: Vibrant (matching birthday77.png - Deep Pink/Red)
         vibrant: {
             img: 'birthday77.png',
-            discount: "আপনার জন্মদিনে একটি বিশেষ *ডিসকাউন্ট* পান বার্থ চার্ট রিডিং ও জেমস্টোনের উপর!",
+            discount: "a special *discount* on birth chart reading and gemstones!",
             borderColor: '#D81B60', // Deep Pink/Red
-            headerColor: '#FFFFFF', 
             headerBg: '#F06292',    // Light Pink for header background
             callColor: '#D81B60'
         }
@@ -108,18 +93,16 @@ const themes = {
         // Theme 3: Classic (matching anniversary88.png - Deep Red Roses)
         cake: {
             img: 'anniversary88.png',
-            discount: "আপনার বিবাহবার্ষিকীতে একটি বিশেষ *ডিসকাউন্ট* পান বার্থ চার্ট রিডিং ও জেমস্টোনের উপর!",
+            discount: "a special *discount* on birth chart reading and gemstones!",
             borderColor: '#B71C1C', // Deep Red
-            headerColor: '#FFFFFF', 
             headerBg: '#E57373',    // Light Red for header background
             callColor: '#B71C1C'
         },
-        // Theme 4: Romantic (matching anniversary99.png - Warm Gold/Heart)
+        // Theme 4: Romantic (matching anniversary99.png - Warm Gold/Orange)
         heart: { 
             img: 'anniversary99.png',
-            discount: "আপনার বিবাহবার্ষিকীতে একটি বিশেষ *ডিসকাউন্ট* পান বার্থ চার্ট রিডিং ও জেমস্টোনের উপর!",
+            discount: "a special *discount* on birth chart reading and gemstones!",
             borderColor: '#FF8F00', // Deep Orange/Gold
-            headerColor: '#FFFFFF', 
             headerBg: '#FFCC80',    // Light Orange for header background
             callColor: '#FF8F00'
         }
@@ -130,108 +113,43 @@ let currentTheme = null;
 
 if (type === 'birthday') {
     currentTheme = themes.birthday[cardType] || themes.birthday.elegant;
-    headerText = `শুভ ${age ? age + 'তম ' : ''} জন্মদিন, ${name}! 🎉`;
+    headerText = `Happy ${age ? age + 'th ' : ''} Birthday, ${name}! 🎉`;
 } else if (type === 'anniversary') {
     currentTheme = themes.anniversary[cardType] || themes.anniversary.cake;
-    headerText = `শুভ ${age ? age + 'তম ' : ''} বিবাহবার্ষিকী, ${name}! 🥂`;
+    headerText = `Happy ${age ? age + 'th ' : ''} Anniversary, ${name}! 🥂`;
 } else {
+    // Default or fallback case
     headerText = `Hello, ${name}!`;
-    discountText = "a special gift!";
+    discountText = "a special discount!";
     currentTheme = themes.birthday.elegant; 
 }
 
 // Apply theme settings
 if (currentTheme) {
-    imageURL = currentTheme.img;
-    discountText = currentTheme.discount;
-    frameColor = currentTheme.borderColor;
-    headerColor = currentTheme.headerColor;
-    headerBg = currentTheme.headerBg;
-    callNumberColor = currentTheme.callColor;
-
-    coloredFrameElement.style.borderColor = frameColor;
+    const { img, discount, borderColor, headerBg, callColor } = currentTheme;
+    
+    // Set text content
+    cardImage.src = img;
+    discountText = discount;
+    headerTxtElement.innerHTML = headerText;
+    greetingTxtElement.innerHTML = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.`;
+    offerHighlightElement.innerHTML = `Get from Jyotish Devagya Amitsree: <strong>${discountText}</strong>`; 
+    
+    // Apply styling
+    coloredFrameElement.style.borderColor = borderColor;
     headerTxtElement.style.background = headerBg; 
-    headerTxtElement.style.color = headerColor; 
+    offerHighlightElement.style.borderColor = borderColor; 
+    offerHighlightElement.style.color = borderColor; 
+    callNumberElement.style.color = callColor;
     
-    // Apply theme color to offer highlight border and text
-    offerHighlightElement.style.borderColor = frameColor; 
-    offerHighlightElement.style.color = frameColor; 
-    
-    callNumberElement.style.color = callNumberColor;
+    // Set WhatsApp Share Link
+    const shareMessage = `*${headerText}*\n\nDear Client,\nMay the stars bring you immense joy and success this year. Get ${discountText}\n\nCheck out your personalised card:\n${window.location.href}`;
+    whatsappButton.href = `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
+} else {
+    // Fallback if theme parameters are missing
+    headerTxtElement.innerHTML = "Error: Invalid Card Type";
+    greetingTxtElement.innerHTML = "Please check the URL parameters.";
 }
-
-
-const baseMessage = `May the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.`;
-
-cardImage.src = imageURL;
-headerTxtElement.innerHTML = headerText;
-greetingTxtElement.innerHTML = baseMessage;
-// Using <strong> tag to highlight the offer text clearly
-offerHighlightElement.innerHTML = `Jyotish Devagya Amitsree-এর কাছ থেকে পান: <strong>${discountText}</strong>`; 
-
-// --- DOWNLOAD FUNCTION (Modified to return Promise) ---
-window.downloadCard = function() {
-    return new Promise((resolve) => {
-        // Hide button before capturing
-        whatsappButton.style.display = 'none';
-
-        html2canvas(cardContainer, {
-            allowTaint: true,
-            useCORS: true,
-            scale: 2, 
-            backgroundColor: null 
-        }).then(canvas => {
-            const link = document.createElement('a');
-            const fileName = `${type.toUpperCase()}_Card_${name.replace(/\s/g, '_')}_${cardType}.png`;
-            link.download = fileName;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            
-            // Restore button after capture/download initiated
-            whatsappButton.style.display = 'block'; 
-            resolve(); // Resolve the promise
-        });
-    });
-};
-
-// --- WHATSAPP SHARE FUNCTION (Combines Download and Text Share) ---
-window.shareToWhatsApp = function() {
-    whatsappButton.innerText = 'ডাউনলোড হচ্ছে...';
-    
-    downloadCard().then(() => {
-        whatsappButton.innerText = 'WhatsApp এ মেসেজ তৈরি হচ্ছে...';
-        
-        // 1. Generate WhatsApp message text
-        const cardLink = window.location.href; 
-        const shareMessage = getWhatsAppMessage(cardLink);
-        
-        // 2. Open WhatsApp with the text message
-        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
-        
-        // Use a slight delay for better UX (so download can finish starting)
-        setTimeout(() => {
-            window.open(whatsappUrl, '_blank');
-            whatsappButton.innerText = 'ডাউনলোড ও WhatsApp এ শেয়ার করুন';
-            
-            // 3. Instruction to the user is crucial
-            alert("কার্ডের ছবিটি ডাউনলোড হয়ে গেছে। WhatsApp মেসেজটি খুলে ডাউনলোড করা ছবিটি অ্যাটাচ করে পাঠান।");
-        }, 500); // 500ms delay
-    }).catch(e => {
-        console.error("Share failed:", e);
-        whatsappButton.innerText = 'শেয়ার ব্যর্থ হয়েছে। আবার চেষ্টা করুন।';
-        alert("কার্ডটি ডাউনলোড বা শেয়ার করতে সমস্যা হয়েছে।");
-    });
-};
-
-// --- WHATSAPP MESSAGE GENERATOR ---
-window.getWhatsAppMessage = function(cardLink) {
-     // Get the offer text directly for a more dynamic message
-     const dynamicOfferText = offerHighlightElement.innerText.replace('Jyotish Devagya Amitsree-এর কাছ থেকে পান: ', '');
-
-     const fullText = `*${headerText}*\n\nপ্রিয় গ্রাহক,\nMay the stars bring you immense joy and success this year. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.\n\nআপনার জন্য আমাদের বিশেষ অফার: *${dynamicOfferText}*\n\n====================\n\n*Digdarshan Astro* (কোম্পানি বিবরণ)\n47F Raja Rammohan Roy Road, Kolkata-8.\n📞 Call: 8697190840 / 9830637766\n\nCard Link: ${cardLink}\n\n[ডাউনলোড করা ছবিটি অ্যাটাচ করে দিন]`;
-     
-     return fullText;
-};
 
 </script>
 </body>
