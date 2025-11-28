@@ -69,41 +69,41 @@ const whatsappButton = document.getElementById('whatsappButton');
 let headerText = '';
 let discountText = '';
 
-// **THEME DEFINITIONS (Updated with correct .png names and refined colors)**
+// **THEME DEFINITIONS (Using confirmed file names and color matching)**
 const themes = {
     birthday: {
-        // Theme 1: Elegant (matching birthday66.png - Deep Purple)
+        // birthday66.jpg (Assuming Deep Purple/Gold)
         elegant: {
-            img: 'birthday66.png', 
+            img: 'birthday66.jpg', 
             discount: "a special *discount* on birth chart reading and gemstones!",
             borderColor: '#8E24AA', // Deep Purple
-            headerBg: '#BA68C8',    // Light Purple for header background
+            headerBg: '#BA68C8',    // Light Purple
             callColor: '#8E24AA'
         },
-        // Theme 2: Vibrant (matching birthday77.png - Deep Pink/Red)
+        // birthday77.png (Assuming Deep Pink/Red)
         vibrant: {
             img: 'birthday77.png',
             discount: "a special *discount* on birth chart reading and gemstones!",
             borderColor: '#D81B60', // Deep Pink/Red
-            headerBg: '#F06292',    // Light Pink for header background
+            headerBg: '#F06292',    // Light Pink
             callColor: '#D81B60'
         }
     },
     anniversary: {
-        // Theme 3: Classic (matching anniversary88.png - Deep Red Roses)
+        // anniversary88.jpg (Assuming Deep Red Roses)
         cake: {
-            img: 'anniversary88.png',
+            img: 'anniversary88.jpg',
             discount: "a special *discount* on birth chart reading and gemstones!",
             borderColor: '#B71C1C', // Deep Red
-            headerBg: '#E57373',    // Light Red for header background
+            headerBg: '#E57373',    // Light Red
             callColor: '#B71C1C'
         },
-        // Theme 4: Romantic (matching anniversary99.png - Warm Gold/Orange)
+        // anniversary99.jpg (Assuming Warm Gold/Orange)
         heart: { 
-            img: 'anniversary99.png',
+            img: 'anniversary99.jpg',
             discount: "a special *discount* on birth chart reading and gemstones!",
             borderColor: '#FF8F00', // Deep Orange/Gold
-            headerBg: '#FFCC80',    // Light Orange for header background
+            headerBg: '#FFCC80',    // Light Orange
             callColor: '#FF8F00'
         }
     }
@@ -118,7 +118,6 @@ if (type === 'birthday') {
     currentTheme = themes.anniversary[cardType] || themes.anniversary.cake;
     headerText = `Happy ${age ? age + 'th ' : ''} Anniversary, ${name}! 🥂`;
 } else {
-    // Default or fallback case
     headerText = `Hello, ${name}!`;
     discountText = "a special discount!";
     currentTheme = themes.birthday.elegant; 
@@ -142,8 +141,8 @@ if (currentTheme) {
     offerHighlightElement.style.color = borderColor; 
     callNumberElement.style.color = callColor;
     
-    // Set WhatsApp Share Link
-    const shareMessage = `*${headerText}*\n\nDear Client,\nMay the stars bring you immense joy and success this year. Get ${discountText}\n\nCheck out your personalised card:\n${window.location.href}`;
+    // Set WhatsApp Share Link (English Text Only)
+    const shareMessage = `*${headerText}*\n\nDear Client, Wishing you immense joy and success. Get ${discountText}. Check out your personalised card:\n${window.location.href}`;
     whatsappButton.href = `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
 } else {
     // Fallback if theme parameters are missing
