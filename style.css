@@ -1,35 +1,12 @@
-/* ===================== GLOBAL THEME STYLE (shared) ===================== */
-/* Reset & base */
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family: "Inter", Arial, sans-serif;background:#0b0710;color:#fff;-webkit-font-smoothing:antialiased}
-a{color:inherit}
-
-/* Watermark (Rashichakra) — light impression across pages */
-body::before{
-  content:"";
-  position:fixed;
-  left:50%;
-  top:40%;
-  width:70vmin;
-  height:70vmin;
-  transform:translate(-50%,-50%);
-  /* Ensure this image path is correct */
-  background-image:url('/mnt/data/Rashichakra.png');
-  background-size:contain;
-  background-position:center;
-  background-repeat:no-repeat;
-  opacity:0.06;
-  pointer-events:none;
-  filter:grayscale(10%) contrast(0.9);
-  z-index:0;
-}
-
-/* ... [Rest of Admin/Form Styles remain UNCHANGED] ... */
-
-
 /* ===================== CARD PAGE STYLES (SMART & COMPACT) ===================== */
 
+/* NOTE: GLOBAL STYLES (like body::before, a, etc. from previous style.css) 
+    are usually shared. If you are having issues, you may need to ensure a base 
+    shared style.css is still linked, but for now, we focus on the card itself. 
+*/
+
 .card-page {
+    /* Assuming dark background for contrast (from previous global styles) */
     background-color: #0b0710; 
     display: flex;
     justify-content: center;
@@ -66,7 +43,7 @@ body::before{
     min-height: 480px; 
 }
 
-/* --- Image Section (Top) --- */
+/* --- Content Structure (Vertical Stack) --- */
 .card-content {
     display: flex;
     flex-direction: column;
@@ -74,8 +51,8 @@ body::before{
     gap: 0;
 }
 
+/* --- Image Section (Top) --- */
 .left-section {
-    /* Dedicated Image Area (Top) */
     width: 100%;
     max-width: 100%;
     aspect-ratio: 1 / 0.7; /* 10:7 aspect ratio, wide rectangle */
@@ -96,7 +73,7 @@ body::before{
     border-radius: 0;
 }
 
-/* --- Download Icon Overlay (New) --- */
+/* --- Download Icon Overlay --- */
 #downloadIcon {
     position: absolute;
     top: 50%;
@@ -127,7 +104,7 @@ body::before{
     filter: invert(1); 
 }
 
-/* --- Content Section (Bottom) --- */
+/* --- Text Content Section (Bottom) --- */
 .right-section {
     width: 100%;
     flex-grow: 1;
@@ -164,7 +141,7 @@ body::before{
     color: #777;
     padding-top: 8px; 
     border-top: 1px dotted #ccc;
-    margin-top: 10px; /* Space above footer */
+    margin-top: 10px; 
 }
 
 .company-name {
@@ -187,7 +164,7 @@ body::before{
     font-weight: 600;
 }
 
-/* --- New: WhatsApp Button Style --- */
+/* --- WhatsApp Button Style --- */
 #whatsappButton {
     display: block;
     width: 80%;
