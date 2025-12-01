@@ -1,4 +1,4 @@
-/* ===================== CARD PAGE STYLES (CLASSIC ELEGANCE) ===================== */
+/* ===================== CARD PAGE STYLES (CLASSIC ELEGANCE 1:1) ===================== */
 /* Reset & base */
 html, body {
     font-family: "Inter", Arial, sans-serif;
@@ -13,8 +13,10 @@ html, body {
 a { text-decoration: none; }
 
 #card {
+    /* Set Max Width and 1:1 Aspect Ratio for Square Design (Adjusted aspect ratio to better fit content) */
     width: 95%; 
     max-width: 450px; 
+    /* aspect-ratio: 1 / 1; */ /* Removing aspect-ratio for flexibility */
     
     background: #fff; /* Pure white background inside the card */
     padding: 0; 
@@ -26,9 +28,9 @@ a { text-decoration: none; }
     overflow: hidden; 
 }
 
-/* মোটা বর্ডার (8px Solid) - এই ডিজাইনটি 6/7 নং ইমেজের বর্ডারের অনুরূপ */
 .colored-frame {
-    border: 8px solid; /* Thicker border, color will be set by JS */
+    /* 6/7 নং ইমেজের বর্ডারের মতো মোটা বর্ডার */
+    border: 5px solid; /* Thicker border, color will be set by JS */
     border-radius: 12px; 
     height: 100%; 
     display: flex;
@@ -40,86 +42,86 @@ a { text-decoration: none; }
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    text-align: center;
-    padding: 15px 25px 25px 25px; 
 }
 
-/* --- Image Section --- */
+/* --- Image Section (Top Half) --- */
 .top-section {
     width: 100%;
+    /* Image height set fixed for consistent look */
     height: 200px; 
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
-    margin-bottom: 15px;
-    border-radius: 6px;
-}
-#cardImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+    background-color: #f8f8f8; 
 }
 
-/* --- Header Text (Playfair Display, Dark Color) --- */
+.top-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+    object-position: center; 
+}
+
+/* --- Text Content Section (Bottom Half) --- */
+.bottom-section {
+    width: 100%;
+    flex-grow: 1;
+    color: #333;
+    padding: 20px 30px 15px 30px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+/* **HEADER: Happy Birthday/Anniversary Text** */
 .header-text {
-    font-family: 'Playfair Display', serif; /* Serif Font */
+    font-family: 'Playfair Display', serif; 
     font-size: 28px;
     font-weight: 900;
+    color: #111;
+    margin-bottom: 15px; 
     line-height: 1.2;
-    margin-bottom: 8px;
-    color: #111; /* Dark Text */
+    padding: 0;
 }
 .header-text span {
     display: block;
-    font-size: 0.85em; 
+    font-size: 0.85em; /* Name size */
     font-weight: 700;
-    color: #555; /* Name/Age in Dark Gray */
     margin-top: 5px;
+    color: #666; 
 }
 
 .main-message {
-    font-size: 14px;
+    font-size: 15px; 
     line-height: 1.5;
-    color: #444; 
     margin-bottom: 15px;
+    color: #555;
+    flex-grow: 1;
 }
 
-/* **HIGHLIGHT: Offer Text** */
+/* **HIGHLIGHT: Offer Text (Now clickable)** */
 .offer-highlight {
-    display: inline-block;
-    margin: 10px auto;
-    padding: 8px 15px;
-    border-radius: 20px;
-    background: #fff8e1; /* Light background (customized by JS) */
+    display: block;
+    margin: 15px 0;
+    padding: 10px 12px;
+    border-radius: 8px; /* Slightly larger radius */
+    background: #fff8e1; /* Very light yellow background (customized by JS) */
     font-weight: 700;
     font-style: italic;
-    font-size: 13px;
     border: 1px dashed; /* Color set by JS */
     color: #111;
+    cursor: pointer; /* Clickable */
+    transition: background 0.2s;
+}
+.offer-highlight:hover {
+    opacity: 0.9;
 }
 .offer-highlight strong {
     font-size: 1.05em; 
     color: inherit; 
-}
-
-/* --- WhatsApp Link Button --- */
-#whatsappButton {
-    display: block;
-    width: 90%;
-    margin: 15px auto 0;
-    padding: 12px;
-    border-radius: 30px;
-    background: #25D366; 
-    color: #fff;
-    font-weight: 700;
-    text-align: center;
-    font-size: 15px;
-    transition: background 0.2s;
-}
-#whatsappButton:hover {
-    background: #128C7E;
-}
-#whatsappButton i {
-    margin-right: 8px;
 }
 
 /* --- Footer and Signature --- */
@@ -130,7 +132,7 @@ a { text-decoration: none; }
     color: #777;
     padding-top: 10px; 
     border-top: 1px solid #eee; 
-    margin-top: 20px; 
+    margin-top: 10px; 
 }
 
 .company-name {
@@ -152,12 +154,45 @@ a { text-decoration: none; }
 }
 
 
-/* Responsive */
+/* --- DOWNLOAD BUTTON ICON --- */
+#downloadButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+}
+#downloadButton:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+/* Hiding WhatsApp Button */
+#whatsappButton { display: none !important; } 
+
+/* CARD RESPONSIVE */
 @media (max-width: 500px) {
-    .header-text {
-        font-size: 24px;
+    #card {
+        max-width: 95vw;
     }
     .top-section {
         height: 180px;
+    }
+    .bottom-section {
+        padding: 15px 20px 10px 20px;
+    }
+    .header-text {
+        font-size: 24px;
+    }
+    .main-message {
+        font-size: 13px;
     }
 }
