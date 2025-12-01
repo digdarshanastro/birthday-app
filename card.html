@@ -7,6 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <meta property="og:title" content="Special Wishes from Digdarshan Astro!" />
 <meta property="og:description" content="Wishing you immense joy and success from Jyotish Devagya Amitsree. Get your offer now!" />
 <meta property="og:url" content="https://your-app-domain.vercel.app/card.html" /> 
@@ -16,6 +18,10 @@
 <body> 
 
 <div id="card">
+  <div id="downloadButton" title="Save Card as Image">
+    <i class="fas fa-download"></i>
+  </div>
+  
   <div id="coloredFrame" class="colored-frame"> 
       <div class="card-content">
           <div class="top-section"> 
@@ -30,12 +36,10 @@
                       <span id="greetingText"></span>
                   </p>
                   
-                  <span id="offerHighlight" class="offer-highlight"></span>
+                  <span id="offerHighlight" class="offer-highlight" title="Click to get your special offer!"></span>
               </div>
               
-              <a id="whatsappButton" href="#" target="_blank">
-                <i class="fab fa-whatsapp"></i> GET YOUR SPECIAL OFFER NOW!
-              </a>
+              <a id="whatsappButton" href="#" target="_blank"></a>
 
               <div class="footer-section">
                 With Best Wishes from
@@ -52,13 +56,10 @@
 <script>
 const url = new URLSearchParams(window.location.search);
 const type = url.get("type") || 'birthday'; 
-const cardType = url.get("cardType") || (type === 'birthday' ? 'elegant' : 'elegant');
+const cardType = url.get("cardType") || (type === 'birthday' ? 'floral' : 'heart');
 let name = url.get("name");
-let age = url.get("age");
-let annivAge = url.get("annivAge"); 
 
 name = name ? decodeURIComponent(name) : "Dear Client";
-age = age ? Number(age) : (annivAge ? Number(annivAge) : null);
 
 const coloredFrameElement = document.getElementById("coloredFrame"); 
 const cardImage = document.getElementById("cardImage");
@@ -66,7 +67,7 @@ const headerTxtElement = document.getElementById("headerText");
 const greetingTxtElement = document.getElementById("greetingText"); 
 const offerHighlightElement = document.getElementById("offerHighlight"); 
 const callNumberElement = document.getElementById("callNumber");
-const whatsappButton = document.getElementById('whatsappButton');
+const downloadButton = document.getElementById("downloadButton");
 
 let headerText = '';
 let discountText = '';
@@ -75,35 +76,35 @@ let mainGreeting = '';
 // **THEME DEFINITIONS based on uploaded images 1-4 & target styles 5-7**
 const themes = {
     birthday: {
-        // birthday77.png (Violet/Elegant - Target 6 style)
-        elegant: {
-            img: 'birthday77.png', 
-            discount: "a *Special Discount* on Birth Chart Reading & Gemstones",
-            borderColor: '#8A2BE2', // Blue Violet Border
-            highlightBg: '#F3E5F5', // Light background for highlight box
+        // birthday66.jpg (Floral, Deep Purple/Red - Target style)
+        floral: {
+            img: 'birthday66.jpg', 
+            discount: "a Special Discount on Birth Chart Reading & Gemstones",
+            borderColor: '#6A1B9A', // Deep Violet/Purple (from the cake image)
+            highlightBg: '#F3E5F5',
         },
-        // birthday66.jpg (Deep Red/Cake - Target 7 style)
-        cake: {
-            img: 'birthday66.jpg',
-            discount: "a *Special Discount* on Birth Chart Reading & Gemstones",
-            borderColor: '#B71C1C', // Deep Red/Maroon Border
-            highlightBg: '#FFEBEE', // Light background for highlight box
+        // birthday77.png (Cake, Simple/Vibrant - Target style)
+        simple: {
+            img: 'birthday77.png',
+            discount: "a Special Discount on Birth Chart Reading & Gemstones",
+            borderColor: '#D32F2F', // Red (from the cake candles/text)
+            highlightBg: '#FFEBEE',
         }
     },
     anniversary: {
-        // anniversary88.jpg (Deep Blue/Corporate/Elegant)
-        elegant: {
+        // anniversary88.jpg (Cake, Roses/Elegant - Target style)
+        cake: {
             img: 'anniversary88.jpg',
-            discount: "a *Special Discount* on Family Problem Solutions Consultation",
-            borderColor: '#0D47A1', // Deep Blue Border
-            highlightBg: '#E3F2FD', // Light background for highlight box
+            discount: "a Special Discount on Family Problem Solutions Consultation",
+            borderColor: '#8D6E63', // Brown/Earth tone (from the log base)
+            highlightBg: '#FBE9E7', 
         },
-        // anniversary99.jpg (Brown/Sepia/Classic - Target 5 style)
-        sepia: {
+        // anniversary99.jpg (Heart, Red/Gold - Target style)
+        heart: { 
             img: 'anniversary99.jpg',
-            discount: "a *Special Discount* on Family Problem Solutions Consultation",
-            borderColor: '#5D4037', // Brown/Sepia Border
-            highlightBg: '#FBE9E7', // Light background for highlight box
+            discount: "a Special Discount on Family Problem Solutions Consultation",
+            borderColor: '#C62828', // Deep Red (from the heart image)
+            highlightBg: '#FFEBEE',
         }
     }
 };
@@ -111,17 +112,19 @@ const themes = {
 let currentTheme = null;
 
 if (type === 'birthday') {
-    currentTheme = themes.birthday[cardType] || themes.birthday.elegant;
-    headerText = `HAPPY BIRTHDAY <span>${age ? age + 'th' : ''} ${name}!</span>`;
-    mainGreeting = `May the stars bring you immense joy and success on your special day. Get cosmic guidance from Jyotish Devagya Amitsree for your new personal year.`;
+    currentTheme = themes.birthday[cardType] || themes.birthday.floral;
+    // Birthday/Anniversary সংখ্যা উল্লেখ করা বন্ধ করা হয়েছে 
+    headerText = `HAPPY BIRTHDAY <span>${name}!</span>`;
+    mainGreeting = `May the stars bring you immense joy and success on your special day. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.`;
 } else if (type === 'anniversary') {
-    currentTheme = themes.anniversary[cardType] || themes.anniversary.elegant;
-    headerText = `HAPPY ANNIVERSARY <span>${age ? age + 'th' : ''} ${name}!</span>`;
+    currentTheme = themes.anniversary[cardType] || themes.anniversary.heart;
+    // Birthday/Anniversary সংখ্যা উল্লেখ করা বন্ধ করা হয়েছে 
+    headerText = `HAPPY ANNIVERSARY <span>${name}!</span>`;
     mainGreeting = `Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree on this special day.`;
 } else {
     headerText = `HELLO <span>${name}!</span>`;
-    discountText = "*a special gift!*";
-    currentTheme = themes.birthday.elegant; 
+    discountText = "a special gift!";
+    currentTheme = themes.birthday.floral; 
     mainGreeting = `Welcome to Digdarshan Astro!`;
 }
 
@@ -134,31 +137,64 @@ if (currentTheme) {
     discountText = discount;
     headerTxtElement.innerHTML = headerText;
     greetingTxtElement.innerHTML = mainGreeting;
-    // Offer text is now English
-    offerHighlightElement.innerHTML = `Get from Jyotish Devagya Amitsree: ${discountText.replace(/\*/g, '<strong>')}`; 
+    // offerHighlightElement-এ স্টার চিহ্ন দিয়ে strong ট্যাগ প্রতিস্থাপন
+    offerHighlightElement.innerHTML = `Get from Jyotish Devagya Amitsree: <strong>${discountText}</strong>`; 
     
     // Apply styling via JS
     coloredFrameElement.style.borderColor = borderColor;
-    callNumberElement.style.color = borderColor;
+    callNumberElement.style.color = borderColor; // Call number color set to border color
     offerHighlightElement.style.borderColor = borderColor;
     offerHighlightElement.style.backgroundColor = highlightBg;
     
-    // Set WhatsApp Share Link (Entirely English)
-    const whatsappHeader = headerText.replace(/<span>.*?<\/span>/, ` ${name}!`).replace(/<.*?>/g, '').trim(); 
-    
-    const englishShareMessage = 
-        `🎉 ${whatsappHeader} 🎉\n\n` + 
-        `Dear Client, Jyotish Devagya Amitsree is giving you a special offer on your big day!\n` + 
-        `✨ Get ${discountText.replace(/\*/g, '').trim()} by clicking the link below.\n\n` +
-        `View your personalized card: ${window.location.href}`;
-        
-    whatsappButton.href = `https://wa.me/?text=${encodeURIComponent(englishShareMessage)}`;
+    // **NEW: Clickable Offer Box for WhatsApp**
+    offerHighlightElement.onclick = function() {
+        const whatsappHeader = headerText.replace(/<span>.*?<\/span>/, ` ${name}!`).replace(/<.*?>/g, '').trim(); 
+        const whatsappNumber = '86979190840'; // আপনার দেওয়া নম্বর
+
+        const whatsappMessage = 
+            `*🎉 ${whatsappHeader} 🎉*\n\n` + 
+            `Dear Jyotish Devagya Amitsree, I saw my personalized card and I'm interested in getting the offer!\n` + 
+            `Offer: ${discountText}\n` +
+            `Client Name: ${name}\n\n` + 
+            `Please share the details to avail the offer.`;
+            
+        window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
+    };
 
 } else {
-    // Fallback if theme parameters are missing
+    // Fallback
     headerTxtElement.innerHTML = "ERROR <span>INVALID CARD TYPE</span>";
     greetingTxtElement.innerHTML = "Please check the URL parameters.";
 }
+
+// **NEW: Card Download Functionality**
+downloadButton.onclick = function() {
+    // Hide the download button during capture
+    downloadButton.style.display = 'none';
+    
+    html2canvas(document.getElementById('card'), {
+        scale: 2, // High resolution capture
+        allowTaint: true,
+        useCORS: true,
+        backgroundColor: null // Transparent background
+    }).then(function(canvas) {
+        // Restore the download button
+        downloadButton.style.display = 'flex';
+        
+        // Convert canvas to image data
+        const image = canvas.toDataURL("image/png");
+        
+        // Create a temporary link and trigger download
+        const link = document.createElement('a');
+        link.download = `DigdarshanAstro_${name.replace(/\s/g, '_')}_Card.png`;
+        link.href = image;
+        link.click();
+    }).catch(error => {
+        console.error('Download failed:', error);
+        alert('Failed to download card image.');
+        downloadButton.style.display = 'flex';
+    });
+};
 
 </script>
 </body>
