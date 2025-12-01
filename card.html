@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="card-style.css"> 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <meta property="og:title" content="Special Wishes from Digdarshan Astro!" />
-<meta property="og:description" content="Wishing you immense joy and success from Jyotish Devagya Amitsree." />
+<meta property="og:description" content="Wishing you immense joy and success from Jyotish Devagya Amitsree. Get your offer now!" />
 <meta property="og:url" content="https://your-app-domain.vercel.app/card.html" /> 
 <meta property="og:type" content="website" />
 </head>
@@ -33,7 +34,7 @@
               </div>
               
               <a id="whatsappButton" href="#" target="_blank">
-                Share on WhatsApp
+                <i class="fab fa-whatsapp"></i> GET YOUR SPECIAL OFFER NOW!
               </a>
 
               <div class="footer-section">
@@ -71,43 +72,38 @@ let headerText = '';
 let discountText = '';
 let mainGreeting = '';
 
-// **THEME DEFINITIONS (Updated to match the classic look)**
+// **THEME DEFINITIONS (All text is now English)**
 const themes = {
     birthday: {
-        // birthday66.jpg (Deep Red/Gold Theme - matching the uploaded image style)
         elegant: {
-            img: 'birthday66.jpg', 
-            // Subtitle text is now inside headerText logic
-            discount: "a special *discount* on birth chart reading and gemstones!",
-            borderColor: '#C62828', // Deep Red for card border
-            headerColor: '#111', 
-            callColor: '#C62828'
+            img: 'birthday_modern_violet.jpg', 
+            discount: "a *Special Discount* on Birth Chart Reading & Gemstones",
+            borderColor: '#82589F', // Deep Violet
+            accentColor: '#FFD700', // Gold
+            callColor: '#82589F'
         },
-        // birthday77.png (Pink/Vibrant)
         vibrant: {
-            img: 'birthday77.png',
-            discount: "a special *discount* on birth chart reading and gemstones!",
-            borderColor: '#D81B60', // Deep Pink
-            headerColor: '#111', 
-            callColor: '#D81B60'
+            img: 'birthday_modern_neon.png',
+            discount: "a *Special Discount* on Birth Chart Reading & Gemstones",
+            borderColor: '#F06292', // Vibrant Pink
+            accentColor: '#4DD0E1', // Cyan/Aqua
+            callColor: '#F06292'
         }
     },
     anniversary: {
-        // anniversary88.jpg (Deep Red/Roses)
         cake: {
-            img: 'anniversary88.jpg',
-            discount: "a special *discount* on birth chart reading and gemstones!",
-            borderColor: '#9E9D24', // Muted Gold/Olive for Anniversary
-            headerColor: '#111', 
-            callColor: '#9E9D24'
+            img: 'anniversary_modern_gold.jpg',
+            discount: "a *Special Discount* on Family Problem Solutions Consultation",
+            borderColor: '#B71C1C', // Deep Maroon
+            accentColor: '#FFC107', // Amber/Gold
+            callColor: '#B71C1C'
         },
-        // anniversary99.jpg (Warm Gold/Heart)
         heart: { 
-            img: 'anniversary99.jpg',
-            discount: "a special *discount* on birth chart reading and gemstones!",
-            borderColor: '#FF8F00', // Deep Orange/Gold
-            headerColor: '#111', 
-            callColor: '#FF8F00'
+            img: 'anniversary_modern_silver.jpg',
+            discount: "a *Special Discount* on Family Problem Solutions Consultation",
+            borderColor: '#2962FF', // Bright Blue
+            accentColor: '#B0BEC5', // Light Silver/Grey
+            callColor: '#2962FF'
         }
     }
 };
@@ -117,40 +113,46 @@ let currentTheme = null;
 if (type === 'birthday') {
     currentTheme = themes.birthday[cardType] || themes.birthday.elegant;
     headerText = `HAPPY BIRTHDAY <span>${age ? age + 'th' : ''} ${name}!</span>`;
-    mainGreeting = `May the stars bring you immense joy and success on your special day. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.`;
+    mainGreeting = `May the stars bring you immense joy and success on your special day. Get cosmic guidance from Jyotish Devagya Amitsree for your new personal year.`;
 } else if (type === 'anniversary') {
     currentTheme = themes.anniversary[cardType] || themes.anniversary.cake;
     headerText = `HAPPY ANNIVERSARY <span>${age ? age + 'th' : ''} ${name}!</span>`;
     mainGreeting = `Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree on this special day.`;
 } else {
     headerText = `HELLO <span>${name}!</span>`;
-    discountText = "a special gift!";
+    discountText = "*a special gift!*";
     currentTheme = themes.birthday.elegant; 
     mainGreeting = `Welcome to Digdarshan Astro!`;
 }
 
 // Apply theme settings
 if (currentTheme) {
-    const { img, discount, borderColor, callColor } = currentTheme;
+    const { img, discount, borderColor, accentColor, callColor } = currentTheme;
     
     // Set text content
     cardImage.src = img;
     discountText = discount;
     headerTxtElement.innerHTML = headerText;
     greetingTxtElement.innerHTML = mainGreeting;
-    offerHighlightElement.innerHTML = `Get from Jyotish Devagya Amitsree: <strong>${discountText}</strong>`; 
+    offerHighlightElement.innerHTML = `Get from Jyotish Devagya Amitsree: ${discountText.replace(/\*/g, '<strong>')}`; 
     
-    // Apply styling
-    coloredFrameElement.style.borderColor = borderColor;
+    // Apply styling via CSS Custom Properties
+    document.documentElement.style.setProperty('--border-color', borderColor);
+    document.documentElement.style.setProperty('--accent-color', accentColor);
     
-    // Header color is fixed to black (#111) in CSS for this classic design.
-    offerHighlightElement.style.borderColor = borderColor; 
-    offerHighlightElement.style.color = borderColor; 
     callNumberElement.style.color = callColor;
     
-    // Set WhatsApp Share Link (English Text Only)
-    const shareMessage = `*${headerText.replace(/<.*?>/g, '').toUpperCase()}*\n\nDear Client, Wishing you success and happiness. ${mainGreeting.replace('Get cosmic blessings from Jyotish Devagya Amitsree on this special day.', '')}. Get ${discountText}.\n\nCheck out your personalised card: ${window.location.href}`;
-    whatsappButton.href = `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
+    // Set WhatsApp Share Link (Now entirely English)
+    const whatsappHeader = headerText.replace(/<span>.*?<\/span>/, ` ${name}!`).replace(/<.*?>/g, '').trim(); 
+    
+    const englishShareMessage = 
+        `🎉 ${whatsappHeader} 🎉\n\n` + 
+        `Dear Client, Jyotish Devagya Amitsree is giving you a special offer on your big day!\n` + 
+        `✨ Get ${discountText.replace(/\*/g, '').trim()} by clicking the link below.\n\n` +
+        `View your personalized card: ${window.location.href}`;
+        
+    whatsappButton.href = `https://wa.me/?text=${encodeURIComponent(englishShareMessage)}`;
+
 } else {
     // Fallback if theme parameters are missing
     headerTxtElement.innerHTML = "ERROR <span>INVALID CARD TYPE</span>";
