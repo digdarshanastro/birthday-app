@@ -76,19 +76,19 @@ let mainGreeting = '';
 // **THEME DEFINITIONS based on uploaded images 1-4 & target styles 5-7**
 const themes = {
     birthday: {
-        // birthday66.jpg (Floral, Deep Purple/Red - Target style)
+        // birthday66.jpg (Floral, Deep Red/Maroon - Target style)
         floral: {
             img: 'birthday66.jpg', 
             discount: "a Special Discount on Birth Chart Reading & Gemstones",
-            borderColor: '#6A1B9A', // Deep Violet/Purple (from the cake image)
-            highlightBg: '#F3E5F5',
+            borderColor: '#A81E1E', // Deep Red (from target image)
+            highlightBg: '#FFEEEE',
         },
         // birthday77.png (Cake, Simple/Vibrant - Target style)
         simple: {
             img: 'birthday77.png',
             discount: "a Special Discount on Birth Chart Reading & Gemstones",
-            borderColor: '#D32F2F', // Red (from the cake candles/text)
-            highlightBg: '#FFEBEE',
+            borderColor: '#7B1FA2', // Deep Violet (from target image)
+            highlightBg: '#F3E5F5',
         }
     },
     anniversary: {
@@ -96,7 +96,7 @@ const themes = {
         cake: {
             img: 'anniversary88.jpg',
             discount: "a Special Discount on Family Problem Solutions Consultation",
-            borderColor: '#8D6E63', // Brown/Earth tone (from the log base)
+            borderColor: '#6D4C41', // Brown/Sepia (from log base)
             highlightBg: '#FBE9E7', 
         },
         // anniversary99.jpg (Heart, Red/Gold - Target style)
@@ -113,12 +113,10 @@ let currentTheme = null;
 
 if (type === 'birthday') {
     currentTheme = themes.birthday[cardType] || themes.birthday.floral;
-    // Birthday/Anniversary সংখ্যা উল্লেখ করা বন্ধ করা হয়েছে 
     headerText = `HAPPY BIRTHDAY <span>${name}!</span>`;
     mainGreeting = `May the stars bring you immense joy and success on your special day. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.`;
 } else if (type === 'anniversary') {
     currentTheme = themes.anniversary[cardType] || themes.anniversary.heart;
-    // Birthday/Anniversary সংখ্যা উল্লেখ করা বন্ধ করা হয়েছে 
     headerText = `HAPPY ANNIVERSARY <span>${name}!</span>`;
     mainGreeting = `Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree on this special day.`;
 } else {
@@ -137,7 +135,6 @@ if (currentTheme) {
     discountText = discount;
     headerTxtElement.innerHTML = headerText;
     greetingTxtElement.innerHTML = mainGreeting;
-    // offerHighlightElement-এ স্টার চিহ্ন দিয়ে strong ট্যাগ প্রতিস্থাপন
     offerHighlightElement.innerHTML = `Get from Jyotish Devagya Amitsree: <strong>${discountText}</strong>`; 
     
     // Apply styling via JS
@@ -146,7 +143,7 @@ if (currentTheme) {
     offerHighlightElement.style.borderColor = borderColor;
     offerHighlightElement.style.backgroundColor = highlightBg;
     
-    // **NEW: Clickable Offer Box for WhatsApp**
+    // **Offer Box Click for WhatsApp (UNCHANGED)**
     offerHighlightElement.onclick = function() {
         const whatsappHeader = headerText.replace(/<span>.*?<\/span>/, ` ${name}!`).replace(/<.*?>/g, '').trim(); 
         const whatsappNumber = '86979190840'; // আপনার দেওয়া নম্বর
@@ -167,7 +164,7 @@ if (currentTheme) {
     greetingTxtElement.innerHTML = "Please check the URL parameters.";
 }
 
-// **NEW: Card Download Functionality**
+// **Card Download Functionality (UNCHANGED)**
 downloadButton.onclick = function() {
     // Hide the download button during capture
     downloadButton.style.display = 'none';
