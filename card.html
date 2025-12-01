@@ -52,7 +52,7 @@
 <script>
 const url = new URLSearchParams(window.location.search);
 const type = url.get("type") || 'birthday'; 
-const cardType = url.get("cardType") || (type === 'birthday' ? 'elegant' : 'cake');
+const cardType = url.get("cardType") || (type === 'birthday' ? 'elegant' : 'elegant');
 let name = url.get("name");
 let age = url.get("age");
 let annivAge = url.get("annivAge"); 
@@ -72,38 +72,38 @@ let headerText = '';
 let discountText = '';
 let mainGreeting = '';
 
-// **THEME DEFINITIONS (All text is now English)**
+// **THEME DEFINITIONS based on uploaded images 1-4 & target styles 5-7**
 const themes = {
     birthday: {
+        // birthday77.png (Violet/Elegant - Target 6 style)
         elegant: {
-            img: 'birthday_modern_violet.jpg', 
+            img: 'birthday77.png', 
             discount: "a *Special Discount* on Birth Chart Reading & Gemstones",
-            borderColor: '#82589F', // Deep Violet
-            accentColor: '#FFD700', // Gold
-            callColor: '#82589F'
+            borderColor: '#8A2BE2', // Blue Violet Border
+            highlightBg: '#F3E5F5', // Light background for highlight box
         },
-        vibrant: {
-            img: 'birthday_modern_neon.png',
+        // birthday66.jpg (Deep Red/Cake - Target 7 style)
+        cake: {
+            img: 'birthday66.jpg',
             discount: "a *Special Discount* on Birth Chart Reading & Gemstones",
-            borderColor: '#F06292', // Vibrant Pink
-            accentColor: '#4DD0E1', // Cyan/Aqua
-            callColor: '#F06292'
+            borderColor: '#B71C1C', // Deep Red/Maroon Border
+            highlightBg: '#FFEBEE', // Light background for highlight box
         }
     },
     anniversary: {
-        cake: {
-            img: 'anniversary_modern_gold.jpg',
+        // anniversary88.jpg (Deep Blue/Corporate/Elegant)
+        elegant: {
+            img: 'anniversary88.jpg',
             discount: "a *Special Discount* on Family Problem Solutions Consultation",
-            borderColor: '#B71C1C', // Deep Maroon
-            accentColor: '#FFC107', // Amber/Gold
-            callColor: '#B71C1C'
+            borderColor: '#0D47A1', // Deep Blue Border
+            highlightBg: '#E3F2FD', // Light background for highlight box
         },
-        heart: { 
-            img: 'anniversary_modern_silver.jpg',
+        // anniversary99.jpg (Brown/Sepia/Classic - Target 5 style)
+        sepia: {
+            img: 'anniversary99.jpg',
             discount: "a *Special Discount* on Family Problem Solutions Consultation",
-            borderColor: '#2962FF', // Bright Blue
-            accentColor: '#B0BEC5', // Light Silver/Grey
-            callColor: '#2962FF'
+            borderColor: '#5D4037', // Brown/Sepia Border
+            highlightBg: '#FBE9E7', // Light background for highlight box
         }
     }
 };
@@ -115,7 +115,7 @@ if (type === 'birthday') {
     headerText = `HAPPY BIRTHDAY <span>${age ? age + 'th' : ''} ${name}!</span>`;
     mainGreeting = `May the stars bring you immense joy and success on your special day. Get cosmic guidance from Jyotish Devagya Amitsree for your new personal year.`;
 } else if (type === 'anniversary') {
-    currentTheme = themes.anniversary[cardType] || themes.anniversary.cake;
+    currentTheme = themes.anniversary[cardType] || themes.anniversary.elegant;
     headerText = `HAPPY ANNIVERSARY <span>${age ? age + 'th' : ''} ${name}!</span>`;
     mainGreeting = `Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree on this special day.`;
 } else {
@@ -127,22 +127,23 @@ if (type === 'birthday') {
 
 // Apply theme settings
 if (currentTheme) {
-    const { img, discount, borderColor, accentColor, callColor } = currentTheme;
+    const { img, discount, borderColor, highlightBg } = currentTheme;
     
     // Set text content
     cardImage.src = img;
     discountText = discount;
     headerTxtElement.innerHTML = headerText;
     greetingTxtElement.innerHTML = mainGreeting;
+    // Offer text is now English
     offerHighlightElement.innerHTML = `Get from Jyotish Devagya Amitsree: ${discountText.replace(/\*/g, '<strong>')}`; 
     
-    // Apply styling via CSS Custom Properties
-    document.documentElement.style.setProperty('--border-color', borderColor);
-    document.documentElement.style.setProperty('--accent-color', accentColor);
+    // Apply styling via JS
+    coloredFrameElement.style.borderColor = borderColor;
+    callNumberElement.style.color = borderColor;
+    offerHighlightElement.style.borderColor = borderColor;
+    offerHighlightElement.style.backgroundColor = highlightBg;
     
-    callNumberElement.style.color = callColor;
-    
-    // Set WhatsApp Share Link (Now entirely English)
+    // Set WhatsApp Share Link (Entirely English)
     const whatsappHeader = headerText.replace(/<span>.*?<\/span>/, ` ${name}!`).replace(/<.*?>/g, '').trim(); 
     
     const englishShareMessage = 
