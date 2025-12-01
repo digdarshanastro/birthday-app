@@ -1,197 +1,163 @@
-/* ===================== CARD PAGE STYLES (MODERN SOCIAL MEDIA DARK THEME) ===================== */
-
-/* CSS Variables for Dynamic Styling (Set by JS) */
-:root {
-    --border-color: #82589F; /* Theme Primary Accent */
-    --accent-color: #FFD700; /* Theme Secondary Accent (for Headers/Highlights) */
-}
-
-/* --- Global Reset & Page Background (Dark from style (4).css) --- */
-*{box-sizing:border-box;margin:0;padding:0}
+/* ===================== CARD PAGE STYLES (CLASSIC ELEGANCE) ===================== */
+/* Reset & base */
 html, body {
-    height: 100%;
-    min-height: 100vh;
-    font-family: 'Inter', Arial, sans-serif;
-    background: #0b0710; /* Deep Dark Background */
-    color: #fff;
+    font-family: "Inter", Arial, sans-serif;
+    background: #f0f0f0; /* Light grey background outside the card */
+    color: #000;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    margin: 0;
 }
-a { text-decoration: none; color: inherit; }
+a { text-decoration: none; }
 
-/* --- Card Container --- */
 #card {
-    width: 95%;
-    max-width: 420px; /* Optimal size for mobile social posts */
-    border-radius: 20px;
-    overflow: hidden;
+    width: 95%; 
+    max-width: 450px; 
+    
+    background: #fff; /* Pure white background inside the card */
+    padding: 0; 
+    border-radius: 12px; 
+    
+    /* Subtle Shadow Effect */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15); 
     position: relative;
-    transition: all 0.3s ease;
+    overflow: hidden; 
 }
 
-/* --- Colored Frame (Now functions as a Glow/Shadow) --- */
+/* মোটা বর্ডার (8px Solid) - এই ডিজাইনটি 6/7 নং ইমেজের বর্ডারের অনুরূপ */
 .colored-frame {
-    background: #1a1a2e; /* Dark Card Background */
-    border-radius: 20px;
+    border: 8px solid; /* Thicker border, color will be set by JS */
+    border-radius: 12px; 
+    height: 100%; 
+    display: flex;
+    flex-direction: column; 
     overflow: hidden;
-    /* High-contrast shadow border using CSS Variable */
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 0 5px var(--border-color); 
-    height: 100%;
-    transition: all 0.3s ease;
 }
-/* Hover Effect for Professionalism */
-.colored-frame:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7), 0 0 0 8px var(--border-color);
-}
-
 
 .card-content {
-    color: #fff;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
     text-align: center;
-    padding-bottom: 20px; /* Space for the bottom elements */
+    padding: 15px 25px 25px 25px; 
 }
 
-/* --- Image Section (Visual Impact) --- */
+/* --- Image Section --- */
 .top-section {
     width: 100%;
-    height: 250px; /* Fixed height for image focus */
+    height: 200px; 
     overflow: hidden;
-    position: relative;
-    /* Subtle separator */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+    margin-bottom: 15px;
+    border-radius: 6px;
 }
-
 #cardImage {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensures image covers the space */
-    filter: brightness(0.8); /* Slightly darkens image for text contrast */
-    transition: filter 0.3s ease;
+    object-fit: cover;
+    display: block;
 }
 
-/* --- Text Content Section --- */
-.bottom-section {
-    padding: 25px 30px 10px 30px; 
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-/* **HEADER: Happy Birthday/Anniversary Text** */
+/* --- Header Text (Playfair Display, Dark Color) --- */
 .header-text {
-    font-family: 'Playfair Display', serif;
-    font-size: 30px;
+    font-family: 'Playfair Display', serif; /* Serif Font */
+    font-size: 28px;
     font-weight: 900;
     line-height: 1.2;
-    margin-bottom: 10px;
-    color: var(--accent-color); /* Bright Gold/Accent Color */
-    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: #111; /* Dark Text */
 }
 .header-text span {
     display: block;
-    font-size: 0.8em; 
+    font-size: 0.85em; 
     font-weight: 700;
-    color: #fff; /* Name/Age in White */
+    color: #555; /* Name/Age in Dark Gray */
     margin-top: 5px;
 }
 
 .main-message {
-    font-size: 14.5px;
-    line-height: 1.6;
-    color: #e0e0e0; /* Light text for readability */
-    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #444; 
+    margin-bottom: 15px;
 }
 
-/* **HIGHLIGHT: Offer Text (Striking Badge)** */
+/* **HIGHLIGHT: Offer Text** */
 .offer-highlight {
     display: inline-block;
-    margin: 10px 0 15px 0;
+    margin: 10px auto;
     padding: 8px 15px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.08); /* Semi-transparent dark background */
+    border-radius: 20px;
+    background: #fff8e1; /* Light background (customized by JS) */
     font-weight: 700;
     font-style: italic;
     font-size: 13px;
-    border: 1px solid var(--border-color);
-    color: var(--accent-color); /* Highlight color */
+    border: 1px dashed; /* Color set by JS */
+    color: #111;
 }
 .offer-highlight strong {
     font-size: 1.05em; 
-    color: var(--accent-color); 
+    color: inherit; 
 }
 
-/* --- WhatsApp Link Button (Strong CTA) --- */
+/* --- WhatsApp Link Button --- */
 #whatsappButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 14px 25px;
+    display: block;
+    width: 90%;
+    margin: 15px auto 0;
+    padding: 12px;
     border-radius: 30px;
-    background: #25D366; /* WhatsApp Green */
-    color: #0c0b0f;
-    font-weight: 900;
+    background: #25D366; 
+    color: #fff;
+    font-weight: 700;
     text-align: center;
-    font-size: 16px;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-    transition: all 0.2s ease;
+    font-size: 15px;
+    transition: background 0.2s;
 }
 #whatsappButton:hover {
-    background: #128C7E; 
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+    background: #128C7E;
 }
 #whatsappButton i {
-    margin-right: 10px;
-    font-size: 18px;
+    margin-right: 8px;
 }
 
 /* --- Footer and Signature --- */
 .footer-section {
     text-align: center; 
     font-size: 11px; 
-    line-height: 1.6;
-    color: #aaa;
-    padding-top: 15px; 
-    /* Lighter separator for dark theme */
-    border-top: 1px solid rgba(255, 255, 255, 0.1); 
-    margin-top: 15px; 
+    line-height: 1.3;
+    color: #777;
+    padding-top: 10px; 
+    border-top: 1px solid #eee; 
+    margin-top: 20px; 
 }
 
 .company-name {
     font-weight: 900; 
-    color: #fff;
+    color: #111;
     font-size: 14px; 
     display: block;
-    margin-top: 5px;
+    margin-bottom: 2px;
 }
-.address-text {
+.address-text, .call-number {
     font-size: 10px;
     display: block;
     line-height: 1.3;
 }
 .call-number {
-    font-size: 12px;
-    display: block;
     font-weight: 700;
-    margin-top: 5px;
-    color: var(--border-color); /* Highlighting the number with the theme color */
+    font-size: 11px;
+    margin-top: 3px;
 }
 
-/* Responsive Adjustments */
+
+/* Responsive */
 @media (max-width: 500px) {
     .header-text {
-        font-size: 26px;
+        font-size: 24px;
     }
     .top-section {
-        height: 200px;
-    }
-    .bottom-section {
-        padding: 20px 20px 10px 20px;
+        height: 180px;
     }
 }
