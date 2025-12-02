@@ -1,8 +1,8 @@
-/* ===================== CARD PAGE STYLES (CLASSIC ELEGANCE 1:1) ===================== */
+/* ===================== CARD PAGE STYLES (CLASSIC ELEGANCE FINAL) ===================== */
 /* Reset & base */
 html, body {
     font-family: "Inter", Arial, sans-serif;
-    background: #f0f0f0; /* Light grey background outside the card */
+    background: #f0f0f0; 
     color: #000;
     display: flex;
     justify-content: center;
@@ -16,38 +16,40 @@ a { text-decoration: none; }
     width: 95%; 
     max-width: 450px; 
     
-    background: #fff; /* Pure white background inside the card */
+    background: #fff; 
     padding: 0; 
     border-radius: 12px; 
     
-    /* Subtle Shadow Effect */
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15); 
     position: relative;
     overflow: hidden; 
 }
 
-/* মোটা বর্ডার (5px Solid) */
+/* Outer Border with Gap */
 .colored-frame {
-    border: 5px solid; /* Thicker border, color will be set by JS */
+    border: 5px solid; 
     border-radius: 12px; 
     height: 100%; 
     display: flex;
     flex-direction: column; 
     overflow: hidden;
+    padding: 10px; /* আউটলাইন বর্ডার এবং ভেতরের কন্টেন্টের মধ্যে গ্যাপ */
 }
 
+/* Inner Content Area */
 .card-content {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    /* Image এবং Text Content-এর মধ্যে একটি দৃশ্যমান লাইন/বিচ্ছেদ তৈরি করা */
-    border-top: 2px solid #f0f0f0; 
+    background: #fff; /* Ensure inner content is white after padding */
+    border-radius: 8px; /* Slight rounding for the inner white area */
+    overflow: hidden;
+    border: 1px solid #eee; /* Subtle inner border for definition */
 }
 
 /* --- Image Section (Top Half) --- */
 .top-section {
     width: 100%;
-    /* Image height set fixed for consistent look */
     height: 200px; 
     position: relative;
     display: flex;
@@ -55,14 +57,13 @@ a { text-decoration: none; }
     align-items: center;
     overflow: hidden;
     background-color: #f8f8f8; 
-    /* Image সেকশনের নিচের দিকে হালকা শ্যাডো যাতে একটি গভীরতা বোঝা যায় */
     box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.1); 
 }
 
 .top-section img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* ensures whole image is visible */
+    object-fit: contain; 
     object-position: center; 
 }
 
@@ -71,7 +72,7 @@ a { text-decoration: none; }
     width: 100%;
     flex-grow: 1;
     color: #333;
-    padding: 20px 30px 15px 30px; 
+    padding: 20px 25px 15px 25px; /* Adjusted padding for better fit */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -81,7 +82,7 @@ a { text-decoration: none; }
 /* **HEADER: Happy Birthday/Anniversary Text** */
 .header-text {
     font-family: 'Playfair Display', serif; 
-    font-size: 30px; /* Increased font size */
+    font-size: 30px; 
     font-weight: 900;
     color: #111;
     margin-bottom: 12px; 
@@ -90,7 +91,7 @@ a { text-decoration: none; }
 }
 .header-text span {
     display: block;
-    font-size: 0.75em; /* Name size smaller for elegance */
+    font-size: 0.75em; 
     font-weight: 700;
     margin-top: 4px;
     color: #555; 
@@ -104,30 +105,44 @@ a { text-decoration: none; }
     flex-grow: 1;
 }
 
-/* **HIGHLIGHT: Offer Text (Now clickable)** */
+/* **HIGHLIGHT: Offer Text (Only for display)** */
 .offer-highlight {
     display: block;
     margin: 15px 0;
     padding: 10px 15px;
-    border-radius: 10px; /* Slightly rounder */
+    border-radius: 10px; 
     background: #fff8e1; 
     font-weight: 700;
     font-style: italic;
-    font-size: 13px; /* Smaller font for a subtle look */
-    border: 2px solid; /* Thicker dashed border */
+    font-size: 13px; 
+    border: 2px dashed; 
     color: #111;
-    cursor: pointer; 
-    transition: background 0.2s, box-shadow 0.2s;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Added subtle shadow */
+    cursor: default; /* Not clickable */
+    transition: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 .offer-highlight:hover {
-    opacity: 0.95;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    opacity: 1; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 .offer-highlight strong {
+    font-weight: 900; 
+    color: #555; 
+    display: block;
     font-size: 1.05em; 
-    color: inherit; 
+    margin-top: 5px;
 }
+/* New style for the services list */
+.offer-services {
+    display: block;
+    font-size: 13px;
+    font-weight: 400;
+    margin-top: 5px;
+    color: #777;
+    line-height: 1.4;
+    font-style: normal;
+}
+
 
 /* --- Footer and Signature --- */
 .footer-section {
@@ -162,12 +177,12 @@ a { text-decoration: none; }
 /* --- DOWNLOAD BUTTON ICON --- */
 #downloadButton {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 18px; /* Adjusted position due to outer padding */
+    right: 18px; /* Adjusted position due to outer padding */
     background: rgba(0, 0, 0, 0.4);
     color: white;
     border-radius: 50%;
-    width: 32px; /* Slightly smaller icon */
+    width: 32px; 
     height: 32px;
     display: flex;
     align-items: center;
@@ -189,14 +204,17 @@ a { text-decoration: none; }
     #card {
         max-width: 95vw;
     }
+    .colored-frame {
+        padding: 8px;
+    }
     .top-section {
-        height: 170px;
+        height: 150px;
     }
     .bottom-section {
-        padding: 15px 20px 10px 20px;
+        padding: 15px 15px 10px 15px;
     }
     .header-text {
-        font-size: 26px;
+        font-size: 24px;
     }
     .main-message {
         font-size: 13px;
