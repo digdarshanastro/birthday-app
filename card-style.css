@@ -1,4 +1,4 @@
-/* ===================== CARD PAGE STYLES (CLASSIC ELEGANCE FINAL) ===================== */
+/* ===================== CARD PAGE STYLES (ULTRA COMPACT FINAL) ===================== */
 /* Reset & base */
 html, body {
     font-family: "Inter", Arial, sans-serif;
@@ -13,27 +13,28 @@ html, body {
 a { text-decoration: none; }
 
 #card {
+    /* Compact size */
     width: 95%; 
-    max-width: 450px; 
+    max-width: 400px; /* Slightly more compact */
     
     background: #fff; 
     padding: 0; 
-    border-radius: 12px; 
+    border-radius: 8px; /* Slightly less rounded for sleek look */
     
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15); 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
     position: relative;
     overflow: hidden; 
 }
 
-/* Outer Border with Gap */
+/* Outer Border with Compact Gap */
 .colored-frame {
-    border: 5px solid; 
-    border-radius: 12px; 
+    border: 4px solid; /* Thinner border for sleek look */
+    border-radius: 8px; 
     height: 100%; 
     display: flex;
     flex-direction: column; 
     overflow: hidden;
-    padding: 10px; /* আউটলাইন বর্ডার এবং ভেতরের কন্টেন্টের মধ্যে গ্যাপ */
+    padding: 8px; /* আউটলাইন বর্ডার এবং ভেতরের কন্টেন্টের মধ্যে কম্প্যাক্ট গ্যাপ */
 }
 
 /* Inner Content Area */
@@ -41,23 +42,23 @@ a { text-decoration: none; }
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    background: #fff; /* Ensure inner content is white after padding */
-    border-radius: 8px; /* Slight rounding for the inner white area */
+    background: #fff; 
+    border-radius: 4px; /* Slight rounding for the inner white area */
     overflow: hidden;
-    border: 1px solid #eee; /* Subtle inner border for definition */
+    /* Removed extra inner border for cleaner look */
 }
 
 /* --- Image Section (Top Half) --- */
 .top-section {
     width: 100%;
-    height: 200px; 
+    height: 180px; /* Reduced height for compactness */
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     background-color: #f8f8f8; 
-    box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.1); 
 }
 
 .top-section img {
@@ -72,7 +73,7 @@ a { text-decoration: none; }
     width: 100%;
     flex-grow: 1;
     color: #333;
-    padding: 20px 25px 15px 25px; /* Adjusted padding for better fit */
+    padding: 15px 20px 12px 20px; /* Reduced padding */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -82,25 +83,25 @@ a { text-decoration: none; }
 /* **HEADER: Happy Birthday/Anniversary Text** */
 .header-text {
     font-family: 'Playfair Display', serif; 
-    font-size: 30px; 
-    font-weight: 900;
+    font-size: 26px; /* Reduced font size */
+    font-weight: 800; /* Slightly lighter for sleekness */
     color: #111;
-    margin-bottom: 12px; 
+    margin-bottom: 10px; 
     line-height: 1.1;
     padding: 0;
 }
 .header-text span {
     display: block;
     font-size: 0.75em; 
-    font-weight: 700;
-    margin-top: 4px;
+    font-weight: 600;
+    margin-top: 3px;
     color: #555; 
 }
 
 .main-message {
-    font-size: 14px; 
-    line-height: 1.55;
-    margin-bottom: 15px;
+    font-size: 13px; /* Reduced font size */
+    line-height: 1.5;
+    margin-bottom: 12px; /* Reduced margin */
     color: #555;
     flex-grow: 1;
 }
@@ -108,36 +109,33 @@ a { text-decoration: none; }
 /* **HIGHLIGHT: Offer Text (Only for display)** */
 .offer-highlight {
     display: block;
-    margin: 15px 0;
-    padding: 10px 15px;
-    border-radius: 10px; 
+    margin: 12px 0; /* Reduced margin */
+    padding: 8px 12px; /* Reduced padding */
+    border-radius: 8px; 
     background: #fff8e1; 
-    font-weight: 700;
+    font-weight: 600;
     font-style: italic;
-    font-size: 13px; 
-    border: 2px dashed; 
+    font-size: 12px; /* Smallest font size for ultra look */
+    border: 1px solid; /* Solid border for a modern look */
     color: #111;
-    cursor: default; /* Not clickable */
-    transition: none;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    cursor: default; 
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
-.offer-highlight:hover {
-    opacity: 1; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
+
 .offer-highlight strong {
-    font-weight: 900; 
-    color: #555; 
+    font-weight: 800; 
+    color: #333; 
     display: block;
     font-size: 1.05em; 
-    margin-top: 5px;
+    margin-bottom: 3px;
+    font-style: normal;
 }
 /* New style for the services list */
 .offer-services {
     display: block;
-    font-size: 13px;
+    font-size: 11px; /* Very small service list font */
     font-weight: 400;
-    margin-top: 5px;
+    margin-top: 3px;
     color: #777;
     line-height: 1.4;
     font-style: normal;
@@ -147,53 +145,53 @@ a { text-decoration: none; }
 /* --- Footer and Signature --- */
 .footer-section {
     text-align: center; 
-    font-size: 11px; 
+    font-size: 10px; /* Reduced font size */
     line-height: 1.3;
     color: #777;
-    padding-top: 10px; 
+    padding-top: 8px; /* Reduced padding */
     border-top: 1px solid #eee; 
-    margin-top: 10px; 
+    margin-top: 8px; 
 }
 
 .company-name {
-    font-weight: 900; 
+    font-weight: 800; 
     color: #111;
-    font-size: 14px; 
+    font-size: 13px; /* Reduced font size */
     display: block;
     margin-bottom: 2px;
 }
 .address-text, .call-number {
-    font-size: 10px;
+    font-size: 9px; /* Very small text */
     display: block;
     line-height: 1.3;
 }
 .call-number {
     font-weight: 700;
-    font-size: 11px;
-    margin-top: 3px;
+    font-size: 10px;
+    margin-top: 2px;
 }
 
 
 /* --- DOWNLOAD BUTTON ICON --- */
 #downloadButton {
     position: absolute;
-    top: 18px; /* Adjusted position due to outer padding */
-    right: 18px; /* Adjusted position due to outer padding */
-    background: rgba(0, 0, 0, 0.4);
+    top: 15px; /* Adjusted position due to outer padding */
+    right: 15px; /* Adjusted position due to outer padding */
+    background: rgba(0, 0, 0, 0.3); /* Slightly transparent */
     color: white;
     border-radius: 50%;
-    width: 32px; 
-    height: 32px;
+    width: 30px; /* Even smaller icon */
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 10;
     transition: background 0.2s;
-    font-size: 15px;
+    font-size: 14px;
 }
 #downloadButton:hover {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.5);
 }
 
 /* Hiding WhatsApp Button */
@@ -205,18 +203,18 @@ a { text-decoration: none; }
         max-width: 95vw;
     }
     .colored-frame {
-        padding: 8px;
+        padding: 6px;
     }
     .top-section {
-        height: 150px;
+        height: 140px;
     }
     .bottom-section {
-        padding: 15px 15px 10px 15px;
+        padding: 12px 12px 8px 12px;
     }
     .header-text {
-        font-size: 24px;
+        font-size: 22px;
     }
     .main-message {
-        font-size: 13px;
+        font-size: 12px;
     }
 }
