@@ -4,7 +4,7 @@
 <title>Wish Card</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="card-style.css"> 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -75,42 +75,42 @@ const callNumberElement = document.getElementById("callNumber");
 const downloadButton = document.getElementById("downloadButton");
 
 
-// **UPDATED THEME DEFINITIONS**
+// **THEME DEFINITIONS (ALL PNG, COLOR BASED ON IMAGE)**
 const themes = {
     birthday: {
-        // birthday66.jpg
+        // birthday66.png (Floral/Red Theme)
         floral: {
-            img: 'birthday66.jpg', 
+            img: 'birthday66.png', 
             discount: "Get a Special Discount on Your Birthday",
             details: "Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc.",
-            borderColor: '#A81E1E', // Deep Red 
-            highlightBg: '#FFEEEE',
+            borderColor: '#C62828', // Primary Red from floral image
+            highlightBg: '#FFEBEE', // Very Light Red background
         },
-        // birthday77.png
+        // birthday77.png (Cake/Purple-Pink Theme)
         simple: {
             img: 'birthday77.png',
             discount: "Get a Special Discount on Your Birthday",
             details: "Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc.",
-            borderColor: '#7B1FA2', // Deep Violet 
-            highlightBg: '#F3E5F5',
+            borderColor: '#7B1FA2', // Primary Violet/Purple from cake image
+            highlightBg: '#F3E5F5', // Very Light Violet background
         }
     },
     anniversary: {
-        // anniversary88.jpg
+        // anniversary88.png (Cake/Sepia-Brown Theme)
         cake: {
-            img: 'anniversary88.jpg',
+            img: 'anniversary88.png',
             discount: "Get a Special Discount on Your Anniversary",
             details: "Marriage Consultation / Family Problem Solutions / Vastu Tips etc.",
-            borderColor: '#6D4C41', // Brown/Sepia 
-            highlightBg: '#FBE9E7', 
+            borderColor: '#6D4C41', // Primary Brown/Sepia from rose image
+            highlightBg: '#FBE9E7', // Very Light Sepia background
         },
-        // anniversary99.jpg
+        // anniversary99.png (Heart/Deep Red Theme)
         heart: { 
-            img: 'anniversary99.jpg',
+            img: 'anniversary99.png', 
             discount: "Get a Special Discount on Your Anniversary",
             details: "Marriage Consultation / Family Problem Solutions / Vastu Tips etc.",
-            borderColor: '#C62828', // Deep Red 
-            highlightBg: '#FFEBEE',
+            borderColor: '#9E0000', // Deep Red from heart image
+            highlightBg: '#FFDEDE', // Light Red background
         }
     }
 };
@@ -144,13 +144,14 @@ if (currentTheme) {
     offerHeaderElement.innerHTML = `<strong>${discount}</strong>`;
     offerDetailsElement.textContent = details;
     
-    // Apply styling via JS
+    // Apply styling via JS (Color Combination)
     coloredFrameElement.style.borderColor = borderColor;
-    callNumberElement.style.color = borderColor; 
+    callNumberElement.style.color = borderColor; // Call number gets theme color
     offerHighlightElement.style.borderColor = borderColor;
-    offerHighlightElement.style.backgroundColor = highlightBg;
+    offerHighlightElement.style.backgroundColor = highlightBg; // Highlight box gets light theme color
     
-    // **No WhatsApp functionality on click.**
+    // Disable click functionality by removing the event listener (if any existed before)
+    offerHighlightElement.onclick = null;
 
 } else {
     // Fallback
