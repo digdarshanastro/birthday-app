@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Digdarshan — Card Image Generator (PNG)</title>
+
+<!-- html2canvas CDN (used to render HTML -> canvas -> PNG) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNa5lq7Jqgq6D0a6l4wW2n6Wg7m8N2l5xq2Ww1k1b4qf4x+3W2h0y0I5X2h7y6Qw0GQf2x3p6r2pY8Lk5Zz7Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<style>
+  /* page layout */
+  :root{
+    --w:1080px; --h:1350px; /* PNG export size */
+    --brand:#ffd6e8; --accent:#22d3ee; --gold:#d4af37;
+    --card-radius:28px;
+    --shadow: 0 18px 60px rgba(2,6,20,0.6);
+    font-family: Inter, "Playfair Display", system-ui, -apple-system, sans-serif;
+  }
+  body{background:#071021; color:#fff; display:flex; gap:28px; padding:28px; flex-wrap:wrap; align-items:flex-start; justify-content:center;}
+  .panel{width:100%; max-width:1200px; display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start; justify-content:center}
+
+  /* canvas preview frame */
+  .preview-wrap{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:18px; border-radius:16px; box-shadow:var(--shadow);}
+  .card-canvas{width:360px; height:450px; border-radius:16px; overflow:hidden; background:#111; display:grid; place-items:center; border:1px solid rgba(255,255,255,0.04)}
+
+  /* the actual card container (keeps 1080x1350 ratio for export) */
+  .card {
+    width: var(--w);
+    height: var(--h);
+    position:relative;
+    box-shadow:var(--shadow);
+    border-radius:var(--card-radius);
+    overflow:hidden;
+    font-smoothing:antialiased;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  .card-inner{position:absolute; inset:0; display:flex; flex-direction:column;}
+
+  /* Typography */
+  .brand { font-weight:900; font-size:22px; letter-spacing:0.6px; }
+  .subtitle { font-size:13px; opacity:0.85; margin-top:6px; }
+  .big-head { font-family:'Playfair Display', serif; font-weight:900; letter-spacing:1px; margin:0; }
+  .message { font-size:20px; line-height:1.28; margin:0; white-space:pre-line; }
+
+  /* SHARED footer */
+  .card-footer { position:absolute; left:40px; right:40px; bottom:32px; display:flex; flex-direction:column; gap:6px; color:rgba(0,0,0,0.8); }
+
+  /* ====== DESIGN TEMPLATES ====== */
+  /* 1) Birthday 1 - Royal Dark + Gold */
+  .b1 { background:linear-gradient(180deg,#0b1020 0%, #091622 50%, #071018 100%); color:#fff; }
+  .b1 .header { padding:64px 120px 24px 120px; text-align:center; color:var(--brand); }
+  .b1 .big-head { font-size:78px; color:var(--gold); text-shadow:0 6px 30px rgba(212,175,55,0.08); }
+  .b1 .message { color:rgba(255,255,255,0.95); font-size:22px; margin-top:8px; }
+
+  .b1 .garnish {
+    position:absolute; top:18px; right:18px; opacity:0.12; filter:blur(0.5px);
+    width:360px; transform:rotate(9deg);
+  }
+
+  /* 2) Birthday 2 - Pink Gradient + Floral */
+  .b2 { background:linear-gradient(135deg,#ffe6f0 0%, #ffd6e8 45%, #fff0f6 100%); color:#1b1320; }
+  .b2 .header { padding:48px 90px; text-align:center; color:#6b184e; }
+  .b2 .big-head { font-size:64px; color:#6b184e; }
+  .b2 .message { color:#2b1326; font-size:19px; margin-top:10px; }
+
+  .b2 .floral { position:absolute; left:28px; top:28px; width:260px; opacity:0.16; transform:rotate(-12deg); }
+
+  /* A2) Anniversary 2 - Black-Gold Luxury */
+  .a2 { background:linear-gradient(180deg,#070506 0%, #0b0b0b 100%); color:#fff; }
+  .a2 .header { padding:80px 120px 26px 120px; text-align:center; color:var(--gold); }
+  .a2 .big-head { font-size:72px; color:var(--gold); }
+  .a2 .message { color:rgba(255,255,255,0.9); font-size:20px; }
+
+  .a2 .orn { position:absolute; bottom:120px; right:48px; opacity:0.12; width:420px; transform:scale(1.05); }
+
+  /* A3) Anniversary 3 - Heart Gold Minimal Elegant */
+  .a3 { background:linear-gradient(180deg,#fff9f2 0%, #fff6ea 100%); color:#1b1210; }
+  .a3 .header { padding:56px 80px 18px 80px; text-align:center; color:#b86d3a; }
+  .a3 .big-head { font-size:64px; color:#b86d3a; }
+  .a3 .message { color:#3a2a20; font-size:18px; }
+
+  .a3 .heart { position:absolute; left:40px; top:150px; width:420px; opacity:0.06; }
+
+  /* common content blocks */
+  .content { padding:28px 110px; text-align:center; display:flex; flex-direction:column; gap:14px; }
+  .nameLine { font-size:46px; font-weight:900; letter-spacing:0.6px; }
+  .ageLine { font-size:22px; font-weight:700; opacity:0.9; }
+
+  .small-note { font-size:16px; opacity:0.95; line-height:1.3; }
+
+  /* footer style (consistent) */
+  .card-footer .brand { color:rgba(0,0,0,0.6); font-weight:800; }
+  .card-footer .contact { font-size:14px; color:rgba(0,0,0,0.65); }
+
+  /* control panel */
+  .controls { width:360px; display:flex; flex-direction:column; gap:10px; }
+  label{font-size:13px; color:#cbd5e1}
+  input[type=text], input[type=number], select { padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.02); color:#fff; outline:none; }
+  .row{display:flex; gap:8px;}
+  button{padding:10px 12px; border-radius:10px; border:none; cursor:pointer; font-weight:800}
+  .btn-primary{background:linear-gradient(90deg,#ff6ea6,#ff9d6d); color:#fff}
+  .btn-ghost{background:transparent; border:1px solid rgba(255,255,255,0.06); color:#fff}
+  .muted{opacity:0.8; font-size:13px}
+
+  /* small preview thumbnails */
+  .thumbs{display:flex; gap:8px; flex-wrap:wrap;}
+  .thumb{width:84px; height:105px; border-radius:8px; overflow:hidden; border:2px solid transparent; cursor:pointer; box-shadow:0 8px 30px rgba(2,6,20,0.45)}
+  .thumb.selected{border-color:var(--accent); transform:translateY(-4px)}
+  .thumb img{width:100%; height:100%; object-fit:cover}
+  .note-box{font-size:13px; color:#e6eef8; opacity:0.9; margin-top:6px}
+</style>
+</head>
+<body>
+
+<div class="panel">
+  <!-- LEFT: Controls -->
+  <div class="preview-wrap controls">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div class="brand">Digdarshan Astro</div>
+        <div class="muted">Card PNG Generator — Social-ready 1080×1350</div>
+      </div>
+      <div class="muted">Formats: PNG • Download • Share</div>
+    </div>
+
+    <div style="margin-top:8px">
+      <label>Choose Design</label>
+      <div class="thumbs" id="thumbs">
+        <div class="thumb selected" data-id="b1" title="Birthday — Royal Dark"><img src="birthday66.jpg" alt=""></div>
+        <div class="thumb" data-id="b2" title="Birthday — Pink Floral"><img src="birthday77.png" alt=""></div>
+        <div class="thumb" data-id="a2" title="Anniversary — Black Gold"><img src="anniversary88.jpg" alt=""></div>
+        <div class="thumb" data-id="a3" title="Anniversary — Heart Gold"><img src="anniversary99.jpg" alt=""></div>
+      </div>
+    </div>
+
+    <div style="margin-top:10px">
+      <label>Name (for card)</label>
+      <input type="text" id="nameInput" placeholder="Dear Name (e.g. Anita Roy)">
+    </div>
+
+    <div style="margin-top:8px">
+      <label>Age (optional)</label>
+      <input type="number" id="ageInput" placeholder="e.g. 32">
+    </div>
+
+    <div style="display:flex; gap:8px; margin-top:10px;">
+      <button class="btn-primary" id="renderBtn">Render PNG</button>
+      <button class="btn-ghost" id="downloadBtn" disabled>Download PNG</button>
+    </div>
+
+    <div style="display:flex; gap:8px; margin-top:8px;">
+      <button class="btn-ghost" id="shareBtn" title="Share (mobile: share image + text; desktop: fallback to link)">Share to WhatsApp</button>
+      <button class="btn-ghost" id="openCardBtn" title="Open full size card (browser) for link sharing">Open Card Page</button>
+    </div>
+
+    <div class="note-box">
+      Tips: For best results use Chrome on Mobile (Share API will attach image + caption). On Desktop it opens WhatsApp Web with a link to this card so recipients can download.
+    </div>
+  </div>
+
+  <!-- RIGHT: Live preview area -->
+  <div class="preview-wrap" style="display:flex; flex-direction:column; gap:12px; align-items:center">
+    <div style="font-size:13px; color:#cfe8ff">Live Preview (fits screen) — final PNG size: 1080×1350</div>
+    <div id="previewFrame" class="card-canvas" aria-hidden="true"></div>
+
+    <div style="display:flex; gap:8px;">
+      <button class="btn-primary" id="previewDownloadBtn" disabled>Download High-Res PNG</button>
+      <button class="btn-ghost" id="previewShareBtn" disabled>Share (mobile)</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden real-size card (this element will be rendered by html2canvas at 1080×1350) -->
+<div id="exportArea" style="position:fixed; left:-9999px; top:-9999px; visibility:hidden; width:1080px; height:1350px;">
+  <!-- TEMPLATE placeholders for different designs -->
+  <!-- Birthday 1 -->
+  <div id="tmpl-b1" class="card b1" role="img" aria-label="Birthday card template 1">
+    <img class="garnish" src="gold-swirls.png" alt="" />
+    <div class="card-inner">
+      <div class="header">
+        <div style="font-size:16px; color:rgba(255,255,255,0.8)">*Digdarshan Astro*</div>
+        <h1 class="big-head" id="b1-head">HAPPY BIRTHDAY</h1>
+        <div class="subtitle" style="color:rgba(255,255,255,0.75)">May the stars guide you</div>
+      </div>
+
+      <div class="content">
+        <div class="nameLine" id="b1-name">DEAR NAME</div>
+        <div class="ageLine" id="b1-age">AGE</div>
+        <p class="message small-note" id="b1-msg">May the stars bring you immense
+joy and success this year. Start
+your new personal year with
+cosmic guidance from
+Jyotish Devagya Amitsree.</p>
+      </div>
+
+      <div class="card-footer">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="brand">Digdarshan Astro</div>
+            <div class="subtitle">47F Raja Rammohan Roy Road, Kolkata-8.</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:900">Call : 8697190840 / 9830637766</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Birthday 2 -->
+  <div id="tmpl-b2" class="card b2">
+    <img class="floral" src="floral-pattern.png" alt="" />
+    <div class="card-inner">
+      <div class="header">
+        <h1 class="big-head" id="b2-head">HAPPY BIRTHDAY</h1>
+      </div>
+
+      <div class="content">
+        <div class="nameLine" id="b2-name">DEAR NAME</div>
+        <div class="ageLine" id="b2-age">AGE</div>
+        <p class="message small-note" id="b2-msg">May the stars bring you immense
+joy and success this year. Start
+your new personal year with
+cosmic guidance from
+Jyotish Devagya Amitsree.</p>
+      </div>
+
+      <div class="card-footer" style="color:#6b184e">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="brand">Digdarshan Astro</div>
+            <div class="subtitle">47F Raja Rammohan Roy Road, Kolkata-8.</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:900; color:#6b184e">Call : 8697190840 / 9830637766</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Anniversary 2 (Black-Gold) -->
+  <div id="tmpl-a2" class="card a2">
+    <img class="orn" src="ornamental.png" alt="" />
+    <div class="card-inner">
+      <div class="header">
+        <h1 class="big-head" id="a2-head">HAPPY ANNIVERSARY</h1>
+      </div>
+
+      <div class="content">
+        <div class="nameLine" id="a2-name">DEAR COUPLE</div>
+        <div class="ageLine" id="a2-age">YEARS</div>
+        <p class="message small-note" id="a2-msg">Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree on this special day.</p>
+      </div>
+
+      <div class="card-footer">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="brand">Digdarshan Astro</div>
+            <div class="subtitle">47F Raja Rammohan Roy Road, Kolkata-8.</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:900">Call : 8697190840 / 9830637766</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Anniversary 3 (Heart Gold Minimal) -->
+  <div id="tmpl-a3" class="card a3">
+    <img class="heart" src="heart-bg.png" alt="" />
+    <div class="card-inner">
+      <div class="header">
+        <h1 class="big-head" id="a3-head">HAPPY ANNIVERSARY</h1>
+      </div>
+
+      <div class="content">
+        <div class="nameLine" id="a3-name">DEAR COUPLE</div>
+        <div class="ageLine" id="a3-age">YEARS</div>
+        <p class="message small-note" id="a3-msg">Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree on this special day.</p>
+      </div>
+
+      <div class="card-footer">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="brand">Digdarshan Astro</div>
+            <div class="subtitle">47F Raja Rammohan Roy Road, Kolkata-8.</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:900">Call : 8697190840 / 9830637766</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- Utilities ---------- */
+function $qs(sel, root = document) { return root.querySelector(sel); }
+function $qsa(sel, root = document) { return Array.from(root.querySelectorAll(sel)); }
+
+const thumbEls = $qsa('.thumb');
+const previewFrame = document.getElementById('previewFrame');
+const exportArea = document.getElementById('exportArea');
+
+let selected = 'b1';
+let lastBlob = null;
+
+/* Init: read URL params to prefill if available */
+const params = new URLSearchParams(window.location.search);
+const initialName = params.get('name') ? decodeURIComponent(params.get('name')) : '';
+const initialAge = params.get('age') ? params.get('age') : '';
+
+$qs('#nameInput').value = initialName;
+$qs('#ageInput').value = initialAge;
+
+/* Thumb selection */
+thumbEls.forEach(t=>{
+  t.addEventListener('click', ()=>{
+    thumbEls.forEach(x=>x.classList.remove('selected'));
+    t.classList.add('selected');
+    selected = t.dataset.id;
+    renderPreview();
+  });
+});
+
+/* Render small preview by cloning the template and scaling down */
+function renderPreview(){
+  previewFrame.innerHTML = '';
+  const tmpl = document.getElementById('tmpl-'+selected);
+  const clone = tmpl.cloneNode(true);
+  clone.style.transform = 'scale(0.33)'; // 1080→360 approx (1/3)
+  clone.style.transformOrigin = 'top left';
+  // set dynamic text
+  const nm = $qs('#nameInput').value.trim() || (selected.startsWith('a')? 'Dear Couple' : 'Dear Name');
+  const ag = $qs('#ageInput').value.trim();
+  // populate
+  $qsa('[id$="-name"]', clone).forEach(el=> el.textContent = nm);
+  $qsa('[id$="-age"]', clone).forEach(el=> el.textContent = ag ? (ag + (selected.startsWith('a')? ' Years' : 'th')) : '');
+  previewFrame.appendChild(clone);
+}
+renderPreview();
+
+/* Live update on inputs */
+$qs('#nameInput').addEventListener('input', renderPreview);
+$qs('#ageInput').addEventListener('input', renderPreview);
+
+/* Render (high-res) and convert to PNG */
+async function renderAndExport(){
+  // find template and clone into exportArea (visible there)
+  // clear
+  exportArea.querySelectorAll('.card').forEach(c=>c.style.display='none');
+  const active = exportArea.querySelector('#tmpl-'+selected);
+  // populate dynamic text values
+  const nm = $qs('#nameInput').value.trim() || (selected.startsWith('a')? 'Dear Couple' : 'Dear Name');
+  const ag = $qs('#ageInput').value.trim();
+  $qsa('[id$="-name"]', active).forEach(el=> el.textContent = nm);
+  $qsa('[id$="-age"]', active).forEach(el=> el.textContent = ag ? (selected.startsWith('a')? (ag + ' Years') : (ag + 'th')) : '');
+  // show active
+  active.style.display = 'block';
+
+  // ensure images loaded (if any)
+  await Promise.all(Array.from(active.querySelectorAll('img')).map(img=>{
+    return new Promise(res=>{
+      if(!img.src) return res();
+      if(img.complete) return res();
+      img.onload = img.onerror = res;
+    });
+  }));
+
+  // use html2canvas: set scale=1 to get exact pixel size (export area is already 1080x1350)
+  const canvas = await html2canvas(active, { scale:1, useCORS:true, backgroundColor:null, allowTaint:true, logging:false });
+  // create blob
+  return new Promise((resolve)=>{
+    canvas.toBlob(blob=>{
+      lastBlob = blob;
+      resolve({ blob, url: URL.createObjectURL(blob) });
+    }, 'image/png', 1);
+  });
+}
+
+/* Buttons */
+$qs('#renderBtn').addEventListener('click', async ()=>{
+  $qs('#renderBtn').disabled = true;
+  $qs('#renderBtn').textContent = 'Rendering...';
+  try{
+    const { blob, url } = await renderAndExport();
+    // set preview small thumbnail
+    previewFrame.querySelectorAll('*').forEach(n=>n.remove());
+    const img = new Image();
+    img.src = url;
+    img.style.width = '100%'; img.style.height = '100%'; img.style.objectFit='cover';
+    previewFrame.appendChild(img);
+    // enable download & share
+    $qs('#downloadBtn').disabled = false;
+    $qs('#previewDownloadBtn').disabled = false;
+    $qs('#previewShareBtn').disabled = false;
+    $qs('#shareBtn').disabled = false;
+    $qs('#previewDownloadBtn').onclick = ()=> downloadBlob(blob, makeFileName());
+    $qs('#downloadBtn').onclick = ()=> downloadBlob(blob, makeFileName());
+    $qs('#previewShareBtn').onclick = ()=> shareImage(blob);
+    // store last url for openCardBtn parameter link
+    lastBlob = blob;
+  }catch(e){
+    alert('Render failed — check console');
+    console.error(e);
+  }finally{
+    $qs('#renderBtn').disabled = false;
+    $qs('#renderBtn').textContent = 'Render PNG';
+  }
+});
+
+/* helper: filename */
+function makeFileName(){
+  const nm = ($qs('#nameInput').value.trim() || 'card').replace(/\s+/g,'_');
+  return `Digdarshan_${selected}_${nm}.png`;
+}
+
+/* download util */
+function downloadBlob(blob, filename){
+  const a = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 4000);
+}
+
+/* share util: try navigator.share (with files) else fallback to wa.me link to card page */
+async function shareImage(blob){
+  const caption = [
+    '*Digdarshan Astro*,',
+    '47F Raja Rammohan Roy Road, Kolkata-8.',
+    '*Call : 8697190840 / 9830637766*',
+    '',
+    selected.startsWith('b') ? `*Happy Birthday "${$qs('#nameInput').value || 'Name'}"*,` : `*Happy Anniversary "${$qs('#nameInput').value || 'Name'}"*,`,
+    '',
+    selected.startsWith('b') ? `May the stars bring you immense\njoy and success this year. Start\nyour new personal year with\ncosmic guidance from\nJyotish Devagya Amitsree.` :
+    `Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree.`,
+    '',
+    '*Get Special Offer just for you*.',
+    '*Visit our site* :',
+    'https://digdarshanastro.mydurable.com/',
+    '',
+    '*Whatsapp Us for exciting offers*:',
+    'https://wa.me/+919697190840'
+  ].join('\n');
+
+  // Web Share API (Level 2) — supports files on mobile modern browsers
+  if (navigator.canShare && navigator.canShare({ files: [new File([blob], makeFileName(), { type: blob.type })] })) {
+    try {
+      await navigator.share({
+        files: [new File([blob], makeFileName(), { type: blob.type })],
+        text: caption,
+      });
+      return;
+    } catch (err) {
+      console.warn('Share API failed:', err);
+      // fallthrough to WA link
+    }
+  }
+
+  // Fallback: upload not possible here — we open wa.me with text + link to card page that user can open
+  // Build card page URL with params so recipient can view and download
+  const baseCardUrl = window.location.origin + window.location.pathname.replace('card-image-generator.html','card.html');
+  const nameParam = encodeURIComponent($qs('#nameInput').value.trim() || '');
+  const ageParam = encodeURIComponent($qs('#ageInput').value.trim() || '');
+  const cardLink = `${baseCardUrl}?type=${selected.startsWith('b')? 'birthday' : 'anniversary'}&cardType=${selected === 'b1'? 'elegant': selected==='b2'?'floral':selected==='a2'?'cake':'heart'}&name=${nameParam}${ageParam?('&age='+ageParam):''}`;
+
+  const waText = encodeURIComponent(caption + '\n\n' + cardLink);
+  const waUrl = `https://wa.me/?text=${waText}`;
+  window.open(waUrl,'_blank');
+}
+
+/* shareBtn (control panel) triggers same share flow */
+$qs('#shareBtn').addEventListener('click', ()=>{
+  if(!lastBlob){ alert('Please Render PNG first (click Render PNG)'); return; }
+  shareImage(lastBlob);
+});
+
+/* openCardBtn — opens the card.html with params (so admin's old wa.me flow can continue) */
+$qs('#openCardBtn').addEventListener('click', ()=>{
+  const baseCardUrl = window.location.origin + window.location.pathname.replace('card-image-generator.html','card.html');
+  const nameParam = encodeURIComponent($qs('#nameInput').value.trim() || '');
+  const ageParam = encodeURIComponent($qs('#ageInput').value.trim() || '');
+  const cardType = selected === 'b1' ? 'elegant' : selected==='b2' ? 'floral' : selected==='a2' ? 'cake' : 'heart';
+  const link = `${baseCardUrl}?type=${selected.startsWith('b')? 'birthday' : 'anniversary'}&cardType=${cardType}&name=${nameParam}${ageParam?('&age='+ageParam):''}`;
+  window.open(link, '_blank');
+});
+
+/* small preview buttons (duplicate controls) */
+$qs('#previewDownloadBtn').addEventListener('click', ()=> {
+  if(!lastBlob){ alert('Please Render PNG first'); return; }
+  downloadBlob(lastBlob, makeFileName());
+});
+$qs('#previewShareBtn').addEventListener('click', ()=> {
+  if(!lastBlob){ alert('Please Render PNG first'); return; }
+  shareImage(lastBlob);
+});
+
+/* auto-trigger render if URL contains name param */
+if(initialName || initialAge){
+  // select design from param if exists
+  const urlParams = new URLSearchParams(window.location.search);
+  const d = urlParams.get('design');
+  if(d && ['b1','b2','a2','a3'].includes(d)){ selected = d; thumbEls.forEach(t=>t.classList.toggle('selected', t.dataset.id===d)); }
+  setTimeout(()=> document.getElementById('renderBtn').click(), 400);
+}
+</script>
+
+</body>
+</html>
