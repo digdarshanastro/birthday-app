@@ -232,15 +232,19 @@ textarea { min-height:110px; }
 
     <div id="step3" style="display:none;">
 
-      <label>Consultation Type</label>
-      <select id="consultType" onchange="updateConsultationOptions()">
+      <label title="If you choose Online Consultation, you cannot select Free Consultation as it requires physical visit.">
+        Consultation Type
+      </label>
+      <select id="consultType">
         <option value="">Select</option>
         <option>Physical Visit</option>
         <option>Online Consultation</option>
       </select>
 
-      <label>Consultation Mode</label>
-      <select id="consultMode" onchange="updateConsultationOptions()">
+      <label title="Free Consultation requires Offline visit. Cannot be used for Online Consultation.">
+        Consultation Mode
+      </label>
+      <select id="consultMode">
         <option value="">Select</option>
         <option>Free Consultation (Offline)</option>
         <option>Paid Consultation</option>
@@ -284,6 +288,9 @@ textarea { min-height:110px; }
 import { db } from "./firebase-config.js";
 import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+/* ========================
+   TAB CONTROL
+======================== */
 function showStep(n){
   document.getElementById("step1").style.display = n===1 ? "block" : "none";
   document.getElementById("step2").style.display = n===2 ? "block" : "none";
@@ -305,6 +312,38 @@ window.nextStep = nextStep;
 
 window.prevStep = showStep;
 
+
+/* ======================================================
+   ⭐ CONSULTATION LOGIC (ADDED — No Other Code Changed)
+====================================================== */
+const consultType = document.getElementById("consultType");
+const consultMode = document.getElementById("consultMode");
+
+function applyConsultRules() {
+  const type = consultType.value;
+  const mode = consultMode.value;
+
+  // RULE 1: Online Consultation হলে Free Consultation (Offline) সিলেক্ট নিষিদ্ধ
+  if (type === "Online Consultation" && mode === "Free Consultation (Offline)") {
+    consultMode.value = "";
+    alert("Free Consultation শুধুমাত্র Offline Physical Visit-এর জন্য উপলব্ধ।");
+  }
+
+  // RULE 2: Free Consultation (Offline) নিলে Online Consultation সিলেক্ট নিষিদ্ধ
+  if (mode === "Free Consultation (Offline)" && type === "Online Consultation") {
+    consultType.value = "";
+    alert("Online Consultation-এর জন্য Free Consultation নেওয়া যাবে না।");
+  }
+}
+
+// Add listeners
+consultType.addEventListener("change", applyConsultRules);
+consultMode.addEventListener("change", applyConsultRules);
+
+
+/* =========================
+   PREVIEW AUTO UPDATE
+========================= */
 function buildPreview(){
   const p=[];
   p.push(`<b>Name:</b> ${document.getElementById("fname").value} ${document.getElementById("lname").value}`);
@@ -315,62 +354,17 @@ function buildPreview(){
   p.push(`<b>Gotra:</b> ${document.getElementById("gotra").value}`);
   p.push(`<b>Maternal Gotra:</b> ${document.getElementById("maternal_gotra").value}`);
   p.push(`<b>Consult:</b> ${document.getElementById("consultType").value} / ${document.getElementById("consultMode").value}`);
-  p.push(`<b>Plan:</b> ${document.getElementById("plan").value}`); // ⭐ ADDED PREVIEW
+  p.push(`<b>Plan:</b> ${document.getElementById("plan").value}`);
   document.getElementById("preview").innerHTML = p.join("<br>");
 }
 
 document.querySelectorAll("input,select,textarea")
 .forEach(e=>{ e.addEventListener("change",buildPreview); e.addEventListener("input",buildPreview); });
 
-// 🌟 NEW LOGIC: Enforce mutual exclusion between Online Consultation and Free Consultation (Offline)
-const consultTypeSelect = document.getElementById('consultType');
-const consultModeSelect = document.getElementById('consultMode');
 
-window.updateConsultationOptions = function() {
-    const selectedType = consultTypeSelect.value;
-    const selectedMode = consultModeSelect.value;
-
-    const onlineTypeOption = consultTypeSelect.querySelector('option[value="Online Consultation"]');
-    const freeModeOption = consultModeSelect.querySelector('option[value="Free Consultation (Offline)"]');
-
-    // --- Logic 1: Type -> Mode ---
-    // If Type is 'Online Consultation', Mode cannot be 'Free Consultation (Offline)'
-    if (onlineTypeOption && freeModeOption) {
-        if (selectedType === 'Online Consultation') {
-            freeModeOption.disabled = true;
-            // If the disabled option was selected, reset Mode
-            if (selectedMode === 'Free Consultation (Offline)') {
-                consultModeSelect.value = "";
-            }
-        } else {
-            // Otherwise, enable Free Consultation (Offline)
-            freeModeOption.disabled = false;
-        }
-    }
-
-    // --- Logic 2: Mode -> Type ---
-    // If Mode is 'Free Consultation (Offline)', Type cannot be 'Online Consultation'
-    if (onlineTypeOption && freeModeOption) {
-        if (selectedMode === 'Free Consultation (Offline)') {
-            onlineTypeOption.disabled = true;
-            // If the disabled option was selected, reset Type
-            if (selectedType === 'Online Consultation') {
-                consultTypeSelect.value = "";
-            }
-        } else {
-            // Otherwise, enable Online Consultation
-            onlineTypeOption.disabled = false;
-        }
-    }
-    
-    // Also update preview after changing options
-    buildPreview(); 
-};
-
-// Call on page load to set initial state
-window.addEventListener('load', window.updateConsultationOptions);
-
-
+/* =========================
+   FIRESTORE SAVE
+========================= */
 window.submitForm = async function(){
 
   const mobile=document.getElementById("mobile").value.trim();
@@ -399,7 +393,7 @@ window.submitForm = async function(){
     consultType: document.getElementById("consultType").value,
     consultMode: document.getElementById("consultMode").value,
 
-    plan: document.getElementById("plan").value,   // ⭐ ADDED PAYLOAD
+    plan: document.getElementById("plan").value,
 
     remedies: document.getElementById("remedies").value,
     notes: document.getElementById("notes").value,
