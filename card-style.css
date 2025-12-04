@@ -40,7 +40,7 @@ html, body {
   position: relative;
 
   /* Luxury Double Border Effect */
-  border: 6px solid var(--theme-border);
+  border: 6px solid var(--theme-primary);
   box-shadow:
       0 0 0 4px rgba(255,255,255,0.5),
       0 8px 25px rgba(0,0,0,0.25),
@@ -87,15 +87,15 @@ html, body {
   font-size: 32px;
   line-height: 1.1;
   font-weight: 900;
-  color: #1b1b1b;
   margin-bottom: 10px;
+  color: var(--theme-primary);
 }
 
 .header-text span {
   display: block;
   font-size: 20px;
   margin-top: 6px;
-  color: #4a4a4a;
+  color: var(--theme-secondary);
 }
 
 /* Main Message */
@@ -109,13 +109,12 @@ html, body {
 
 /* ===================== OFFER HIGHLIGHT BOX ===================== */
 .offer-highlight {
-  background: rgba(255,255,255,0.55);
+  background: var(--theme-highlight);
   border-radius: 12px;
-  border: 2px solid var(--theme-border);
+  border: 2px solid var(--theme-secondary);
   padding: 14px 18px;
   margin-bottom: 20px;
 
-  backdrop-filter: blur(6px);
   box-shadow:
       0 4px 10px rgba(0,0,0,0.08),
       inset 0 0 8px rgba(255,255,255,0.7);
@@ -125,7 +124,7 @@ html, body {
   font-size: 15px;
   display: block;
   margin-bottom: 4px;
-  color: #222;
+  color: var(--theme-secondary);
 }
 
 .offer-services {
@@ -137,10 +136,10 @@ html, body {
 /* ===================== FOOTER ===================== */
 .footer-section {
   border-top: 1px solid #ddd;
-  padding-top: 14px;
-  margin-top: 16px;
+  padding-top: 6px;
+  margin-top: 10px;
   text-align: center;
-  line-height: 1.45;
+  line-height: 1.35;
   color: #555;
 }
 
@@ -155,18 +154,17 @@ html, body {
   font-family: 'Playfair Display', serif;
   font-size: 16px;
   font-weight: 900;
-  margin: 6px 0 6px 0;
-  color: #000;
+  margin: 4px 0;
+  color: var(--theme-primary);
 }
 
 .call-number {
   display: block;
-  margin-top: 6px;
+  margin-top: 4px;
   font-size: 13px;
   font-weight: 900;
-  color: var(--theme-border);
+  color: var(--theme-primary);
 }
-
 
 /* ===================== DOWNLOAD BUTTON ===================== */
 #downloadButton {
@@ -175,7 +173,7 @@ html, body {
   right: -20px;
   width: 48px;
   height: 48px;
-  background: var(--theme-border);
+  background: var(--theme-primary);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -205,3 +203,4 @@ html, body {
     height: 200px;
   }
 }
+
