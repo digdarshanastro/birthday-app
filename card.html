@@ -1,179 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-
-<title>Digdarshan Astro – Wish Card</title>
+<title>Wish Card</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<!-- ALWAYS LOAD CARD CSS FIRST (so nothing overrides it) -->
-<link rel="stylesheet" href="card-style.css?v=500">
-
-<!-- Premium Fonts -->
+<link rel="stylesheet" href="card-style.css"> 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-
-<!-- Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<!-- HD Export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
 </head>
 
 <body>
 
 <div id="card">
 
-    <!-- Download Button -->
-    <div id="downloadButton" title="Save Card">
-        <i class="fas fa-download"></i>
-    </div>
+  <div id="downloadButton" title="Save Card as Image">
+    <i class="fas fa-download"></i>
+  </div>
 
-    <!-- Outer Luxury Frame -->
-    <div id="coloredFrame" class="colored-frame">
+  <div id="coloredFrame" class="colored-frame">
+      <div class="card-content">
 
-        <div class="card-content">
+          <div class="top-section">
+              <img id="cardImage" src="" alt="Greeting Image">
+          </div>
 
-            <!-- Image Section -->
-            <div class="top-section">
-                <img id="cardImage" src="" alt="Greeting Image">
-            </div>
+          <div class="bottom-section">
 
-            <!-- Text + Footer -->
-            <div class="bottom-section">
+              <h2 id="headerText" class="header-text"></h2>
 
-                <div>
-                    <h2 id="headerText" class="header-text"></h2>
+              <p class="main-message"><span id="greetingText"></span></p>
 
-                    <p id="mainMessage" class="main-message">
-                        <span id="greetingText"></span>
-                    </p>
+              <div id="offerHighlight" class="offer-highlight">
+                <strong id="offerHeader"></strong>
+                <span id="offerDetails" class="offer-services"></span>
+              </div>
 
-                    <!-- Premium Offer Highlight Box -->
-                    <div id="offerHighlight" class="offer-highlight">
-                        <span id="offerHeader"></span>
-                        <span id="offerDetails" class="offer-services"></span>
-                    </div>
-                </div>
+              <div class="footer-section">
+                <span class="footer-line">With Best Wishes from</span>
+                <strong class="company-name">Digdarshan Astro</strong>
+                <span class="footer-line">47F Raja Rammohan Roy Road, Kolkata-8.</span>
+                <span class="footer-line">Jyotish Devagya Amitsree</span>
+                <span class="call-number" id="callNumber">Call : 8697190840 / 9830637766</span>
+              </div>
 
-                <!-- (Hidden) WhatsApp Button -->
-                <a id="whatsappButton" href="#" target="_blank"></a>
-
-                <!-- Footer -->
-                <div class="footer-section">
-                    <span class="footer-line">With Best Wishes from</span>
-                    <strong class="company-name">Digdarshan Astro</strong>
-                    <span class="footer-line">47F Raja Rammohan Roy Road, Kolkata-8.</span>
-                    <span class="footer-line">Jyotish Devagya Amitsree</span>
-                    <span class="call-number" id="callNumber">Call : 8697190840 / 9830637766</span>
-                </div>
-
-
-            </div>
-
-        </div>
-
-    </div>
-
+          </div>
+      </div>
+  </div>
 </div>
 
+
 <script>
-/* url params */
 const url = new URLSearchParams(window.location.search);
 const type = url.get("type") || "birthday";
-const cardType = url.get("cardType") || (type === "birthday" ? "floral" : "heart");
-let name = decodeURIComponent(url.get("name") || "Dear Client");
+const cardType = url.get("cardType") || "floral";
+let name = url.get("name") ? decodeURIComponent(url.get("name")) : "Dear Client";
 
-/* DOM refs */
-const coloredFrameElement = document.getElementById("coloredFrame");
-const cardImage = document.getElementById("cardImage");
-const headerTxtElement = document.getElementById("headerText");
-const greetingTxtElement = document.getElementById("greetingText");
-const offerHighlightElement = document.getElementById("offerHighlight");
-const offerHeaderElement = document.getElementById("offerHeader");
-const offerDetailsElement = document.getElementById("offerDetails");
-const callNumberElement = document.getElementById("callNumber");
-const downloadButton = document.getElementById("downloadButton");
-
-/* THEMES */
 const themes = {
     birthday: {
         floral: {
             img: "birthday66.png",
+            primary: "#7B1FA2",
+            secondary: "#D81B60",
+            highlight: "#FCE4EC",
             discount: "Get a Special Discount on Your Birthday",
-            details: "Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc.",
-            borderColor: "#C62828",
-            highlightBg: "#FFEBEE"
+            details: "Chart Reading / Career Consultation / Gemstones / Rudraksha / Hoom / Hawan etc."
         },
         simple: {
             img: "birthday77.png",
+            primary: "#8E44AD",
+            secondary: "#D35400",
+            highlight: "#FDEDEC",
             discount: "Get a Special Discount on Your Birthday",
-            details: "Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc.",
-            borderColor: "#7B1FA2",
-            highlightBg: "#F3E5F5"
+            details: "Chart Reading / Career Consultation / Gemstones / Rudraksha / Hoom / Hawan etc."
         }
     },
+
     anniversary: {
         cake: {
             img: "anniversary88.png",
+            primary: "#6D4C41",
+            secondary: "#A1887F",
+            highlight: "#F6ECE7",
             discount: "Get a Special Discount on Your Anniversary",
-            details: "Marriage Consultation / Family Problem Solutions / Vastu Tips etc.",
-            borderColor: "#6D4C41",
-            highlightBg: "#FBE9E7"
+            details: "Marriage Consultation / Family Problem Solutions / Vastu Tips etc."
         },
         heart: {
             img: "anniversary99.png",
+            primary: "#C00000",
+            secondary: "#FF4081",
+            highlight: "#FFE6EA",
             discount: "Get a Special Discount on Your Anniversary",
-            details: "Marriage Consultation / Family Problem Solutions / Vastu Tips etc.",
-            borderColor: "#9E0000",
-            highlightBg: "#FFDEDE"
+            details: "Marriage Consultation / Family Problem Solutions / Vastu Tips etc."
         }
     }
 };
 
-/* APPLY THEME */
-let headerText = "";
-let mainGreeting = "";
-let currentTheme = null;
+let theme = themes[type][cardType];
 
-if (type === "birthday") {
-    currentTheme = themes.birthday[cardType];
-    headerText = `HAPPY BIRTHDAY <span>${name}!</span>`;
-    mainGreeting =
-        "May the stars bring you immense joy and success on your special day. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.";
-} else if (type === "anniversary") {
-    currentTheme = themes.anniversary[cardType];
-    headerText = `HAPPY ANNIVERSARY <span>${name}!</span>`;
-    mainGreeting =
-        "Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree on this special day.";
-}
+// Apply image & text
+document.getElementById("cardImage").src = theme.img;
+document.getElementById("headerText").innerHTML =
+    (type === "birthday" ? "HAPPY BIRTHDAY" : "HAPPY ANNIVERSARY") +
+    ` <span>${name}!</span>`;
+document.getElementById("greetingText").innerHTML =
+    (type === "birthday")
+    ? "May the stars bring you immense joy and success on your special day. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree."
+    : "Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree on this special day.";
 
-/* Set content */
-cardImage.src = currentTheme.img;
-headerTxtElement.innerHTML = headerText;
-greetingTxtElement.innerHTML = mainGreeting;
+document.getElementById("offerHeader").innerHTML = theme.discount;
+document.getElementById("offerDetails").innerHTML = theme.details;
 
-offerHeaderElement.innerHTML = `<strong>${currentTheme.discount}</strong>`;
-offerDetailsElement.textContent = currentTheme.details;
+// Apply colors
+document.body.style.setProperty("--theme-primary", theme.primary);
+document.body.style.setProperty("--theme-secondary", theme.secondary);
+document.body.style.setProperty("--theme-highlight", theme.highlight);
 
-/* Theme colors */
-coloredFrameElement.style.setProperty("--theme-border", currentTheme.borderColor);
-callNumberElement.style.color = currentTheme.borderColor;
-offerHighlightElement.style.borderColor = currentTheme.borderColor;
-offerHighlightElement.style.backgroundColor = currentTheme.highlightBg;
+// Download Fix
+document.getElementById("downloadButton").onclick = function () {
 
-/* DOWNLOAD PNG */
-downloadButton.onclick = () => {
-    downloadButton.style.display = "none";
+    document.getElementById("downloadButton").style.display = "none";
 
     html2canvas(document.getElementById("card"), {
         scale: 2,
-        useCORS: true,
-        backgroundColor: null
+        backgroundColor: "#ffffff",
+        useCORS: true
     }).then(canvas => {
-        downloadButton.style.display = "flex";
+
+        document.getElementById("downloadButton").style.display = "flex";
+
         const link = document.createElement("a");
-        link.download = `DigdarshanAstro_${name.replace(/\s/g, "_")}_Card.png`;
-        link.href = canvas.toDataURL("image/png");
+        link.download = `DigdarshanAstro_${name.replace(/\s+/g,"_")}.png`;
+        link.href = canvas.toDataURL();
         link.click();
     });
 };
