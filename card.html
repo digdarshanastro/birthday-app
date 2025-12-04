@@ -1,203 +1,182 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Wish Card</title>
+
+<title>Digdarshan Astro – Wish Card</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="card-style.css"> 
+
+<!-- ALWAYS LOAD CARD CSS FIRST (so nothing overrides it) -->
+<link rel="stylesheet" href="card-style.css?v=500">
+
+<!-- Premium Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+<!-- HD Export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<meta property="og:title" content="Special Wishes from Digdarshan Astro!" />
-<meta property="og:description" content="Wishing you immense joy and success from Jyotish Devagya Amitsree. Get your offer now!" />
-<meta property="og:url" content="https://your-app-domain.vercel.app/card.html" /> 
-<meta property="og:type" content="website" />
 </head>
 
-<body> 
+<body>
 
 <div id="card">
-  <div id="downloadButton" title="Save Card as Image">
-    <i class="fas fa-download"></i>
-  </div>
-  
-  <div id="coloredFrame" class="colored-frame"> 
-      <div class="card-content">
-          <div class="top-section"> 
-              <img id="cardImage" src="" alt="Greeting Image">
-          </div>
-          
-          <div class="bottom-section">
-              <div>
-                  <h2 id="headerText" class="header-text"></h2>
-                  
-                  <p id="mainMessage" class="main-message">
-                      <span id="greetingText"></span>
-                  </p>
-                  
-                  <div id="offerHighlight" class="offer-highlight">
-                    <span id="offerHeader"></span>
-                    <span id="offerDetails" class="offer-services"></span>
-                  </div>
-              </div>
-              
-              <a id="whatsappButton" href="#" target="_blank"></a>
 
-              <div class="footer-section">
-                With Best Wishes from
-                <strong class="company-name">Digdarshan Astro</strong>
-                <span class="address-text">47F Raja Rammohan Roy Road, Kolkata-8.</span> 
-                Jyotish Devagya Amitsree
-                <span class="call-number" id="callNumber">Call : 8697190840 / 9830637766</span>
-              </div>
-          </div>
-      </div>
-  </div>
+    <!-- Download Button -->
+    <div id="downloadButton" title="Save Card">
+        <i class="fas fa-download"></i>
+    </div>
+
+    <!-- Outer Luxury Frame -->
+    <div id="coloredFrame" class="colored-frame">
+
+        <div class="card-content">
+
+            <!-- Image Section -->
+            <div class="top-section">
+                <img id="cardImage" src="" alt="Greeting Image">
+            </div>
+
+            <!-- Text + Footer -->
+            <div class="bottom-section">
+
+                <div>
+                    <h2 id="headerText" class="header-text"></h2>
+
+                    <p id="mainMessage" class="main-message">
+                        <span id="greetingText"></span>
+                    </p>
+
+                    <!-- Premium Offer Highlight Box -->
+                    <div id="offerHighlight" class="offer-highlight">
+                        <span id="offerHeader"></span>
+                        <span id="offerDetails" class="offer-services"></span>
+                    </div>
+                </div>
+
+                <!-- (Hidden) WhatsApp Button -->
+                <a id="whatsappButton" href="#" target="_blank"></a>
+
+                <!-- Footer -->
+                <div class="footer-section">
+                    With Best Wishes from
+                    <strong class="company-name">Digdarshan Astro</strong>
+                    <span class="address-text">47F Raja Rammohan Roy Road, Kolkata-8.</span>
+                    Jyotish Devagya Amitsree
+                    <span class="call-number" id="callNumber">Call : 8697190840 / 9830637766</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 <script>
+/* url params */
 const url = new URLSearchParams(window.location.search);
-const type = url.get("type") || 'birthday'; 
-const cardType = url.get("cardType") || (type === 'birthday' ? 'floral' : 'heart');
-let name = url.get("name");
+const type = url.get("type") || "birthday";
+const cardType = url.get("cardType") || (type === "birthday" ? "floral" : "heart");
+let name = decodeURIComponent(url.get("name") || "Dear Client");
 
-name = name ? decodeURIComponent(name) : "Dear Client";
-
-const coloredFrameElement = document.getElementById("coloredFrame"); 
+/* DOM refs */
+const coloredFrameElement = document.getElementById("coloredFrame");
 const cardImage = document.getElementById("cardImage");
 const headerTxtElement = document.getElementById("headerText");
-const greetingTxtElement = document.getElementById("greetingText"); 
+const greetingTxtElement = document.getElementById("greetingText");
 const offerHighlightElement = document.getElementById("offerHighlight");
 const offerHeaderElement = document.getElementById("offerHeader");
 const offerDetailsElement = document.getElementById("offerDetails");
 const callNumberElement = document.getElementById("callNumber");
 const downloadButton = document.getElementById("downloadButton");
 
-
-// **THEME DEFINITIONS (ALL PNG, COLOR BASED ON IMAGE)**
+/* THEMES */
 const themes = {
     birthday: {
-        // birthday66.png (Floral/Red Theme)
         floral: {
-            img: 'birthday66.png', 
+            img: "birthday66.png",
             discount: "Get a Special Discount on Your Birthday",
             details: "Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc.",
-            borderColor: '#C62828', // Primary Red from floral image
-            highlightBg: '#FFEBEE', // Very Light Red background
+            borderColor: "#C62828",
+            highlightBg: "#FFEBEE"
         },
-        // birthday77.png (Cake/Purple-Pink Theme)
         simple: {
-            img: 'birthday77.png',
+            img: "birthday77.png",
             discount: "Get a Special Discount on Your Birthday",
             details: "Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc.",
-            borderColor: '#7B1FA2', // Primary Violet/Purple from cake image
-            highlightBg: '#F3E5F5', // Very Light Violet background
+            borderColor: "#7B1FA2",
+            highlightBg: "#F3E5F5"
         }
     },
     anniversary: {
-        // anniversary88.png (Cake/Sepia-Brown Theme)
         cake: {
-            img: 'anniversary88.png',
+            img: "anniversary88.png",
             discount: "Get a Special Discount on Your Anniversary",
             details: "Marriage Consultation / Family Problem Solutions / Vastu Tips etc.",
-            borderColor: '#6D4C41', // Primary Brown/Sepia from rose image
-            highlightBg: '#FBE9E7', // Very Light Sepia background
+            borderColor: "#6D4C41",
+            highlightBg: "#FBE9E7"
         },
-        // anniversary99.png (Heart/Deep Red Theme)
-        heart: { 
-            img: 'anniversary99.png', 
+        heart: {
+            img: "anniversary99.png",
             discount: "Get a Special Discount on Your Anniversary",
             details: "Marriage Consultation / Family Problem Solutions / Vastu Tips etc.",
-            borderColor: '#9E0000', // Deep Red from heart image
-            highlightBg: '#FFDEDE', // Light Red background
+            borderColor: "#9E0000",
+            highlightBg: "#FFDEDE"
         }
     }
 };
 
+/* APPLY THEME */
+let headerText = "";
+let mainGreeting = "";
 let currentTheme = null;
 
-if (type === 'birthday') {
-    currentTheme = themes.birthday[cardType] || themes.birthday.floral;
+if (type === "birthday") {
+    currentTheme = themes.birthday[cardType];
     headerText = `HAPPY BIRTHDAY <span>${name}!</span>`;
-    mainGreeting = `May the stars bring you immense joy and success on your special day. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.`;
-} else if (type === 'anniversary') {
-    currentTheme = themes.anniversary[cardType] || themes.anniversary.heart;
+    mainGreeting =
+        "May the stars bring you immense joy and success on your special day. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.";
+} else if (type === "anniversary") {
+    currentTheme = themes.anniversary[cardType];
     headerText = `HAPPY ANNIVERSARY <span>${name}!</span>`;
-    mainGreeting = `Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree on this special day.`;
-} else {
-    headerText = `HELLO <span>${name}!</span>`;
-    currentTheme = themes.birthday.floral; 
-    mainGreeting = `Welcome to Digdarshan Astro!`;
+    mainGreeting =
+        "Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree on this special day.";
 }
 
-// Apply theme settings
-if (currentTheme) {
-    const { img, discount, details, borderColor, highlightBg } = currentTheme;
-    
-    // Set text content
-    cardImage.src = img;
-    headerTxtElement.innerHTML = headerText;
-    greetingTxtElement.innerHTML = mainGreeting;
-    
-    // Offer Text Implementation
-    offerHeaderElement.innerHTML = `<strong>${discount}</strong>`;
-    offerDetailsElement.textContent = details;
-    
-    // Apply styling via JS (Color Combination)
-    coloredFrameElement.style.setProperty('--theme-border', borderColor);
-    coloredFrameElement.style.borderColor = borderColor;
-    callNumberElement.style.color = borderColor; // Call number gets theme color
-    offerHighlightElement.style.borderColor = borderColor;
-    offerHighlightElement.style.backgroundColor = highlightBg; // Highlight box gets light theme color
-    
-    // Disable click functionality by removing the event listener (if any existed before)
-    offerHighlightElement.onclick = null;
+/* Set content */
+cardImage.src = currentTheme.img;
+headerTxtElement.innerHTML = headerText;
+greetingTxtElement.innerHTML = mainGreeting;
 
-} else {
-    // Fallback
-    headerTxtElement.innerHTML = "ERROR <span>INVALID CARD TYPE</span>";
-    greetingTxtElement.innerHTML = "Please check the URL parameters.";
-    offerHeaderElement.textContent = "";
-    offerDetailsElement.textContent = "";
-}
+offerHeaderElement.innerHTML = `<strong>${currentTheme.discount}</strong>`;
+offerDetailsElement.textContent = currentTheme.details;
 
-// **Card Download Functionality**
-downloadButton.onclick = function() {
-    // Hide the download button during capture
-    downloadButton.style.display = 'none';
-    
-    // Hide outer frame padding temporarily for clean capture
-    const originalPadding = coloredFrameElement.style.padding;
-    coloredFrameElement.style.padding = '0';
-    
-    html2canvas(document.getElementById('card'), {
-        scale: 2, // High resolution capture
-        allowTaint: true,
+/* Theme colors */
+coloredFrameElement.style.setProperty("--theme-border", currentTheme.borderColor);
+callNumberElement.style.color = currentTheme.borderColor;
+offerHighlightElement.style.borderColor = currentTheme.borderColor;
+offerHighlightElement.style.backgroundColor = currentTheme.highlightBg;
+
+/* DOWNLOAD PNG */
+downloadButton.onclick = () => {
+    downloadButton.style.display = "none";
+
+    html2canvas(document.getElementById("card"), {
+        scale: 2,
         useCORS: true,
-        backgroundColor: null // Transparent background
-    }).then(function(canvas) {
-        // Restore elements
-        downloadButton.style.display = 'flex';
-        coloredFrameElement.style.padding = originalPadding;
-        
-        // Convert canvas to image data
-        const image = canvas.toDataURL("image/png");
-        
-        // Create a temporary link and trigger download
-        const link = document.createElement('a');
-        link.download = `DigdarshanAstro_${name.replace(/\s/g, '_')}_Card.png`;
-        link.href = image;
+        backgroundColor: null
+    }).then(canvas => {
+        downloadButton.style.display = "flex";
+        const link = document.createElement("a");
+        link.download = `DigdarshanAstro_${name.replace(/\s/g, "_")}_Card.png`;
+        link.href = canvas.toDataURL("image/png");
         link.click();
-    }).catch(error => {
-        console.error('Download failed:', error);
-        alert('Failed to download card image.');
-        downloadButton.style.display = 'flex';
-        coloredFrameElement.style.padding = originalPadding;
     });
 };
-
 </script>
+
 </body>
 </html>
-
