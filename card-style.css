@@ -1,8 +1,7 @@
 /* ============================================================
-   ULTRA PRO PREMIUM CARD DESIGN (Digdarshan Astro)
+   Digdarshan Astro – ULTRA PREMIUM CARD WITH PNG BORDER
    ============================================================ */
 
-/* Base Reset */
 * {
   margin: 0;
   padding: 0;
@@ -11,60 +10,45 @@
 
 html, body {
   font-family: 'Inter', sans-serif;
-  background: #ede9f5;
+  background: #f5f3fa;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
 }
 
-/* ===================== CARD WRAPPER ===================== */
+/* CARD WRAPPER */
 #card {
   width: 95%;
-  max-width: 440px;
-  background: transparent;
+  max-width: 420px;
   position: relative;
-  overflow: visible;
+  padding: 20px;
 }
 
-/* ===================== OUTER PREMIUM BORDER ===================== */
-.colored-frame {
-  padding: 0;
-  border-radius: 16px;
-  background: linear-gradient(
-      135deg,
-      rgba(255,255,255,0.85),
-      rgba(245,245,255,0.35) 40%,
-      rgba(255,255,255,0.95)
-  );
-  position: relative;
-
-  /* Luxury Double Border Effect */
-  border: 6px solid var(--theme-primary);
-  box-shadow:
-      0 0 0 4px rgba(255,255,255,0.5),
-      0 8px 25px rgba(0,0,0,0.25),
-      inset 0 0 15px rgba(255,255,255,0.45);
+/* PNG BORDER FRAME */
+.border-frame {
+  background: url("border.png") no-repeat center center;
+  background-size: 100% 100%;
+  padding: 22px;
 }
 
-/* ===================== INNER CONTENT ===================== */
-.card-content {
+/* INNER CARD */
+.card-inner {
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 14px;
+  padding-bottom: 20px;
   overflow: hidden;
-  box-shadow: inset 0 0 40px rgba(0,0,0,0.05);
-  display: flex;
-  flex-direction: column;
+  box-shadow: 0 0 25px rgba(0,0,0,0.08);
 }
 
-/* ===================== IMAGE SECTION ===================== */
+/* IMAGE SECTION */
 .top-section {
   height: 240px;
-  background: radial-gradient(circle at top, #fafafa, #e6e6e6);
+  background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 14px;
+  padding: 12px;
 }
 
 .top-section img {
@@ -73,117 +57,92 @@ html, body {
   object-fit: contain;
 }
 
-/* ===================== TEXT SECTION ===================== */
-.bottom-section {
-  padding: 24px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Premium Header */
+/* HEADER */
 .header-text {
   font-family: 'Playfair Display', serif;
   font-size: 32px;
-  line-height: 1.1;
   font-weight: 900;
-  margin-bottom: 10px;
-  color: var(--theme-primary);
+  text-align: center;
+  margin-top: 16px;
+  color: var(--primary);
 }
 
 .header-text span {
   display: block;
   font-size: 20px;
   margin-top: 6px;
-  color: var(--theme-secondary);
+  color: var(--secondary);
 }
 
-/* Main Message */
-.main-message {
-  font-size: 15px;
-  color: #555;
-  line-height: 1.55;
-  margin-top: 6px;
-  margin-bottom: 16px;
-}
-
-/* ===================== OFFER HIGHLIGHT BOX ===================== */
-.offer-highlight {
-  background: var(--theme-highlight);
-  border-radius: 12px;
-  border: 2px solid var(--theme-secondary);
-  padding: 14px 18px;
-  margin-bottom: 20px;
-
-  box-shadow:
-      0 4px 10px rgba(0,0,0,0.08),
-      inset 0 0 8px rgba(255,255,255,0.7);
-}
-
-.offer-highlight strong {
-  font-size: 15px;
-  display: block;
-  margin-bottom: 4px;
-  color: var(--theme-secondary);
-}
-
-.offer-services {
-  font-size: 13px;
-  color: #555;
-  line-height: 1.45;
-}
-
-/* ===================== FOOTER ===================== */
-.footer-section {
-  border-top: 1px solid #ddd;
-  padding-top: 6px;
-  margin-top: 10px;
+/* GREETING TEXT */
+.greeting {
   text-align: center;
+  padding: 10px 22px;
+  color: #444;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* OFFER BOX */
+.offer-box {
+  margin: 18px auto;
+  width: 88%;
+  background: var(--offer-bg);
+  border: 2px solid var(--secondary);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+
+.offer-box strong {
+  color: var(--secondary);
+  font-size: 15px;
+}
+
+.offer-details {
+  font-size: 13px;
+  color: #333;
+  margin-top: 4px;
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 13px;
   line-height: 1.35;
-  color: #555;
 }
 
-.footer-line {
-  display: block;
-  font-size: 12px;
-  margin-bottom: 3px;
-}
-
-.company-name {
-  display: block;
+.footer .brand {
   font-family: 'Playfair Display', serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 900;
-  margin: 4px 0;
-  color: var(--theme-primary);
+  color: var(--primary);
 }
 
 .call-number {
-  display: block;
-  margin-top: 4px;
-  font-size: 13px;
+  color: var(--primary);
   font-weight: 900;
-  color: var(--theme-primary);
+  margin-top: 6px;
+  display: block;
 }
 
-/* ===================== DOWNLOAD BUTTON ===================== */
+/* DOWNLOAD BUTTON */
 #downloadButton {
   position: absolute;
-  top: -20px;
-  right: -20px;
+  top: -18px;
+  right: -18px;
   width: 48px;
   height: 48px;
-  background: var(--theme-primary);
-  color: white;
   border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-
   font-size: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-  z-index: 10;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
 }
 
 #downloadButton:hover {
@@ -191,16 +150,9 @@ html, body {
   transition: 0.2s;
 }
 
-/* Hide WhatsApp Button */
-#whatsappButton { display: none !important; }
-
-/* ===================== RESPONSIVE ===================== */
-@media (max-width: 500px) {
-  .header-text {
-    font-size: 28px;
-  }
-  .top-section {
-    height: 200px;
-  }
+/* MOBILE */
+@media(max-width: 500px){
+  .header-text { font-size: 28px; }
+  .top-section { height: 200px; }
 }
 
