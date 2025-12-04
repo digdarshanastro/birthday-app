@@ -145,6 +145,7 @@ if (currentTheme) {
     offerDetailsElement.textContent = details;
     
     // Apply styling via JS (Color Combination)
+    coloredFrameElement.style.setProperty('--theme-border', borderColor);
     coloredFrameElement.style.borderColor = borderColor;
     callNumberElement.style.color = borderColor; // Call number gets theme color
     offerHighlightElement.style.borderColor = borderColor;
