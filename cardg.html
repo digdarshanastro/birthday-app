@@ -1,340 +1,280 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Digdarshan — Card PNG Generator (Fixed)</title>
-
-<!-- IMPORTANT: working html2canvas (no integrity attribute) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Digdarshan Astro — Card PNG Generator</title>
 
 <style>
-  :root{ --w:1080px; --h:1350px; --card-radius:28px; --shadow:0 18px 60px rgba(2,6,20,0.6); --gold:#d4af37; }
-  body{background:#071021;color:#fff;font-family:Inter,Arial,sans-serif;padding:20px;display:flex;justify-content:center}
-  .wrap{width:1200px;display:flex;gap:18px}
-  .panel{width:360px;background:linear-gradient(180deg,#08101a,#07101a);padding:16px;border-radius:12px;box-shadow:var(--shadow)}
-  .preview{flex:1;background:linear-gradient(180deg,#071018,#041018);padding:16px;border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center}
-  h3{margin:0 0 8px 0;color:#ffd6e8}
-  label{display:block;font-size:13px;color:#cbd5e1;margin-top:10px}
-  input,select{width:100%;padding:10px;border-radius:8px;border:none;background:rgba(255,255,255,0.03);color:#fff}
-  .thumbs{display:flex;gap:8px;margin-top:10px}
-  .thumb{width:64px;height:84px;border-radius:8px;overflow:hidden;border:2px solid transparent;cursor:pointer}
-  .thumb.selected{border-color:#22d3ee;transform:translateY(-4px)}
-  .thumb img{width:100%;height:100%;object-fit:cover}
-  button{padding:10px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:800}
-  .btn-primary{background:linear-gradient(90deg,#ff6ea6,#ff9d6d);color:#fff}
-  .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}
-  .card-canvas{width:360px;height:450px;border-radius:12px;background:#000;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(255,255,255,0.02)}
-  .note{font-size:13px;color:#bcd;opacity:0.85;margin-top:8px}
-  /* hidden export area (exact pixel size) */
-  #exportArea{position:fixed;left:-9999px;top:-9999px;width:1080px;height:1350px;visibility:hidden}
-  .card{width:1080px;height:1350px;border-radius:28px;overflow:hidden;font-family: 'Playfair Display', serif;position:relative}
-  /* Template snippets (simplified, uses your images) */
-  .tmpl-b1{background:linear-gradient(180deg,#0b1020,#071018);color:#fff}
-  .tmpl-b1 .big{font-size:100px;color:var(--gold);text-align:center;padding-top:120px}
-  .tmpl-b1 .name{font-size:56px;text-align:center;margin-top:18px}
-  .tmpl-b1 .msg{font-size:22px;text-align:center;margin:40px 160px;line-height:1.3;color:rgba(255,255,255,0.9)}
+body{
+  margin:0;
+  background:#001220;
+  font-family: "Poppins", sans-serif;
+  color:white;
+}
+.container{
+  display:flex;
+  padding:20px;
+  gap:20px;
+}
+.left{
+  width:35%;
+}
+.right{
+  width:65%;
+  background:#0a0f18;
+  padding:20px;
+  border-radius:20px;
+}
 
-  .tmpl-b2{background:linear-gradient(135deg,#ffe6f0,#ffd6e8);color:#1b1320}
-  .tmpl-b2 .big{font-size:88px;text-align:center;padding-top:100px}
-  .tmpl-b2 .name{font-size:48px;text-align:center;margin-top:12px}
-  .tmpl-b2 .msg{font-size:20px;text-align:center;margin:32px 120px;color:#2b1326}
+h2{margin:0 0 10px;}
+.thumb-grid{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:10px;
+}
+.thumb-grid img{
+  width:100%;
+  height:80px;
+  object-fit:cover;
+  border-radius:8px;
+  cursor:pointer;
+  border:3px solid transparent;
+}
+.thumb-grid img.active{
+  border:3px solid #22d3ee;
+}
 
-  .tmpl-a2{background:linear-gradient(180deg,#070506,#0b0b0b);color:#fff}
-  .tmpl-a2 .big{font-size:88px;color:var(--gold);text-align:center;padding-top:120px}
-  .tmpl-a2 .name{font-size:46px;text-align:center;margin-top:16px}
-  .tmpl-a2 .msg{font-size:20px;text-align:center;margin:36px 140px;color:rgba(255,255,255,0.9)}
+input{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  margin:8px 0;
+}
 
-  .tmpl-a3{background:linear-gradient(180deg,#fff9f2,#fff6ea);color:#1b1210}
-  .tmpl-a3 .big{font-size:80px;color:#b86d3a;text-align:center;padding-top:100px}
-  .tmpl-a3 .name{font-size:46px;text-align:center;margin-top:14px}
-  .tmpl-a3 .msg{font-size:20px;text-align:center;margin:32px 140px;color:#3a2a20}
+button{
+  background:#ff6f91;
+  border:none;
+  padding:12px 20px;
+  color:white;
+  border-radius:10px;
+  margin:10px 6px 0 0;
+  cursor:pointer;
+  font-size:15px;
+}
+
+#preview-area{
+  width:100%;
+  height:1350px;
+  background:black;
+  border-radius:20px;
+  margin-top:10px;
+  position:relative;
+  overflow:hidden;
+}
+
+#card-canvas{
+  width:1080px;
+  height:1350px;
+  transform:scale(0.6);
+  transform-origin:top left;
+  position:absolute;
+  top:0; left:0;
+  background:black;
+  color:white;
+  padding:40px;
+  font-family:"Poppins", sans-serif;
+}
+
+.title{
+  text-align:center;
+  font-size:70px;
+  margin-top:20px;
+  color:gold;
+}
+
+.name{
+  text-align:center;
+  font-size:40px;
+  margin-top:20px;
+}
+
+.message{
+  text-align:center;
+  margin:20px auto;
+  width:80%;
+  font-size:18px;
+}
+
+.footer{
+  position:absolute;
+  bottom:30px;
+  left:50px;
+  font-size:14px;
+  opacity:0.7;
+}
+.overlay-img{
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  pointer-events:none;
+  object-fit:cover;
+  opacity:0.22;
+}
 </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
+
 <body>
 
-<div class="wrap">
-  <div class="panel">
-    <h3>Digdarshan Astro</h3>
-    <div class="muted">Card PNG Generator — Social-ready 1080×1350</div>
+<div class="container">
 
-    <label>Choose Design</label>
-    <div class="thumbs" id="thumbs">
-      <div class="thumb selected" data-id="b1"><img src="gold-swirls.png" alt="b1"></div>
-      <div class="thumb" data-id="b2"><img src="floral-pattern.png" alt="b2"></div>
-      <div class="thumb" data-id="a2"><img src="ornamental.png" alt="a2"></div>
-      <div class="thumb" data-id="a3"><img src="heart-bg.png" alt="a3"></div>
-    </div>
+<!-- LEFT PANEL -->
+<div class="left">
+  <h2>Digdarshan Astro</h2>
+  <h4>Choose Design</h4>
 
-    <label>Name (for card)</label>
-    <input id="nameInput" placeholder="e.g. Anita Roy">
-
-    <label>Age (optional)</label>
-    <input id="ageInput" type="number" placeholder="e.g. 32">
-
-    <div style="display:flex;gap:8px;margin-top:12px">
-      <button id="renderBtn" class="btn-primary">Render PNG</button>
-      <button id="downloadBtn" class="btn-ghost" disabled>Download PNG</button>
-    </div>
-
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button id="shareBtn" class="btn-ghost" disabled>Share (mobile)</button>
-      <button id="openCardBtn" class="btn-ghost">Open Card Page</button>
-    </div>
-
-    <div class="note">Tip: Best experience on Chrome mobile (Share API attaches image + text). On desktop use Download then send.</div>
+  <div class="thumb-grid">
+    <img src="gold-swirls-1.png" data-overlay="gold-swirls-1.png" />
+    <img src="gold-swirls-2.png" data-overlay="gold-swirls-2.png" />
+    <img src="floral-pattern-1.png" data-overlay="floral-pattern-1.png" />
+    <img src="floral-pattern-2.png" data-overlay="floral-pattern-2.png" />
+    <img src="ornamental-1.png" data-overlay="ornamental-1.png" />
+    <img src="ornamental-2.png" data-overlay="ornamental-2.png" />
+    <img src="heart-bg-1.png" data-overlay="heart-bg-1.png" />
+    <img src="heart-bg-2.png" data-overlay="heart-bg-2.png" />
   </div>
 
-  <div class="preview">
-    <div style="color:#cfe8ff;margin-bottom:8px">Live Preview (fits screen) — final PNG size: 1080×1350</div>
-    <div id="previewFrame" class="card-canvas" aria-hidden="true">Preview</div>
+  <label>Name (for card)</label>
+  <input id="cardName" placeholder="e.g. Dear Jayeeta" />
 
-    <div style="display:flex;gap:8px;margin-top:12px">
-      <button id="previewDownloadBtn" class="btn-primary" disabled>Download High-Res PNG</button>
-      <button id="previewShareBtn" class="btn-ghost" disabled>Share (mobile)</button>
+  <label>Age (optional)</label>
+  <input id="cardAge" placeholder="e.g. 32" />
+
+  <button onclick="renderPNG()">Render PNG</button>
+  <button onclick="downloadPNG()">Download PNG</button>
+  <button onclick="shareMobile()">Share (mobile)</button>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right">
+  <h3>Live Preview — final size: 1080×1350</h3>
+
+  <div id="preview-area">
+    <div id="card-canvas">
+
+      <img id="overlay" class="overlay-img" />
+
+      <div class="title" id="titleText">HAPPY BIRTHDAY</div>
+      <div class="name" id="nameText"></div>
+
+      <div class="message" id="messageText">
+        May the stars bring you immense joy and success this year.
+        Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.
+      </div>
+
+      <div class="footer">
+        Digdarshan Astro<br>
+        47F Raja Rammohan Roy Road, Kolkata-8<br>
+        Call: 8697190840 / 9830637766
+      </div>
+
     </div>
   </div>
 </div>
 
-<!-- Hidden export area: exact sized templates -->
-<div id="exportArea">
-  <!-- Birthday 1 (uses gold-swirls.png as decoration) -->
-  <div id="tmpl-b1" class="card tmpl-b1" style="display:none">
-    <img src="gold-swirls.png" style="position:absolute;right:40px;top:40px;opacity:0.14;width:520px;" alt="">
-    <div class="big">HAPPY BIRTHDAY</div>
-    <div class="name" id="b1-name">Dear Name</div>
-    <div class="msg" id="b1-msg">May the stars bring you immense
-joy and success this year. Start
-your new personal year with
-cosmic guidance from
-Jyotish Devagya Amitsree.</div>
-    <div style="position:absolute;left:40px;bottom:28px;color:rgba(255,255,255,0.85)"><strong>Digdarshan Astro</strong><div style="font-size:14px;margin-top:4px">47F Raja Rammohan Roy Road, Kolkata-8.<br>Call : 8697190840 / 9830637766</div></div>
-  </div>
-
-  <!-- Birthday 2 (floral pattern) -->
-  <div id="tmpl-b2" class="card tmpl-b2" style="display:none">
-    <img src="floral-pattern.png" style="position:absolute;left:20px;top:20px;opacity:0.16;width:520px;" alt="">
-    <div class="big">HAPPY BIRTHDAY</div>
-    <div class="name" id="b2-name">Dear Name</div>
-    <div class="msg" id="b2-msg">May the stars bring you immense
-joy and success this year. Start
-your new personal year with
-cosmic guidance from
-Jyotish Devagya Amitsree.</div>
-    <div style="position:absolute;left:40px;bottom:28px;color:#6b184e"><strong>Digdarshan Astro</strong><div style="font-size:14px;margin-top:4px">47F Raja Rammohan Roy Road, Kolkata-8.<br>Call : 8697190840 / 9830637766</div></div>
-  </div>
-
-  <!-- Anniversary 2 (ornamental) -->
-  <div id="tmpl-a2" class="card tmpl-a2" style="display:none">
-    <img src="ornamental.png" style="position:absolute;left:20px;bottom:140px;opacity:0.12;width:700px;" alt="">
-    <div class="big">HAPPY ANNIVERSARY</div>
-    <div class="name" id="a2-name">Dear Couple</div>
-    <div class="msg" id="a2-msg">Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree on this special day.</div>
-    <div style="position:absolute;left:40px;bottom:28px;color:rgba(255,255,255,0.9)"><strong>Digdarshan Astro</strong><div style="font-size:14px;margin-top:4px">47F Raja Rammohan Roy Road, Kolkata-8.<br>Call : 8697190840 / 9830637766</div></div>
-  </div>
-
-  <!-- Anniversary 3 (heart pattern) -->
-  <div id="tmpl-a3" class="card tmpl-a3" style="display:none">
-    <img src="heart-bg.png" style="position:absolute;right:20px;top:140px;opacity:0.10;width:600px;" alt="">
-    <div class="big">HAPPY ANNIVERSARY</div>
-    <div class="name" id="a3-name">Dear Couple</div>
-    <div class="msg" id="a3-msg">Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree on this special day.</div>
-    <div style="position:absolute;left:40px;bottom:28px;color:#3a2a20"><strong>Digdarshan Astro</strong><div style="font-size:14px;margin-top:4px">47F Raja Rammohan Roy Road, Kolkata-8.<br>Call : 8697190840 / 9830637766</div></div>
-  </div>
 </div>
 
 <script>
-/* ----------------------
-   Helper & Initialization
-   ---------------------- */
-function $qs(s,root=document){return root.querySelector(s)}
-function $qsa(s,root=document){return Array.from(root.querySelectorAll(s))}
+let selectedOverlay = null;
 
-const thumbs = $qsa('.thumb')
-const previewFrame = $qs('#previewFrame')
-const exportArea = $qs('#exportArea')
-let selected = 'b1'
-let lastBlob = null
+// Clicking thumbnails
+document.querySelectorAll('.thumb-grid img').forEach(img=>{
+img.onclick = ()=>{
 
-// prefill from url
-const urlp = new URLSearchParams(window.location.search)
-$qs('#nameInput').value = urlp.get('name') ? decodeURIComponent(urlp.get('name')) : ''
-$qs('#ageInput').value = urlp.get('age') || ''
+  document.querySelectorAll('.thumb-grid img').forEach(i=>i.classList.remove("active"));
+  img.classList.add("active");
 
-// thumb click
-thumbs.forEach(t=>{
-  t.addEventListener('click', ()=>{
-    thumbs.forEach(x=>x.classList.remove('selected'))
-    t.classList.add('selected')
-    selected = t.dataset.id
-    renderPreview()
-  })
-})
+  selectedOverlay = img.dataset.overlay;
+  document.getElementById("overlay").src = selectedOverlay;
 
-// Render a scaled preview (not full-res)
-function renderPreview(){
-  previewFrame.innerHTML = ''
-  const tmpl = $qs('#tmpl-' + selected)
-  const clone = tmpl.cloneNode(true)
-  clone.style.display = 'block'
-  // populate texts
-  const name = $qs('#nameInput').value.trim() || (selected.startsWith('a')? 'Dear Couple' : 'Dear Name')
-  const age = $qs('#ageInput').value.trim()
-  $qsa('[id$="-name"]', clone).forEach(el=> el.textContent = name + (age ? (' ' + (selected.startsWith('a')? age + ' Years' : age + 'th')) : ''))
-  // scale down to preview size (1080->360 -> scale 0.333)
-  clone.style.transform = 'scale(0.3333)'
-  clone.style.transformOrigin = 'top left'
-  previewFrame.appendChild(clone)
-}
-renderPreview()
-$qs('#nameInput').addEventListener('input', renderPreview)
-$qs('#ageInput').addEventListener('input', renderPreview)
+  // AUTO TITLE / MESSAGE SWITCHING
+  const title = document.getElementById("titleText");
+  const message = document.getElementById("messageText");
 
-/* -------------------------
-   Render export (full-res)
-   ------------------------- */
-async function renderAndExport(){
-  // hide all templates, then enable active
-  $qsa('#exportArea .card').forEach(c=> c.style.display = 'none')
-  const active = $qs('#tmpl-' + selected)
-  if(!active) throw new Error('Template not found: ' + selected)
-  // set texts
-  const name = $qs('#nameInput').value.trim() || (selected.startsWith('a')? 'Dear Couple' : 'Dear Name')
-  const age = $qs('#ageInput').value.trim()
-  $qsa('[id$="-name"]', active).forEach(el=> el.textContent = name + (age ? (' ' + (selected.startsWith('a')? age + ' Years' : age + 'th')) : ''))
-  // show
-  active.style.display = 'block'
-
-  // ensure images loaded
-  await Promise.all(Array.from(active.querySelectorAll('img')).map(img => {
-    return new Promise(res => {
-      if(!img.src) return res()
-      if(img.complete) return res()
-      img.onload = img.onerror = res
-      // small timeout fallback
-      setTimeout(res, 3000)
-    })
-  }))
-
-  // Use html2canvas to render (scale=1 to match pixel size of exportArea element)
-  try{
-    const canvas = await html2canvas(active, { scale:1, useCORS:true, backgroundColor:null, logging:false })
-    return new Promise((resolve) => {
-      canvas.toBlob(blob => {
-        lastBlob = blob
-        resolve({ blob, url: URL.createObjectURL(blob) })
-      }, 'image/png', 1)
-    })
-  } catch(err) {
-    console.error('html2canvas render error:', err)
-    throw err
-  } finally {
-    // hide active after render to avoid showing hidden area
-    active.style.display = 'none'
+  if(
+    selectedOverlay.includes("gold-swirls") ||
+    selectedOverlay.includes("floral-pattern")
+  ){
+      // BIRTHDAY
+      title.innerText = "HAPPY BIRTHDAY";
+      message.innerText =
+        "May the stars bring you immense joy and success this year.\n" +
+        "Start your new personal year with cosmic guidance from\n" +
+        "Jyotish Devagya Amitsree.";
+  }
+  else if(
+    selectedOverlay.includes("ornamental") ||
+    selectedOverlay.includes("heart-bg")
+  ){
+      // ANNIVERSARY
+      title.innerText = "HAPPY ANNIVERSARY";
+      message.innerText =
+        "Wishing you endless happiness and continued success\n" +
+        "in your journey together. Receive cosmic blessings from\n" +
+        "Jyotish Devagya Amitsree on this special day.";
   }
 }
 
-/* -------------------------
-   Buttons & sharing logic
-   ------------------------- */
-$qs('#renderBtn').addEventListener('click', async ()=>{
-  try{
-    $qs('#renderBtn').disabled = true
-    $qs('#renderBtn').textContent = 'Rendering...'
-    const { blob, url } = await renderAndExport()
-    // show preview image
-    previewFrame.innerHTML = ''
-    const img = new Image()
-    img.src = url
-    img.style.width = '100%'; img.style.height = '100%'; img.style.objectFit = 'cover'
-    previewFrame.appendChild(img)
-    // enable buttons
-    $qs('#downloadBtn').disabled = false
-    $qs('#previewDownloadBtn').disabled = false
-    $qs('#shareBtn').disabled = false
-    $qs('#previewShareBtn').disabled = false
-    // download handlers
-    $qs('#downloadBtn').onclick = ()=> downloadBlob(blob, makeFileName())
-    $qs('#previewDownloadBtn').onclick = ()=> downloadBlob(blob, makeFileName())
-    $qs('#previewShareBtn').onclick = ()=> shareImage(blob)
-    console.log('Render completed; blob size:', blob.size)
-  } catch(e){
-    alert('Render failed — see console for details.')
-    console.error('Render failed:', e)
-  } finally {
-    $qs('#renderBtn').disabled = false
-    $qs('#renderBtn').textContent = 'Render PNG'
+// Update LIVE text
+document.getElementById("cardName").addEventListener("input", ()=>{
+  document.getElementById("nameText").innerText = 
+    document.getElementById("cardName").value;
+});
+
+// Render PNG on screen
+function renderPNG(){
+  if(!selectedOverlay){
+    alert("Please select a design");
+    return;
   }
-})
-
-function makeFileName(){
-  const nm = ($qs('#nameInput').value.trim() || 'card').replace(/\s+/g,'_')
-  return `Digdarshan_${selected}_${nm}.png`
 }
 
-function downloadBlob(blob, filename){
-  const a = document.createElement('a')
-  const url = URL.createObjectURL(blob)
-  a.href = url
-  a.download = filename
-  document.body.appendChild(a)
-  a.click()
-  setTimeout(()=>{ URL.revokeObjectURL(url); a.remove() }, 4000)
+// Download PNG
+function downloadPNG(){
+  html2canvas(document.getElementById("card-canvas"), {
+    scale:3,
+    allowTaint:true
+  }).then(canvas=>{
+    const link=document.createElement("a");
+    link.download="Card.png";
+    link.href=canvas.toDataURL("image/png");
+    link.click();
+  });
 }
 
-async function shareImage(blob){
-  const caption = [
-    '*Digdarshan Astro*,',
-    '47F Raja Rammohan Roy Road, Kolkata-8.',
-    '*Call : 8697190840 / 9830637766*',
-    '',
-    selected.startsWith('b') ? `*Happy Birthday "${$qs('#nameInput').value || 'Name'}"*` : `*Happy Anniversary "${$qs('#nameInput').value || 'Name'}"*`,
-    '',
-    selected.startsWith('b') ? `May the stars bring you immense\njoy and success this year. Start\nyour new personal year with\ncosmic guidance from\nJyotish Devagya Amitsree.` :
-    `Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree.`,
-    '',
-    '*Get Special Offer just for you*.',
-    '*Visit our site*: https://digdarshanastro.mydurable.com/',
-    '',
-    '*Whatsapp Us for exciting offers*: https://wa.me/+919697190840'
-  ].join('\n')
+// Mobile Share
+async function shareMobile(){
+  html2canvas(document.getElementById("card-canvas"), {scale:3})
+  .then(async canvas=>{
+    const blob = await (await fetch(canvas.toDataURL())).blob();
+    const file = new File([blob], "Card.png", {type:"image/png"});
 
-  // Web Share API (mobile)
-  try{
-    const file = new File([blob], makeFileName(), { type: blob.type })
-    if(navigator.canShare && navigator.canShare({ files: [file] })){
-      await navigator.share({ files: [file], text: caption })
-      return
+    if(navigator.share){
+      navigator.share({
+        title:"Digdarshan Astro Card",
+        text:"Generated by Digdarshan Astro",
+        files:[file]
+      });
+    } else {
+      alert("Use mobile browser for sharing.");
     }
-  }catch(err){
-    console.warn('Share API error:', err)
-  }
-
-  // Fallback: open wa.me with text + link to card page
-  const baseCard = window.location.origin + window.location.pathname.replace('card-image-generator.html','card.html')
-  const nameParam = encodeURIComponent($qs('#nameInput').value.trim() || '')
-  const ageParam = encodeURIComponent($qs('#ageInput').value.trim() || '')
-  const cardType = selected
-  const cardLink = `${baseCard}?type=${selected.startsWith('b')? 'birthday' : 'anniversary'}&cardType=${ cardType === 'b1' ? 'elegant' : cardType === 'b2' ? 'floral' : cardType === 'a2' ? 'cake' : 'heart'}&name=${nameParam}${ageParam?('&age='+ageParam):''}`
-  const waText = encodeURIComponent(caption + '\n\n' + cardLink)
-  window.open(`https://wa.me/?text=${waText}`, '_blank')
+  });
 }
-
-// shareBtn wrapper
-$qs('#shareBtn').addEventListener('click', ()=>{
-  if(!lastBlob){ alert('Please Render PNG first (click Render PNG)'); return }
-  shareImage(lastBlob)
-})
-
-// open card page (legacy)
-$qs('#openCardBtn').addEventListener('click', ()=>{
-  const baseCard = window.location.origin + window.location.pathname.replace('card-image-generator.html','card.html')
-  const nameParam = encodeURIComponent($qs('#nameInput').value.trim() || '')
-  const ageParam = encodeURIComponent($qs('#ageInput').value.trim() || '')
-  const cardType = selected
-  const cardLink = `${baseCard}?type=${selected.startsWith('b')? 'birthday' : 'anniversary'}&cardType=${ cardType === 'b1' ? 'elegant' : cardType === 'b2' ? 'floral' : cardType === 'a2' ? 'cake' : 'heart'}&name=${nameParam}${ageParam?('&age='+ageParam):''}`
-  window.open(cardLink, '_blank')
-})
 </script>
 
 </body>
