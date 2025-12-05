@@ -39,12 +39,11 @@ body{
 
 /* BORDER FRAME */
 .border-frame{
-  background:url("border.png") no-repeat center center;
-  background-size:100% 100%;
-  
-  padding:12px;        /* আগে ছিল 22px */
-  padding-top:40px;    /* উপরের border দেখা যাবে */
-  padding-bottom:34px; /* নিচে সামান্য বেশি space */
+  background: url("border.png") no-repeat center center;
+  background-size: 100% 100%;
+  padding: 28px 22px;       /* Top/Bottom = 28px, Left/Right = 22px */
+  display: flex;
+  justify-content: center;
 }
 
 /* INNER CARD */
