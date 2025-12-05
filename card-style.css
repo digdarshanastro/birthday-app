@@ -41,7 +41,10 @@ body{
 .border-frame{
   background:url("border.png") no-repeat center center;
   background-size:100% 100%;
-  padding:22px;
+  
+  padding:12px;        /* আগে ছিল 22px */
+  padding-top:40px;    /* উপরের border দেখা যাবে */
+  padding-bottom:34px; /* নিচে সামান্য বেশি space */
 }
 
 /* INNER CARD */
