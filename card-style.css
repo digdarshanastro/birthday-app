@@ -56,11 +56,14 @@ body{
 
 /* IMAGE */
 .top-section img{
-  width:100%;
-  height:auto;
-  display:block;
-  object-fit:contain;
+  width: 100%;
+  height: auto;
+  max-height: 360px;      /* আগে 600+ px হয়ে যাচ্ছিল */
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
 }
+
 
 /* HEADER */
 .header-text{
