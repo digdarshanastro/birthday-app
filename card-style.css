@@ -1,138 +1,126 @@
-/* ============================================================
-   ULTRA PREMIUM ASTRO CARD (Final Stable Version)
-   ============================================================ */
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: #f5f3fa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+body{
+  background:#f5f3fa;
+  font-family:'Inter', sans-serif;
+  display:flex;
+  justify-content:center;
+  padding:20px 0;
 }
 
-/* ================= BORDER FRAME ================= */
-.border-frame {
-  background: url('border.png') no-repeat center center;
-  background-size: 100% 100%;
-  padding: 22px;
-  width: 95%;
-  max-width: 440px;
+#cardContainer{
+  position:relative;
+  width:95%;
+  max-width:460px;
 }
 
-/* ================= INNER CARD ================= */
-.card-inner {
-  background: #ffffff;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 0 25px rgba(0,0,0,0.12);
+/* DOWNLOAD BUTTON */
+#downloadButton{
+  position:absolute;
+  top:-18px;
+  right:-18px;
+  width:46px;
+  height:46px;
+  background:var(--primary);
+  color:#fff;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:20px;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,0,0,0.35);
+  z-index:10;
 }
 
-/* ================= TOP IMAGE FIX ================= */
-.top-section {
-  width: 100%;
-  padding: 10px 10px 0 10px;
+/* BORDER FRAME */
+.border-frame{
+  background:url("border.png") no-repeat center center;
+  background-size:100% 100%;
+  padding:22px;
 }
 
-.top-section img {
-  width: 100%;
-  height: auto;        /* FIXED: no distortion */
-  display: block;
-  object-fit: contain; /* maintain image proportion */
+/* INNER CARD */
+.card-inner{
+  background:#fff;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 0 20px rgba(0,0,0,0.15);
 }
 
-/* ================= TITLE ================= */
-.header-text {
-  font-family: 'Playfair Display', serif;
-  font-size: 32px;
-  font-weight: 900;
-  text-align: center;
-  color: var(--primary);
-  margin-top: 14px;
+/* IMAGE */
+.top-section img{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:contain;
 }
 
-.header-text span {
-  display: block;
-  font-size: 20px;
-  font-weight: 800;
-  margin-top: 6px;
-  color: var(--secondary);
+/* HEADER */
+.header-text{
+  font-family:'Playfair Display', serif;
+  text-align:center;
+  margin:18px 10px 8px;
+  color:var(--primary);
+  font-size:30px;
+  font-weight:900;
 }
 
-/* ================= MESSAGE ================= */
-.greeting {
-  font-size: 16px;
-  text-align: center;
-  color: #444;
-  line-height: 1.55;
-  margin: 14px 20px 20px;
+.header-text span{
+  color:var(--secondary);
+  font-size:22px;
 }
 
-/* ================= OFFER BOX ================= */
-.offer-box {
-  background: var(--offer-bg);
-  border-radius: 14px;
-  border: 2px solid var(--primary);
-  padding: 18px;
-  margin: 0 20px 22px;
-  text-align: center;
+/* MESSAGE */
+.greeting{
+  margin:10px 20px 20px;
+  font-size:16px;
+  text-align:center;
+  color:#444;
+  line-height:1.6;
 }
 
-.offer-box strong {
-  color: var(--primary);
-  font-size: 16px;
+/* OFFER BOX */
+.offer-box{
+  margin:0 20px 24px;
+  padding:16px;
+  border-radius:12px;
+  border:2px solid var(--primary);
+  background:var(--offer-bg);
+  text-align:center;
 }
 
-.offer-box p {
-  font-size: 14px;
-  margin-top: 6px;
-  color: #444;
+.offer-box strong{
+  font-size:17px;
+  color:var(--primary);
 }
 
-/* ================= FOOTER ================= */
-.footer {
-  padding: 16px 20px 26px;
-  text-align: center;
-  line-height: 1.5;
+.offer-box p{
+  margin-top:6px;
+  font-size:14px;
 }
 
-.footer b {
-  color: var(--primary);
-  font-size: 20px;
-  font-weight: 900;
+/* FOOTER */
+.footer{
+  text-align:center;
+  padding:20px 16px;
+  line-height:1.55;
 }
 
-.call-line {
-  margin-top: 8px;
-  font-size: 16px;
-  color: var(--primary);
-  font-weight: 900;
+.footer b{
+  color:var(--primary);
+  font-size:20px;
 }
 
-/* ================= DOWNLOAD BUTTON ================= */
-#downloadButton {
-  position: absolute;
-  top: -18px;
-  right: -18px;
-  width: 46px;
-  height: 46px;
-  background: var(--primary);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-  font-size: 20px;
+.call-line{
+  margin-top:8px;
+  display:block;
+  font-size:16px;
+  color:var(--primary);
+  font-weight:900;
 }
 
-@media(max-width:480px){
-  .header-text { font-size: 28px; }
-}
