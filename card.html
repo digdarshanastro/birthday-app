@@ -1,129 +1,145 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Digdarshan Astro Card</title>
+  <title>Wish Card</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" href="card-style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<link rel="stylesheet" href="card-style.css">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
+
 <body>
 
-<div id="cardContainer">
-    <div id="downloadButton">⬇</div>
+<div id="card">
 
-    <!-- Outer Border -->
-<body>
-  <div class="border-frame">
+  <div id="downloadButton"><i class="fas fa-download"></i></div>
+
+  <!-- BORDER WRAPPER -->
+  <div class="astro-border">
+      <span class="corner-bl"></span>
+      <span class="corner-br"></span>
+
       <div class="card-inner">
-           (image + texts)
+
+          <div class="top-section">
+            <img id="cardImage" src="">
+          </div>
+
+          <h2 class="header-text" id="headerText"></h2>
+          <div class="name-text" id="nameText"></div>
+
+          <p id="greetingText" class="greeting"></p>
+
+          <div class="offer-box">
+            <strong id="offerTitle"></strong>
+            <div id="offerDetails"></div>
+          </div>
+
+          <div class="footer">
+            <span class="line">With Best Wishes from</span>
+            <span class="brand">Digdarshan Astro</span>
+            <span class="line">47F Raja Rammohan Roy Road, Kolkata-8.</span>
+            <span class="line">Jyotish Devagya Amitsree</span>
+            <span class="contact">Call : 8697190840 / 9830637766</span>
+          </div>
+
       </div>
   </div>
-</body>
-
-            <h2 id="headerText" class="header-text"></h2>
-            <p id="greetingText" class="greeting"></p>
-
-            <div class="offer-box">
-                <strong id="offerHeader"></strong>
-                <p id="offerDetails"></p>
-            </div>
-
-            <div class="footer">
-                With Best Wishes from<br>
-                <b>Digdarshan Astro</b><br>
-                47F Raja Rammohan Roy Road, Kolkata-8.<br>
-                Jyotish Devagya Amitsree<br>
-                <span class="call-line">Call : 8697190840 / 9830637766</span>
-            </div>
-
-        </div>
-    </div>
 </div>
 
-<script>
-const qs = new URLSearchParams(window.location.search);
-const type = qs.get("type") || "birthday";
-const cardType = qs.get("cardType") || "floral";
-const name = decodeURIComponent(qs.get("name") || "Dear Client");
 
-// THEMES
+<script>
+const url = new URLSearchParams(window.location.search);
+const type = url.get("type") || "birthday";
+const cardType = url.get("cardType") || "floral";
+let name = decodeURIComponent(url.get("name") || "Dear Client");
+
+/* THEMES */
 const themes = {
-    birthday:{
-        floral:{
-            img:"birthday66.png",
-            color1:"#7B1FA2",
-            color2:"#D81B60",
-            offer:"Get a Special Discount on Your Birthday",
-            details:"Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc."
-        },
-        simple:{
-            img:"birthday77.png",
-            color1:"#6A1B9A",
-            color2:"#AD1457",
-            offer:"Special Birthday Offer",
-            details:"Gemstones / Rudraksha / Horoscope Guidance / Hoom-Hawan etc."
-        }
+  birthday: {
+    floral: {
+      img: "birthday66.png",
+      primary: "#7b19ad",
+      secondary: "#ff4081",
+      offerBg: "#fae0ff",
+      offerTitle: "Get a Special Discount on Your Birthday",
+      offerDetails: "Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc."
     },
-    anniversary:{
-        heart:{
-            img:"anniversary99.png",
-            color1:"#C00000",
-            color2:"#FF5C8D",
-            offer:"Get a Special Discount on Your Anniversary",
-            details:"Marriage Consultation / Family Problem Solutions / Vastu Tips etc."
-        },
-        cake:{
-            img:"anniversary88.png",
-            color1:"#8D6E63",
-            color2:"#D7CCC8",
-            offer:"Special Anniversary Offer",
-            details:"Marriage issues / Family issues / Remedies / Vastu"
-        }
+    simple: {
+      img: "birthday77.png",
+      primary: "#5b2cd3",
+      secondary: "#ff4f8b",
+      offerBg: "#f4e4ff",
+      offerTitle: "Special Birthday Discount Awaits You",
+      offerDetails: "Gemstones / Career Reading / Remedies / Hoom etc."
     }
+  },
+
+  anniversary: {
+    cake: {
+      img: "anniversary88.png",
+      primary: "#8b4c39",
+      secondary: "#ff4d79",
+      offerBg: "#ffe9e5",
+      offerTitle: "Get a Special Discount on Your Anniversary",
+      offerDetails: "Marriage Consultation / Family Problem Solutions / Vastu Tips etc."
+    },
+    heart: {
+      img: "anniversary99.png",
+      primary: "#c00000",
+      secondary: "#ff5890",
+      offerBg: "#ffe2e2",
+      offerTitle: "Special Anniversary Discount",
+      offerDetails: "Relationship Reading / Remedies / Family Solutions / Vastu Tips etc."
+    }
+  }
 };
 
-const theme = themes[type][cardType];
+let theme =
+  type === "birthday"
+    ? themes.birthday[cardType] || themes.birthday.floral
+    : themes.anniversary[cardType] || themes.anniversary.heart;
 
-// LOAD CONTENT
+/* APPLY THEME */
+document.documentElement.style.setProperty("--primary", theme.primary);
+document.documentElement.style.setProperty("--secondary", theme.secondary);
+document.documentElement.style.setProperty("--offer-bg", theme.offerBg);
+
 document.getElementById("cardImage").src = theme.img;
 
-document.documentElement.style.setProperty("--primary", theme.color1);
-document.documentElement.style.setProperty("--secondary", theme.color2);
-document.documentElement.style.setProperty("--offer-bg", theme.color2 + "22");
-
 document.getElementById("headerText").innerHTML =
-    (type==="birthday" ? "HAPPY BIRTHDAY<br><span>"+name+"</span>"
-                       : "HAPPY ANNIVERSARY<br><span>"+name+"</span>");
+  type === "birthday" ? "HAPPY BIRTHDAY" : "HAPPY ANNIVERSARY";
+
+document.getElementById("nameText").innerText = name;
 
 document.getElementById("greetingText").innerHTML =
-    (type==="birthday"
-    ? "May the stars bring you immense joy and success on your special day."
-    : "Wishing you endless happiness and continued success in your journey together.")
-    + " Get cosmic guidance from Jyotish Devagya Amitsree.";
+  type === "birthday"
+    ? "May the stars bring you immense joy and success on your special day. Get cosmic guidance from Jyotish Devagya Amitsree."
+    : "Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree.";
 
-document.getElementById("offerHeader").textContent = theme.offer;
-document.getElementById("offerDetails").textContent = theme.details;
+document.getElementById("offerTitle").innerText = theme.offerTitle;
+document.getElementById("offerDetails").innerText = theme.offerDetails;
 
+/* DOWNLOAD */
+document.getElementById("downloadButton").onclick = function () {
+  const btn = document.getElementById("downloadButton");
+  btn.style.display = "none";
 
-// DOWNLOAD CARD
-document.getElementById("downloadButton").onclick = () => {
-    document.getElementById("downloadButton").style.display = "none";
+  html2canvas(document.getElementById("card"), {
+    scale: 2,
+    backgroundColor: "#ffffff"
+  }).then(canvas => {
+    btn.style.display = "flex";
 
-    html2canvas(document.querySelector(".border-frame"), {
-        scale: 2,
-        useCORS: true
-    }).then(canvas => {
-        document.getElementById("downloadButton").style.display = "flex";
-
-        let a = document.createElement("a");
-        a.download = "DigdarshanAstro_"+name+"_Card.png";
-        a.href = canvas.toDataURL();
-        a.click();
-    })
+    const img = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.download = `DigdarshanAstro_${name.replace(/\s/g, "_")}.png`;
+    link.href = img;
+    link.click();
+  });
 };
 </script>
 
