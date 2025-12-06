@@ -1,109 +1,106 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Digdarshan Dashboard</title>
-<link rel="stylesheet" href="style.css">
-<style>
-/* small admin overrides to ensure layout matches add.html look */
-.container { max-width:1400px; margin:20px auto; padding:20px; border-radius:12px; }
-.header-top { text-align:center; margin-bottom:8px; position:relative; z-index:2; }
-.header-top img { width:72px; height:72px; object-fit:contain; border-radius:12px; display:inline-block; vertical-align:middle; margin-right:10px; }
-.header-title { display:inline-block; vertical-align:middle; text-align:left; }
-.header-title h1 { margin:0; font-size:22px; color:#ffd6e8; }
-.header-title .sub { font-weight:700; color:rgba(255,255,255,0.85); font-size:13px; margin-top:6px; }
-.controls { display:flex; gap:12px; justify-content:center; align-items:center; margin:8px 0 12px; flex-wrap:wrap; z-index:2; position:relative; }
-@media (max-width: 600px) {
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Digdarshan Dashboard</title>
+
+  <!-- main site stylesheet (keep your existing style.css as well) -->
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+  /* small admin overrides (only new/changed parts) */
+  .container { max-width:1400px; margin:20px auto; padding:20px; border-radius:12px; }
+  .header-top { text-align:center; margin-bottom:8px; position:relative; z-index:2; }
+  .header-top img { width:72px; height:72px; object-fit:contain; border-radius:12px; display:inline-block; vertical-align:middle; margin-right:10px; }
+  .header-title { display:inline-block; vertical-align:middle; text-align:left; }
+  .header-title h1 { margin:0; font-size:22px; color:#ffd6e8; }
+  .header-title .sub { font-weight:700; color:rgba(255,255,255,0.85); font-size:13px; margin-top:6px; }
+  .controls { display:flex; gap:12px; justify-content:center; align-items:center; margin:8px 0 12px; flex-wrap:wrap; z-index:2; position:relative; }
+
+  /* counter box with responsive break */
   #counterBox {
-    width: 100% !important;
-    text-align: center !important;
-    display: block !important;
-    margin-bottom: 6px;
-    line-height: 1.6;
-    white-space: normal !important; /* দুই লাইনে ব্রেক করার জন্য */
+    width:auto;
+    font-weight:800;
+    color:#ffe3f0;
+    background:rgba(255,255,255,0.02);
+    padding:8px 12px;
+    border-radius:8px;
+    text-align:center;
   }
-}
+  /* show as single line by default; allow break on small screens */
+  .counter-break { display:inline; } /* becomes block on small screens */
 
-    
-#searchBar{width:68%; min-width:260px}
-.table-box{overflow:auto; margin-top:12px; z-index:2; position:relative;}
-table{width:100%; border-collapse:collapse}
-th, td { padding:10px 8px; border:1px solid rgba(255,255,255,0.03); font-size:13px; white-space:nowrap; text-align:center; vertical-align:middle; }
-th { background:rgba(255,255,255,0.02); color:#ffe3f0; font-weight:800; }
+  /* search */
+  #searchBar{width:68%; min-width:260px}
 
-/* 🌟 UPDATED: Action area layout for two rows, optimized for 4 buttons */
-.actions-container {
-    display: flex;
-    flex-direction: column;
-    gap: 4px; 
-    align-items: center;
-    min-width: 250px; /* Adjusted min-width for 4 buttons */
-}
+  .table-box{overflow:auto; margin-top:12px; z-index:2; position:relative;}
+  table{width:100%; border-collapse:collapse}
+  th, td { padding:10px 8px; border:1px solid rgba(255,255,255,0.03); font-size:13px; white-space:nowrap; text-align:center; vertical-align:middle; }
+  th { background:rgba(255,255,255,0.02); color:#ffe3f0; font-weight:800; }
 
-.actions-line { 
-    display:flex; 
-    gap:4px; 
-    align-items:center; 
-    justify-content:center; 
-    flex-wrap:nowrap; 
-    width:100%; 
-}
+  /* Actions layout: two rows (portrait row + landscape row) */
+  .actions-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      min-width: 320px;
+  }
+  .actions-line {
+      display:flex;
+      gap:6px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:nowrap;
+      width:100%;
+  }
 
-.action-btn { 
-    min-width:48px !important; /* Adjusted min-width for 4 buttons to fit better */
-    height:22px; 
-    display:inline-flex; 
-    align-items:center; 
-    justify-content:center; 
-    border-radius:4px; 
-    font-weight:700; 
-    font-size:10px; 
-    text-decoration:none; 
-    color:#fff; 
-    padding:2px 4px; 
-    transition: all 0.2s;
-    line-height:1; 
-    flex-shrink: 0; 
-}
-.card-btn{background:#ff4500; border:1px solid #ff4500;}
-.whatsapp-btn{background:#25d366;color:#05260f; border:1px solid #25d366;}
-.action-btn:hover { opacity: 0.8; }
-.card-btn:hover { background: #e03c00; }
-.whatsapp-btn:hover { background: #20b056; }
+  .action-btn {
+      min-width:48px;
+      height:28px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:6px;
+      font-weight:800;
+      font-size:12px;
+      text-decoration:none;
+      color:#fff;
+      padding:6px 8px;
+      transition: all .12s;
+      line-height:1;
+      cursor:pointer;
+  }
+  .card-btn{background:#ff5a0f;border:1px solid #ff5a0f}
+  .wa-btn{background:#19c76b;border:1px solid #19c76b;color:#05260f}
+  .land-btn{background:#6f2fa8;border:1px solid #6f2fa8}
+  .action-btn:hover{opacity:.9; transform: translateY(-1px)}
 
-.action-icon {
-    width: 28px;
-    height: 28px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.2s;
-    flex-shrink: 0;
-}
-.action-icon:hover { background: rgba(255, 255, 255, 0.15); }
-.action-icon.edit { color: #ffb86b; margin-left: auto; } 
-.action-icon.del { color: #ff5b6b; margin-left: auto; } 
+  .icon-btn{width:34px;height:34px;border-radius:6px;background:rgba(255,255,255,0.06);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+  .icon-btn.edit{color:#ffb86b}
+  .icon-btn.del{color:#ff5b6b}
 
-.row-blink{animation:softBlink 1.5s infinite}
-@keyframes softBlink{0%{opacity:1}50%{opacity:0.45}100%{opacity:1}}
-@media(max-width:980px){
-  #searchBar{width:92%}
-  th,td{font-size:12px;padding:8px}
-  .actions-container{min-width:220px} /* Smaller for small screen */
-  .action-btn{min-width:40px !important;font-size:9px;padding:2px 3px;}
-}
-@media(max-width:640px){
-  th,td{font-size:11px;padding:8px;white-space:normal}
-  .actions-container{min-width:auto}
-  .actions-line{justify-content:flex-start; flex-wrap:wrap;}
-  .action-icon{margin-left:8px !important;}
-}
-</style>
+  @media (max-width:980px){
+    #searchBar{width:92%}
+    th,td{font-size:12px;padding:8px}
+    .actions-container{min-width:240px}
+  }
+
+  @media (max-width:700px){
+    .header-title { text-align:center; display:block; }
+    .header-top img { margin-bottom:8px; }
+    /* show call on new line in mobile */
+    .br-call { display:block; }
+    .counter-break { display:block; } /* birthdays then anniversaries next line */
+    .actions-line { justify-content:flex-start; flex-wrap:wrap; }
+    th,td{white-space:normal}
+  }
+  @media (min-width:701px){
+    .br-call { display:inline; }
+  }
+
+  </style>
 </head>
 <body>
 
@@ -112,23 +109,24 @@ th { background:rgba(255,255,255,0.02); color:#ffe3f0; font-weight:800; }
     <img src="Digdarshan Astro Logo.png" alt="logo">
     <div class="header-title" aria-hidden="true">
       <h1>Digdarshan Dashboard</h1>
-      <div class="sub">Jyotish Devagya Amitsree — Call: 8697190840 / 9830637766</div>
+      <!-- desktop: single line; mobile: call on new line -->
+      <div class="sub">Jyotish Devagya Amitsree <span class="br-call">— Call: 8697190840 / 9830637766</span></div>
       <div style="margin-top:6px;"><a href="https://digdarshanastro.mydurable.com/" target="_blank" style="color:#ffd2ee;text-decoration:underline;">https://digdarshanastro.mydurable.com/</a></div>
     </div>
   </div>
 
   <div class="controls">
-    <div id="counterBox" style="font-weight:800;color:#ffe3f0;background:rgba(255,255,255,0.02);padding:8px 12px;border-radius:8px;"></div>
+    <div id="counterBox"></div>
     <input id="searchBar" placeholder="Search by Name / Mobile / DOB / PIN / City / Consult Type / Remedies / Notes / Gotra...">
     <div id="upcomingAlert" class="alert-box" style="display:none;"></div>
   </div>
 
   <div class="table-box" aria-live="polite">
-    <table id="tbl" role="table" aria-label="Saved details table">
-      </table>
+    <table id="tbl" role="table" aria-label="Saved details table"></table>
   </div>
 </div>
 
+<!-- Simple edit modal (unchanged) -->
 <div id="editModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
   <div style="width:95%;max-width:820px;background:linear-gradient(180deg,#141018,#1f1724);padding:18px;border-radius:12px;box-shadow:0 10px 50px rgba(0,0,0,0.8);">
     <h3 style="color:#fff;margin:6px 0 8px;">Edit Record</h3>
@@ -159,6 +157,7 @@ th { background:rgba(255,255,255,0.02); color:#ffe3f0; font-weight:800; }
   </div>
 </div>
 
+<!-- Firebase & logic -->
 <script type="module">
 import { db } from "./firebase-config.js";
 import { collection, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -171,7 +170,7 @@ const upcomingAlert = document.getElementById('upcomingAlert');
 let rowsData = [];
 let editingId = null;
 
-// Global functions for access from HTML
+// expose for modal buttons
 window.openEdit = openEdit;
 window.closeEdit = closeEdit;
 window.saveEdit = saveEdit;
@@ -182,24 +181,17 @@ function formatDate(iso){ if(!iso) return '-'; if(/^\d{4}-\d{2}-\d{2}$/.test(iso
 function parseDMY(iso){ if(!iso) return null; if(/^\d{4}-\d{2}-\d{2}$/.test(iso)){ const [y,m,d]=iso.split('-'); return {day:+d, month:+m}; } return null; }
 function daysTo(d,m){ const now=new Date(); let ev=new Date(now.getFullYear(), m-1, d); const today=new Date(now.getFullYear(), now.getMonth(), now.getDate()); if(ev < today) ev = new Date(now.getFullYear()+1, m-1, d); return Math.ceil((ev - today)/(1000*60*60*24)); }
 function calcAge(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); const dob=new Date(+y,+m-1,+d); const t=new Date(); let age=t.getFullYear()-dob.getFullYear(); const mm=t.getMonth()-dob.getMonth(); if(mm<0 || (mm===0 && t.getDate()<dob.getDate())) age--; return age; }
-
-// Function: Calculate age difference for anniversary
 function calcAnnivAge(iso){
   if(!iso) return '';
   const [y,m,d]=iso.split('-');
   const annivDate=new Date(+y,+m-1,+d);
   const t=new Date();
   let years=t.getFullYear()-annivDate.getFullYear();
-  // Check if anniversary this year has passed
-  if(t.getMonth() < annivDate.getMonth() || (t.getMonth() === annivDate.getMonth() && t.getDate() < annivDate.getDate())) {
-      years--;
-  }
+  if(t.getMonth() < annivDate.getMonth() || (t.getMonth() === annivDate.getMonth() && t.getDate() < annivDate.getDate())) { years--; }
   return years > 0 ? years : 0;
 }
 
-
 async function loadData(){
-  // header (including Maternal Gotra)
   tbl.innerHTML = `
     <tr>
       <th style="min-width:160px;text-align:left;">Name</th>
@@ -219,7 +211,7 @@ async function loadData(){
       <th>Consult Mode</th>
       <th>Remedies</th>
       <th>Notes</th>
-      <th style="min-width:250px;">Actions</th>
+      <th style="min-width:360px;">Actions</th>
     </tr>`;
 
   try {
@@ -231,8 +223,7 @@ async function loadData(){
       x.dobF = formatDate(x.dob);
       x.annF = formatDate(x.anniv);
       x.age = calcAge(x.dob);
-      x.annivAge = calcAnnivAge(x.anniv); // Calculate anniversary age
-      // ensure both possible keys for maternal gotra (if older data used different naming)
+      x.annivAge = calcAnnivAge(x.anniv);
       x.maternal_gotra = x.maternal_gotra || x.maternalGotra || '';
       const dobP = parseDMY(x.dob);
       const anP = parseDMY(x.anniv);
@@ -240,16 +231,17 @@ async function loadData(){
       rowsData.push(x);
     });
 
-    // sort by upcoming closeness
     rowsData.sort((a,b)=> (a.next||9999)-(b.next||9999));
 
-    // counters
+    // counters by month
     const thisM = (new Date()).getMonth()+1;
     const bCount = rowsData.filter(r=> parseDMY(r.dob)?.month === thisM).length;
     const aCount = rowsData.filter(r=> parseDMY(r.anniv)?.month === thisM).length;
-    counterBox.innerText = `🎂 Birthdays this month: ${bCount}   💍 Anniversaries this month: ${aCount}`;
 
-    // upcoming tomorrow list
+    // use span with class "counter-break" which will become block on small screens
+    counterBox.innerHTML = `🎂 Birthdays this month: ${bCount} <span class="counter-break"> &nbsp; 💍 Anniversaries this month: ${aCount}</span>`;
+
+    // upcoming
     const t = new Date(); t.setDate(t.getDate()+1);
     const td=t.getDate(), tm=t.getMonth()+1;
     const up = rowsData.filter(r=>{
@@ -259,13 +251,10 @@ async function loadData(){
     if(up.length){
       upcomingAlert.style.display='block';
       upcomingAlert.innerHTML = `📣 Tomorrow: ${up.map(x=>x.name).join(', ')}`;
-    } else {
-      upcomingAlert.style.display='none';
-    }
+    } else upcomingAlert.style.display='none';
 
     render(rowsData);
 
-    // setup search
     searchBar.oninput = ()=> {
       const q = searchBar.value.trim().toLowerCase();
       if(!q) return render(rowsData);
@@ -289,31 +278,38 @@ async function loadData(){
 }
 
 function render(list){
-  // clear old rows
   tbl.querySelectorAll('tr:not(:first-child)').forEach(n=>n.remove());
-  const base = window.location.origin + window.location.pathname.replace('admin.html','card.html');
+  // base path for portrait and landscape
+  const baseOrigin = window.location.origin;
+  const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')+1);
+  const basePortrait = baseOrigin + basePath + 'card.html';
+  const baseLandscape = baseOrigin + basePath + 'card2.html';
 
-  const baseWAText = encodeURIComponent(`*DIGDARSHAN ASTRO*\nIn Partnership with Parashmoni (Gems & Jewellery).\nVisit our site for *exciting offers*: https://digdarshanastro.mydurable.com/`);
-  
+  const baseWAText = encodeURIComponent(`*DIGDARSHAN ASTRO*\nIn Partnership with Parashmoni (Gems & Jewellery).\nVisit our site for offers: https://digdarshanastro.mydurable.com/`);
+
   list.forEach(x=>{
     const enc = encodeURIComponent(x.name||'');
     const ageParam = x.age ? `&age=${x.age}` : '';
-    const annivAgeParam = x.annivAge ? `&age=${x.annivAge}` : ''; 
+    const annivAgeParam = x.annivAge ? `&age=${x.annivAge}` : '';
 
-    // Birthday Card Links (Floral & Simple)
-    const Bf = `${base}?type=birthday&cardType=floral&name=${enc}${ageParam}`;
-    const Bs = `${base}?type=birthday&cardType=simple&name=${enc}${ageParam}`;
-    
-    // Anniversary Card Links (Cake & Heart)
-    const Ac = `${base}?type=anniversary&cardType=cake&name=${enc}${annivAgeParam}`;
-    const Ah = `${base}?type=anniversary&cardType=heart&name=${enc}${annivAgeParam}`;
-    
-    // WhatsApp Links (New format: Base Text + Line Break + Card Link)
+    // portrait links (existing)
+    const Bf = `${basePortrait}?type=birthday&cardType=floral&name=${enc}${ageParam}`;
+    const Bs = `${basePortrait}?type=birthday&cardType=simple&name=${enc}${ageParam}`;
+    const Ac = `${basePortrait}?type=anniversary&cardType=cake&name=${enc}${annivAgeParam}`;
+    const Ah = `${basePortrait}?type=anniversary&cardType=heart&name=${enc}${annivAgeParam}`;
+
+    // landscape links (new)
+    const Lb = `${baseLandscape}?type=birthday&cardType=floral&name=${enc}${ageParam}`;
+    const La = `${baseLandscape}?type=anniversary&cardType=heart&name=${enc}${annivAgeParam}`;
+
+    // whatsapp share links
     const waBf = `https://wa.me/?text=${baseWAText}%0A%0A${encodeURIComponent(Bf)}`;
     const waBs = `https://wa.me/?text=${baseWAText}%0A%0A${encodeURIComponent(Bs)}`;
     const waAc = `https://wa.me/?text=${baseWAText}%0A%0A${encodeURIComponent(Ac)}`;
     const waAh = `https://wa.me/?text=${baseWAText}%0A%0A${encodeURIComponent(Ah)}`;
-    
+    const waLb = `https://wa.me/?text=${baseWAText}%0A%0A${encodeURIComponent(Lb)}`;
+    const waLa = `https://wa.me/?text=${baseWAText}%0A%0A${encodeURIComponent(La)}`;
+
     const tr = document.createElement('tr');
     if(x.next <= 1) tr.classList.add('row-blink');
 
@@ -336,23 +332,30 @@ function render(list){
       <td>${x.remedies||'-'}</td>
       <td style="max-width:220px; white-space:normal;">${(x.notes||'').substring(0,300)}</td>
       <td>
-        <div class="actions-container">
+        <div class="actions-container" aria-hidden="false">
+          <!-- TOP ROW: portrait buttons + landscape buttons + edit icon -->
           <div class="actions-line" aria-label="Card Links">
-            <a class="action-btn card-btn" href="${Bf}" target="_blank" title="Birthday - Floral (birthday66)">B-F</a>
-            <a class="action-btn card-btn" href="${Bs}" target="_blank" title="Birthday - Simple (birthday77)">B-S</a>
-            <a class="action-btn card-btn" href="${Ac}" target="_blank" title="Anniversary - Cake (anniversary88)">A-C</a>
-            <a class="action-btn card-btn" href="${Ah}" target="_blank" title="Anniversary - Heart (anniversary99)">A-H</a>
-            
-            <span class="action-icon edit" title="Edit Record" onclick="openEdit('${x._id}')">✏️</span>
+            <a class="action-btn card-btn" href="${Bf}" target="_blank" title="Birthday - Floral">B-F</a>
+            <a class="action-btn card-btn" href="${Bs}" target="_blank" title="Birthday - Simple">B-S</a>
+            <a class="action-btn card-btn" href="${Ac}" target="_blank" title="Anniversary - Cake">A-C</a>
+            <a class="action-btn card-btn" href="${Ah}" target="_blank" title="Anniversary - Heart">A-H</a>
+            <a class="action-btn land-btn" href="${Lb}" target="_blank" title="Landscape Birthday">L-B</a>
+            <a class="action-btn land-btn" href="${La}" target="_blank" title="Landscape Anniversary">L-A</a>
+
+            <span class="icon-btn edit" title="Edit record" onclick="openEdit('${x._id}')">✏️</span>
           </div>
 
+          <!-- BOTTOM ROW: whatsapp links + edit/del icons -->
           <div class="actions-line" aria-label="WhatsApp Links">
-            <a class="action-btn whatsapp-btn" href="${waBf}" target="_blank" title="WhatsApp B-F">WA B-F</a>
-            <a class="action-btn whatsapp-btn" href="${waBs}" target="_blank" title="WhatsApp B-S">WA B-S</a>
-            <a class="action-btn whatsapp-btn" href="${waAc}" target="_blank" title="WhatsApp A-C">WA A-C</a>
-            <a class="action-btn whatsapp-btn" href="${waAh}" target="_blank" title="WhatsApp A-H">WA A-H</a>
-            
-            <span class="action-icon del" title="Delete Record" onclick="deleteOne('${x._id}')">🗑️</span>
+            <a class="action-btn wa-btn" href="${waBf}" target="_blank" title="WA B-F">WA B-F</a>
+            <a class="action-btn wa-btn" href="${waBs}" target="_blank" title="WA B-S">WA B-S</a>
+            <a class="action-btn wa-btn" href="${waAc}" target="_blank" title="WA A-C">WA A-C</a>
+            <a class="action-btn wa-btn" href="${waAh}" target="_blank" title="WA A-H">WA A-H</a>
+            <a class="action-btn wa-btn" href="${waLb}" target="_blank" title="WA L-B">WA L-B</a>
+            <a class="action-btn wa-btn" href="${waLa}" target="_blank" title="WA L-A">WA L-A</a>
+
+            <span style="width:8px"></span>
+            <span class="icon-btn del" title="Delete record" onclick="deleteOne('${x._id}')">🗑️</span>
           </div>
         </div>
       </td>
@@ -361,7 +364,7 @@ function render(list){
   });
 }
 
-// deleteOne and Edit functions remain as fixed
+// delete and edit handlers
 async function deleteOne(id){
   if(!confirm('Delete this record?')) return;
   try {
@@ -374,7 +377,6 @@ async function deleteOne(id){
   }
 };
 
-// Edit modal handlers
 function openEdit(id){
   editingId = id;
   const rec = rowsData.find(r=>r._id === id);
@@ -399,10 +401,8 @@ function openEdit(id){
   document.getElementById('editModal').style.display = 'flex';
   window.scrollTo({top:0,behavior:'smooth'});
 }
-function closeEdit(){
-  document.getElementById('editModal').style.display = 'none';
-  editingId = null;
-}
+function closeEdit(){ document.getElementById('editModal').style.display = 'none'; editingId = null; }
+
 async function saveEdit(){
   if(!editingId) return;
   const m = document.getElementById('e_mobile').value.trim();
