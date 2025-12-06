@@ -1,161 +1,78 @@
-/* RESET */
-*{margin:0;padding:0;box-sizing:border-box}
+/* card-style.css - shared helpers for portrait & landscape cards */
 
-body{
-  font-family:'Inter',sans-serif;
-  background:#f5f1ff;
-  display:flex;
-  justify-content:center;
-  padding:20px 0;
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: 'Inter', sans-serif;
+  background: #f8f4ff;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
 }
 
 /* THEME VARIABLES */
-:root{
-  --primary:#9b28b8;
-  --secondary:#ff5890;
-  --offer-bg:#fde7ff;
+:root {
+  --primary: #9b28b8;   /* Default primary */
+  --secondary: #ff5890; /* Default accent */
+  --offer-bg: #fde7ff;
 }
 
-/* GOLD CORNER FOLD BORDER */
-.border-frame{
-  position:relative;
-  padding:28px;
-  width:95%;
-  max-width:430px;
-  background:#fff;
-  border-radius:26px;
-  border:4px solid #d8a842;
-  box-shadow:0 0 18px rgba(0,0,0,0.18);
+/* Common card wrapper (portrait cards use .border-frame, landscape uses inline styles) */
+.border-frame {
+  position: relative;
+  padding: 28px;
+  width: 95%;
+  max-width: 430px;
+  background: #fff;
+  border-radius: 26px;
+  border: 4px solid #d8a842; /* gold by default (portrait can override) */
+  box-shadow: 0 0 18px rgba(0,0,0,0.18);
 }
 
-/* Corner Folds */
+/* corner shapes for gold fold (if using .border-frame) */
 .border-frame::before,
 .border-frame::after,
 .corner-bl,
-.corner-br{
-  content:"";
-  position:absolute;
-  width:32px;
-  height:32px;
-  background:linear-gradient(135deg,#f5d68a,#c79328);
-  z-index:5;
+.corner-br {
+  content: "";
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #f5d68a, #c79328);
+  z-index: 5;
 }
+.border-frame::before{ top:-3px; left:-3px; border-radius:0 0 12px 0; clip-path:polygon(0 0,100% 0,0 100%); }
+.border-frame::after{ top:-3px; right:-3px; border-radius:0 0 0 12px; clip-path:polygon(0 0,100% 0,100% 100%); }
+.corner-bl{ bottom:-3px; left:-3px; border-radius:0 12px 0 0; clip-path:polygon(0 0,100% 100%,0 100%); }
+.corner-br{ bottom:-3px; right:-3px; border-radius:12px 0 0 0; clip-path:polygon(100% 0,100% 100%,0 100%); }
 
-/* TOP-LEFT */
-.border-frame::before{
-  top:-3px; left:-3px;
-  border-radius:0 0 12px 0;
-  clip-path:polygon(0 0,100% 0,0 100%);
-}
+/* portrait card internals (kept minimal here) */
+.card-inner { text-align:center; }
+.top-section img { width:100%; max-height:360px; object-fit:contain; display:block; margin:0 auto 10px auto; }
+.header-text { font-size:34px; font-family:'Playfair Display', serif; font-weight:900; color:var(--primary); margin-top:10px; }
+.name-text { font-size:22px; font-weight:900; margin:8px 0; color:var(--secondary); }
+.greeting { font-size:16px; color:#444; line-height:1.55; padding:0 14px; margin-top:6px; }
 
-/* TOP-RIGHT */
-.border-frame::after{
-  top:-3px; right:-3px;
-  border-radius:0 0 0 12px;
-  clip-path:polygon(0 0,100% 0,100% 100%);
-}
+/* offer box style */
+.offer-box { border:2px solid var(--primary); background:var(--offer-bg); border-radius:16px; padding:16px 12px; margin:22px 14px; }
+.offer-box strong { font-size:18px; color:var(--primary); }
 
-/* BOTTOM-LEFT */
-.corner-bl{
-  bottom:-3px; left:-3px;
-  border-radius:0 12px 0 0;
-  clip-path:polygon(0 0,100% 100%,0 100%);
-}
+/* footer */
+.footer { margin-top:30px; padding-bottom:20px; text-align:center;}
+.footer .line { display:block; margin-bottom:6px; color:#333; }
+.footer .brand { font-size:22px; font-family:'Playfair Display', serif; font-weight:900; color:var(--primary); }
+.footer .contact { margin-top:8px; font-size:18px; font-weight:900; color:var(--primary); }
 
-/* BOTTOM-RIGHT */
-.corner-br{
-  bottom:-3px; right:-3px;
-  border-radius:12px 0 0 0;
-  clip-path:polygon(100% 0,100% 100%,0 100%);
-}
+/* download button */
+#downloadButton { position:absolute; top:-22px; right:-22px; width:50px; height:50px; background:var(--primary); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 8px 25px rgba(0,0,0,0.25); z-index:50; font-size:22px; }
+#downloadButton:hover{ transform:scale(1.08) }
 
-/* IMAGE */
-.top-section img{
-  width:100%;
-  max-height:360px;
-  object-fit:contain;
-  display:block;
-  margin:0 auto 10px;
-}
-
-/* TEXTS */
-.header-text{
-  font-family:'Playfair Display',serif;
-  font-size:34px;
-  font-weight:900;
-  margin-top:12px;
-  color:var(--primary);
-}
-
-.name-text{
-  margin:8px 0;
-  font-size:24px;
-  font-weight:900;
-  color:var(--secondary);
-}
-
-/* MAIN MESSAGE */
-.greeting{
-  margin-top:8px;
-  padding:0 14px;
-  font-size:16px;
-  color:#444;
-  line-height:1.55;
-  text-align:center;
-}
-
-/* OFFER BOX */
-.offer-box{
-  background:var(--offer-bg);
-  border:2px solid var(--primary);
-  margin:22px 14px;
-  padding:16px 12px;
-  border-radius:18px;
-  text-align:center;
-}
-
-.offer-box strong{
-  color:var(--primary);
-  font-size:18px;
-}
-
-/* FOOTER */
-.footer{text-align:center;margin-top:25px}
-.footer .line{margin-bottom:6px;color:#444}
-.footer .brand{
-  font-size:22px;
-  font-family:'Playfair Display',serif;
-  font-weight:900;
-  color:var(--primary);
-}
-.footer .contact{
-  margin-top:8px;
-  font-size:18px;
-  font-weight:900;
-  color:var(--primary);
-}
-
-/* DOWNLOAD BUTTON */
-#downloadButton{
-  position:absolute;
-  top:-22px; right:-22px;
-  width:50px;
-  height:50px;
-  background:var(--primary);
-  border-radius:50%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  color:#fff;
-  font-size:22px;
-  cursor:pointer;
-  box-shadow:0 8px 25px rgba(0,0,0,0.25);
-  z-index:50;
-}
-
-#downloadButton:hover{transform:scale(1.08)}
-
-@media(max-width:480px){
-  .header-text{font-size:28px}
-  .name-text{font-size:20px}
+@media (max-width:480px){
+  .header-text { font-size:28px }
+  .name-text { font-size:20px }
 }
