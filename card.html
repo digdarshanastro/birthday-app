@@ -1,262 +1,177 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<title>Astro Wish Card</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Astro — Portrait Card</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<!-- shared stylesheet -->
+<link rel="stylesheet" href="card-style.css">
+
+<!-- html2canvas -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-/* RESET */
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:'Inter',sans-serif;
-  background:#f5f1ff;
-  display:flex;
-  justify-content:center;
-  padding:20px 0;
-}
-
-/* THEME VARIABLES */
-:root{
-  --primary:#9b28b8;
-  --secondary:#ff5890;
-  --offer-bg:#fde7ff;
-}
-
-/* GOLD CORNER FOLD BORDER */
-.border-frame{
-  position:relative;
-  padding:28px;
-  width:95%;
-  max-width:430px;
-  background:#fff;
-  border-radius:26px;
-  border:4px solid #d8a842;
-  box-shadow:0 0 18px rgba(0,0,0,0.18);
-}
-
-/* Corner folds */
-.border-frame::before,
-.border-frame::after,
-.corner-bl,
-.corner-br{
-  content:"";
-  position:absolute;
-  width:32px;
-  height:32px;
-  background:linear-gradient(135deg,#f5d68a,#c79328);
-  z-index:5;
-}
-
-/* top-left */
-.border-frame::before{
-  top:-3px; left:-3px;
-  border-radius:0 0 12px 0;
-  clip-path:polygon(0 0,100% 0,0 100%);
-}
-
-/* top-right */
-.border-frame::after{
-  top:-3px; right:-3px;
-  border-radius:0 0 0 12px;
-  clip-path:polygon(0 0,100% 0,100% 100%);
-}
-
-/* bottom-left */
-.corner-bl{
-  bottom:-3px; left:-3px;
-  border-radius:0 12px 0 0;
-  clip-path:polygon(0 0,100% 100%,0 100%);
-}
-
-/* bottom-right */
-.corner-br{
-  bottom:-3px; right:-3px;
-  border-radius:12px 0 0 0;
-  clip-path:polygon(100% 0,100% 100%,0 100%);
-}
-
-/* IMAGE */
-.top-section img{
-  width:100%;
-  max-height:360px;
-  object-fit:contain;
-  display:block;
-  margin:0 auto 10px;
-}
-
-/* TEXTS */
-.header-text{
-  font-family:'Playfair Display',serif;
-  font-size:34px;
-  font-weight:900;
-  margin-top:12px;
-  color:var(--primary);
-}
-
-.name-text{
-  margin:8px 0;
-  font-size:24px;
-  font-weight:900;
-  color:var(--secondary);
-}
-
-.greeting{
-  margin-top:8px;
-  padding:0 14px;
-  font-size:16px;
-  color:#444;
-  line-height:1.55;
-  text-align:center;
-}
-
-/* OFFER BOX */
-.offer-box{
-  background:var(--offer-bg);
-  border:2px solid var(--primary);
-  margin:22px 14px;
-  padding:16px 12px;
-  border-radius:18px;
-  text-align:center;
-}
-
-.offer-box strong{
-  color:var(--primary);
-  font-size:18px;
-}
-
-/* FOOTER */
-.footer{text-align:center;margin-top:25px}
-.footer .line{margin-bottom:6px;color:#444}
-.footer .brand{
-  font-size:22px;
-  font-family:'Playfair Display',serif;
-  font-weight:900;
-  color:var(--primary);
-}
-.footer .contact{
-  margin-top:8px;
-  font-size:18px;
-  font-weight:900;
-  color:var(--primary);
-}
-
-/* DOWNLOAD BUTTON */
-#downloadButton{
-  position:absolute;
-  top:-22px; right:-22px;
-  width:50px;
-  height:50px;
-  background:var(--primary);
-  border-radius:50%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  color:#fff;
-  font-size:22px;
-  cursor:pointer;
-  box-shadow:0 8px 25px rgba(0,0,0,0.25);
-  z-index:50;
-}
-
-#downloadButton:hover{
-  transform:scale(1.08);
-}
-
-@media(max-width:480px){
-  .header-text{font-size:28px}
-  .name-text{font-size:20px}
-}
+/* small override so portrait uses gold outer and accent inner (JS sets --accent) */
+.border-frame{ border:6px solid rgba(0,0,0,0.02); }
 </style>
 </head>
-
 <body>
 
-<div id="card" class="border-frame">
+<div id="card" class="border-frame" role="img" aria-label="Greeting card">
+  <div id="downloadButton" title="Save card as PNG">⬇</div>
 
-  <div id="downloadButton">⬇</div>
-  <div class="corner-bl"></div>
-  <div class="corner-br"></div>
+  <!-- gold corner pieces -->
+  <div class="corner-bl" aria-hidden="true"></div>
+  <div class="corner-br" aria-hidden="true"></div>
 
   <div class="card-inner">
-
     <div class="top-section">
-      <img id="cardImage" src="">
+      <img id="cardImage" src="" alt="card image" crossorigin="anonymous">
     </div>
 
     <h2 id="headerText" class="header-text"></h2>
-    <h3 id="nameText" class="name-text"></h3>
+    <div id="nameText" class="name-text"></div>
     <p id="greetingText" class="greeting"></p>
 
-    <div class="offer-box">
-      <strong id="offerHeader"></strong><br>
-      <span id="offerDetails"></span>
+    <div class="offer-box" id="offerBox">
+      <strong id="offerHeader"></strong>
+      <div class="offer-services" id="offerDetails"></div>
     </div>
 
-    <div class="footer">
+    <div class="footer" role="contentinfo">
       <span class="line">With Best Wishes from</span>
       <div class="brand">Digdarshan Astro</div>
-      <div class="line">47F Raja Rammohan Roy Road, Kolkata-8.<br>Jyotish Devagya Amitsree</div>
-      <div class="contact">Call : 8697190840 / 9830637766</div>
+      <div class="address">47F Raja Rammohan Roy Road, Kolkata-8.<br>Jyotish Devagya Amitsree</div>
+      <div class="call">Call : 8697190840 / 9830637766</div>
     </div>
-
   </div>
 </div>
 
 <script>
-const url = new URLSearchParams(window.location.search);
-const type = url.get("type") || "birthday";
-const cardType = url.get("cardType") || "floral";
-let name = decodeURIComponent(url.get("name") || "Dear Client");
+/* card.html JS: supports ?type=birthday|anniversary&cardType=&name=... 
+   - loads image
+   - extracts dominant color and sets CSS var --accent
+   - fills texts
+   - download via html2canvas
+*/
+
+// helpers: simple dominant color extractor (downsamples for speed)
+async function getDominantColor(img) {
+  // draw to canvas small size then average
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 40, H = 40;
+  canvas.width = W; canvas.height = H;
+  try {
+    ctx.drawImage(img, 0, 0, W, H);
+  } catch (e) {
+    return '#9b28b8';
+  }
+  const data = ctx.getImageData(0,0,W,H).data;
+  const counts = {};
+  let maxCount = 0, dominant = [155,40,184];
+  for(let i=0;i<data.length;i+=4){
+    const r = Math.round(data[i]/8)*8;
+    const g = Math.round(data[i+1]/8)*8;
+    const b = Math.round(data[i+2]/8)*8;
+    const key = r+','+g+','+b;
+    counts[key] = (counts[key]||0)+1;
+    if(counts[key]>maxCount){ maxCount = counts[key]; dominant = [r,g,b]; }
+  }
+  return `rgb(${dominant[0]},${dominant[1]},${dominant[2]})`;
+}
+
+function setAccentColor(rgb){
+  // set accent and a secondary accent (slightly lighter/darker)
+  document.documentElement.style.setProperty('--accent', rgb);
+  // compute a second accent by lightening
+  function mix(c, amount){
+    // c = "rgb(r,g,b)"
+    const m = c.match(/(\d+),\s*(\d+),\s*(\d+)/);
+    if(!m) return '#ff5890';
+    let r = Math.min(255, Math.round(+m[1] + amount));
+    let g = Math.min(255, Math.round(+m[2] + amount));
+    let b = Math.min(255, Math.round(+m[3] + amount));
+    return `rgb(${r},${g},${b})`;
+  }
+  const accent2 = mix(rgb, 40);
+  document.documentElement.style.setProperty('--accent-2', accent2);
+  // set download button background for visibility
+  const btn = document.getElementById('downloadButton');
+  if(btn) btn.style.background = rgb;
+}
+
+// read URL params, determine texts
+const params = new URLSearchParams(window.location.search);
+const type = params.get('type') || 'birthday';
+const cardType = params.get('cardType') || (type==='birthday' ? 'floral' : 'heart');
+const rawName = params.get('name') ? decodeURIComponent(params.get('name')) : 'Dear Client';
 
 const IMG = {
-  birthday:{
-    floral:"birthday66.png",
-    simple:"birthday77.png"
-  },
-  anniversary:{
-    cake:"anniversary88.png",
-    heart:"anniversary99.png"
+  birthday: { floral: 'birthday66.png', simple: 'birthday77.png' },
+  anniversary: { cake: 'anniversary88.png', heart: 'anniversary99.png' }
+};
+
+const imgFile = IMG[type] && IMG[type][cardType] ? IMG[type][cardType] : IMG.birthday.floral;
+
+const imgEl = document.getElementById('cardImage');
+imgEl.src = imgFile;
+
+// texts
+const headerEl = document.getElementById('headerText');
+const nameEl = document.getElementById('nameText');
+const greetEl = document.getElementById('greetingText');
+const offerH = document.getElementById('offerHeader');
+const offerD = document.getElementById('offerDetails');
+
+if(type==='birthday'){
+  headerEl.innerHTML = 'HAPPY BIRTHDAY';
+  greetEl.textContent = 'May the stars bring you immense joy and success on your special day. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.';
+  offerH.innerHTML = 'Get a Special Discount on Your Birthday';
+  offerD.textContent = 'Chart Reading / Career Consultation / Gemstones / Rudraksha / Hoom-Hawan etc.';
+} else {
+  headerEl.innerHTML = 'HAPPY ANNIVERSARY';
+  greetEl.textContent = 'Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree.';
+  offerH.innerHTML = 'Get a Special Discount on Your Anniversary';
+  offerD.textContent = 'Relationship Solutions / Career Consultation / Gemstones / Rudraksha / Hoom-Hawan etc.';
+}
+nameEl.textContent = rawName;
+
+// once image loads (or error), extract colour and apply
+imgEl.addEventListener('load', async ()=> {
+  try{
+    const rgb = await getDominantColor(imgEl);
+    setAccentColor(rgb);
+  }catch(e){
+    setAccentColor(getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#9b28b8');
   }
-};
+});
+imgEl.addEventListener('error', ()=> {
+  // fallback accent
+  setAccentColor(getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#9b28b8');
+});
 
-let img = IMG[type]?.[cardType] || IMG.birthday.floral;
-
-document.getElementById("cardImage").src = img;
-
-if(type==="birthday"){
-  document.getElementById("headerText").innerHTML="HAPPY BIRTHDAY";
-  document.getElementById("greetingText").innerHTML=
-    "May the stars bring you immense joy and success on your special day. Get cosmic guidance from Jyotish Devagya Amitsree.";
-  document.getElementById("offerHeader").innerHTML="Get a Special Discount on Your Birthday";
-  document.getElementById("offerDetails").innerHTML="Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc.";
-}
-else{
-  document.getElementById("headerText").innerHTML="HAPPY ANNIVERSARY";
-  document.getElementById("greetingText").innerHTML=
-    "Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree.";
-  document.getElementById("offerHeader").innerHTML="Get a Special Discount on Your Anniversary";
-  document.getElementById("offerDetails").innerHTML="Marriage Consultation / Family Problem Solutions / Vastu Tips etc.";
-}
-
-document.getElementById("nameText").innerHTML=name;
-
-/* DOWNLOAD PNG */
-document.getElementById("downloadButton").onclick = ()=>{
-  const btn = document.getElementById("downloadButton");
-  btn.style.display="none";
-
-  html2canvas(document.getElementById("card"),{scale:2}).then(canvas=>{
-    const link=document.createElement("a");
-    link.download=`DigdarshanAstro_${name.replace(/\s/g,'_')}.png`;
-    link.href=canvas.toDataURL();
+// DOWNLOAD using html2canvas
+document.getElementById('downloadButton').addEventListener('click', ()=>{
+  const btn = document.getElementById('downloadButton');
+  btn.style.display = 'none';
+  // ensure white bg for download
+  const card = document.getElementById('card');
+  html2canvas(card, { scale: 2, backgroundColor: '#ffffff', useCORS: true }).then(canvas=>{
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png');
+    link.download = `DigdarshanAstro_${rawName.replace(/\s+/g,'_')}.png`;
     link.click();
-    btn.style.display="flex";
+    btn.style.display = 'flex';
+  }).catch(err=>{
+    console.error(err);
+    alert('Download failed');
+    btn.style.display = 'flex';
   });
-};
+});
 </script>
-
 </body>
 </html>
