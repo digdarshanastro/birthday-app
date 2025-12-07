@@ -1,38 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=600, user-scalable=no">
-<title>Compact Landscape Card</title>
-<link rel="stylesheet" href="card2-style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Landscape Card</title>
+
+<style>
+body{
+    margin:0;
+    padding:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#f4f0ff;
+    font-family:"Inter",sans-serif;
+}
+
+.card-wrap{
+    width:600px;
+    height:400px;
+    background:#fff;
+    display:flex;
+    border:4px solid #5e1b8b;
+    border-radius:18px;
+    position:relative;
+    overflow:hidden;
+}
+
+/* DOUBLE BORDER EFFECT */
+.card-wrap:before, .card-wrap:after{
+    content:"";
+    position:absolute;
+    border:3px solid #b77bff;
+    border-radius:14px;
+}
+.card-wrap:before{
+    inset:6px;
+}
+.card-wrap:after{
+    inset:12px;
+}
+
+/* LEFT IMAGE */
+.left-box{
+    width:35%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:10px;
+    background:#faf4ff;
+    border-right:3px solid #e5ccff;
+}
+.left-box img{
+    width:100%;
+    height:auto;
+    object-fit:contain;
+}
+
+/* RIGHT TEXT */
+.right-box{
+    width:65%;
+    padding:16px 22px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    color:#333;
+}
+
+.title{
+    font-size:26px;
+    font-weight:900;
+    color:#5e1b8b;
+    margin-bottom:4px;
+}
+
+.name{
+    font-size:20px;
+    font-weight:800;
+    color:#ff4f7c;
+    margin-bottom:8px;
+}
+
+.msg{
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:10px;
+}
+
+.offer{
+    border:2px solid #5e1b8b;
+    background:#fce8ff;
+    padding:10px 12px;
+    border-radius:12px;
+    font-size:13px;
+    text-align:left;
+    margin-bottom:10px;
+}
+.offer strong{
+    display:block;
+    font-size:15px;
+    color:#5e1b8b;
+    margin-bottom:4px;
+}
+
+.footer{
+    font-size:12px;
+    margin-top:auto;
+}
+.brand{
+    font-size:16px;
+    font-weight:900;
+    color:#5e1b8b;
+}
+.call{
+    margin-top:4px;
+    font-weight:900;
+    color:#5e1b8b;
+}
+</style>
 </head>
 
 <body>
 
-<div class="land-card">
+<div class="card-wrap">
 
-    <!-- LEFT SIDE IMAGE -->
-    <div class="left-img">
-        <img id="cardImg" src="" alt="card image">
+    <!-- LEFT IMAGE -->
+    <div class="left-box">
+        <img id="cardImg" src="">
     </div>
 
-    <!-- RIGHT SIDE TEXT -->
-    <div class="right-text">
-        <h2 class="title" id="titleText"></h2>
-        <h3 class="name" id="nameText"></h3>
+    <!-- RIGHT CONTENT -->
+    <div class="right-box">
+        <div>
+            <div class="title" id="titleText"></div>
+            <div class="name" id="nameText"></div>
+            <div class="msg" id="msgText"></div>
 
-        <p class="msg" id="msgText"></p>
-
-        <div class="offer-box">
-            <strong id="offerTitle"></strong>
-            <p id="offerDesc"></p>
+            <div class="offer">
+                <strong id="offerTitle"></strong>
+                <span id="offerDesc"></span>
+            </div>
         </div>
 
         <div class="footer">
-            <span>With Best Wishes from</span>
-            <div class="brand">Digdarshan Astro</div>
-            <div class="addr">47F Raja Rammohan Roy Road, Kolkata-8.</div>
-            <div class="astro">Jyotish Devagya Amitsree</div>
+            With Best Wishes from<br>
+            <span class="brand">Digdarshan Astro</span><br>
+            47F Raja Rammohan Roy Road, Kolkata-8.<br>
+            Jyotish Devagya Amitsree
             <div class="call">Call : 8697190840 / 9830637766</div>
         </div>
     </div>
@@ -40,37 +155,37 @@
 </div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const type = params.get("type") || "birthday";
-const name = params.get("name") || "";
-const cardType = params.get("cardType") || "floral";
+// Collect params
+const p = new URLSearchParams(window.location.search);
+const type = p.get("type") || "birthday";
+const name = p.get("name") || "";
 
-/* TEXTS */
-document.getElementById("titleText").innerText =
-  type === "birthday" ? "HAPPY BIRTHDAY" : "HAPPY ANNIVERSARY";
-
+// Dynamic Set
 document.getElementById("nameText").innerText = name;
 
-document.getElementById("msgText").innerText =
-  type === "birthday"
-  ? "May the stars bring you immense joy and success on your special day. Get cosmic guidance from Jyotish Devagya Amitsree."
-  : "Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree.";
+// Birthday
+if(type === "birthday"){
+    document.getElementById("titleText").innerText = "HAPPY BIRTHDAY";
+    document.getElementById("msgText").innerText =
+        "May the stars bring you immense joy and success on your special day. Get cosmic guidance from Jyotish Devagya Amitsree.";
+    document.getElementById("offerTitle").innerText =
+        "Get a Special Discount on Your Birthday";
+    document.getElementById("offerDesc").innerText =
+        "Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc.";
+    document.getElementById("cardImg").src = "birthday66.png";
+}
 
-document.getElementById("offerTitle").innerText =
-  type === "birthday"
-  ? "Get a Special Discount on Your Birthday"
-  : "Get a Special Discount on Your Anniversary";
-
-document.getElementById("offerDesc").innerText =
-  type === "birthday"
-  ? "Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc."
-  : "Marriage Consultation / Family Problem Solutions / Vastu Tips etc.";
-
-/* IMAGE LOADER */
-let imgFile =
-  type === "birthday" ? "birthday66.png" : "anniversary99.png";
-
-document.getElementById("cardImg").src = imgFile;
+// Anniversary
+else{
+    document.getElementById("titleText").innerText = "HAPPY ANNIVERSARY";
+    document.getElementById("msgText").innerText =
+        "Wishing you endless happiness and continued success in your journey together. Get cosmic blessings.";
+    document.getElementById("offerTitle").innerText =
+        "Get a Special Discount on Your Anniversary";
+    document.getElementById("offerDesc").innerText =
+        "Marriage Consultation / Family Problem Solutions / Vastu Tips etc.";
+    document.getElementById("cardImg").src = "anniversary99.png";
+}
 </script>
 
 </body>
