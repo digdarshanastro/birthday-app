@@ -1,196 +1,158 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Landscape Auto-Color Card</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Astro — Landscape Card</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="card-style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-/* Container */
-.land-card {
-    width: 100%;
-    max-width: 900px;
-    margin: auto;
-    display: flex;
-    background: #ffffff;
-    border-radius: 18px;
-    overflow: hidden;
-    border: 6px solid var(--auto-border, #999);
-}
-
-/* LEFT IMAGE */
-.left-img {
-    width: 32%;
-    background: #fafafa;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 12px;
-}
-.left-img img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    border-radius: 12px;
-}
-
-/* RIGHT SECTION */
-.right-text {
-    width: 68%;
-    padding: 28px 32px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-/* Heading */
-.title {
-    font-size: 36px;
-    font-family: "Playfair Display", serif;
-    font-weight: 900;
-    margin: 0;
-    color: var(--auto-border);
-}
-
-/* Name beside heading */
-.title span {
-    font-size: 28px;
-    font-weight: 700;
-}
-
-/* Message */
-.msg {
-    font-size: 16px;
-    line-height: 1.52;
-    margin: 18px 0;
-    color: #444;
-}
-
-/* Offer box */
-.offer-box {
-    background: #fff8ff;
-    padding: 18px 16px;
-    border-radius: 12px;
-    border: 2px solid var(--auto-border);
-    margin: 14px 0;
-}
-.offer-box strong {
-    font-size: 18px;
-    color: var(--auto-border);
-}
-
-/* Footer */
-.footer {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #333;
-}
-.footer .brand {
-    font-family: "Playfair Display", serif;
-    font-size: 20px;
-    font-weight: 900;
-    margin-top: 10px;
-    color: var(--auto-border);
-}
-.footer .call {
-    font-weight: 700;
-    margin-top: 4px;
-    color: var(--auto-border);
-}
-
-/* Responsive */
-@media(max-width:650px){
-    .land-card { flex-direction: column; }
-    .left-img { width: 100%; }
-    .right-text { width: 100%; padding: 22px; }
-    .title { font-size: 30px; }
-}
+/* small landscape-specific override: make border thin and auto-color from --accent */
+.landscape-wrap{ border:4px solid var(--accent); border-radius:12px; }
+#downloadButton{ right:10px; top:10px; position:absolute; z-index:80; }
 </style>
-
 </head>
 <body>
 
-<div class="land-card" id="cardBox">
+<!-- wrapper -->
+<div id="landCardWrapper" style="position:relative; width:100%; display:flex; justify-content:center; padding:20px 0;">
+  <div id="downloadButton" title="Save Landscape">⬇</div>
 
-    <div class="left-img">
-        <img id="cardImg" src="" alt="">
+  <div id="landCard" class="landscape-wrap compact" role="img" aria-label="Landscape greeting">
+    <div class="land-left">
+      <img id="landImg" src="" alt="left image" crossorigin="anonymous">
     </div>
-
-    <div class="right-text">
-        <div>
-            <h1 class="title" id="titleText">
-                Happy Birthday! <span id="nameText"></span>
-            </h1>
-
-            <p class="msg" id="msgText">
-                Wishing you joy, success and cosmic blessings on your special day.
-            </p>
-
-            <div class="offer-box">
-                <strong id="offerTitle">Special Discount on Your Birthday</strong>
-                <p id="offerDesc">Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc.</p>
-            </div>
+    <div class="land-right">
+      <div>
+        <div class="land-title" id="landTitle">HAPPY BIRTHDAY <span class="land-name" id="landName"></span></div>
+        <p class="land-msg" id="landMsg"></p>
+        <div class="land-offer">
+          <strong id="landOfferTitle"></strong>
+          <div id="landOfferDesc"></div>
         </div>
-
-        <div class="footer">
-            <span>With Best Wishes from</span>
-            <div class="brand">Digdarshan Astro</div>
-            <div>Jyotish Devagya Amitsree</div>
-            <div class="call">Call : 8697190840 / 9830637766</div>
-        </div>
+      </div>
+      <div class="land-footer" id="landFooter">
+        <div>With Best Wishes from</div>
+        <div style="font-weight:800; font-family:'Playfair Display', serif; color:var(--accent);">Digdarshan Astro</div>
+        <div>47F Raja Rammohan Roy Road, Kolkata-8. — Jyotish Devagya Amitsree</div>
+        <div style="font-weight:900; color:var(--accent);">Call : 8697190840 / 9830637766</div>
+      </div>
     </div>
-
+  </div>
 </div>
 
 <script>
-/* Read URL Params */
-const p = new URLSearchParams(location.search);
-const type = p.get("type") || "birthday";
-const name = p.get("name") || "";
-document.getElementById("nameText").textContent = name;
+/* card2.html: accepts same params as portrait: ?type=&cardType=&name=
+   behaviour:
+   - load image (birthday vs anniversary)
+   - extract dominant color, set --accent
+   - populate texts
+   - download using html2canvas
+*/
 
-/* Image Select */
-const img = document.getElementById("cardImg");
-img.src = (type === "anniversary") ? "anniversary99.png" : "birthday66.png";
-
-/* Auto border color detection */
-img.onload = function () {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = img.width;
-    canvas.height = img.height;
-    ctx.drawImage(img, 0, 0);
-
-    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-    let r=0, g=0, b=0;
-
-    for (let i=0; i < data.length; i+=4) {
-        r += data[i];
-        g += data[i+1];
-        b += data[i+2];
+function getDominantColorFromImage(img){
+  return new Promise((resolve)=>{
+    try{
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const W = 36, H = 36;
+      canvas.width = W; canvas.height = H;
+      ctx.drawImage(img,0,0,W,H);
+      const d = ctx.getImageData(0,0,W,H).data;
+      const counts = {};
+      let max = 0, dom=[155,40,184];
+      for(let i=0;i<d.length;i+=4){
+        const r = Math.round(d[i]/16)*16;
+        const g = Math.round(d[i+1]/16)*16;
+        const b = Math.round(d[i+2]/16)*16;
+        const k = `${r},${g},${b}`;
+        counts[k] = (counts[k]||0)+1;
+        if(counts[k]>max){ max = counts[k]; dom=[r,g,b]; }
+      }
+      resolve(`rgb(${dom[0]},${dom[1]},${dom[2]})`);
+    }catch(e){
+      resolve(getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#9b28b8');
     }
+  });
+}
 
-    const count = data.length/4;
-    r = Math.round(r/count);
-    g = Math.round(g/count);
-    b = Math.round(b/count);
+// params
+const p = new URLSearchParams(window.location.search);
+const type = p.get('type') || 'birthday';
+const cardType = p.get('cardType') || (type==='birthday' ? 'floral' : 'heart');
+const rawName = p.get('name') ? decodeURIComponent(p.get('name')) : 'Dear Client';
 
-    const domColor = `rgb(${r},${g},${b})`;
-    document.documentElement.style.setProperty("--auto-border", domColor);
+const IMG = {
+  birthday: { floral:'birthday66.png', simple:'birthday77.png' },
+  anniversary: { cake:'anniversary88.png', heart:'anniversary99.png' }
 };
 
-/* Override text for Anniversary */
-if (type === "anniversary") {
-    document.getElementById("titleText").innerHTML =
-        `Happy Anniversary! <span>${name}</span>`;
-    document.getElementById("offerTitle").textContent =
-        "Special Discount on Your Anniversary";
-    document.getElementById("offerDesc").textContent =
-        "Marriage Consultation / Family Solutions / Vastu Tips etc.";
-}
-</script>
+const chosen = IMG[type] && IMG[type][cardType] ? IMG[type][cardType] : IMG.birthday.floral;
 
+const landImg = document.getElementById('landImg');
+landImg.src = chosen;
+
+const landTitle = document.getElementById('landTitle');
+const landName = document.getElementById('landName');
+const landMsg  = document.getElementById('landMsg');
+const landOfferTitle = document.getElementById('landOfferTitle');
+const landOfferDesc  = document.getElementById('landOfferDesc');
+
+if(type==='birthday'){
+  landTitle.textContent = 'HAPPY BIRTHDAY';
+  landName.textContent = rawName ? ` ${rawName}` : '';
+  landMsg.textContent = 'May the stars bring you immense joy and success on your special day. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.';
+  landOfferTitle.textContent = 'Get a Special Discount on Your Birthday';
+  landOfferDesc.textContent = 'Chart Reading / Career Consultation / Gemstones / Rudraksha / Hoom-Hawan etc.';
+} else {
+  landTitle.textContent = 'HAPPY ANNIVERSARY';
+  landName.textContent = rawName ? ` ${rawName}` : '';
+  landMsg.textContent = 'Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree.';
+  landOfferTitle.textContent = 'Get a Special Discount on Your Anniversary';
+  landOfferDesc.textContent = 'Relationship Solutions / Career Consultation / Gemstones / Rudraksha / Hoom-Hawan etc.';
+}
+
+// once image loads set accent
+landImg.addEventListener('load', async ()=>{
+  const rgb = await getDominantColorFromImage(landImg);
+  document.documentElement.style.setProperty('--accent', rgb);
+  // subtle accent2
+  const arr = rgb.match(/(\d+),\s*(\d+),\s*(\d+)/);
+  if(arr){
+    const a2 = `rgb(${Math.min(255,+arr[1]+30)},${Math.min(255,+arr[2]+30)},${Math.min(255,+arr[3]+30)})`;
+    document.documentElement.style.setProperty('--accent-2', a2);
+  }
+  // set download button bg
+  const btn = document.getElementById('downloadButton');
+  if(btn) btn.style.background = rgb;
+});
+
+// fallback
+landImg.addEventListener('error', ()=>{
+  const btn = document.getElementById('downloadButton');
+  if(btn) btn.style.background = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+});
+
+// download
+document.getElementById('downloadButton').addEventListener('click', ()=>{
+  const btn = document.getElementById('downloadButton');
+  btn.style.display = 'none';
+  const card = document.getElementById('landCard');
+  html2canvas(card, { scale: 2, backgroundColor: '#ffffff', useCORS: true }).then(canvas=>{
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png');
+    link.download = `DigdarshanAstro_Landscape_${rawName.replace(/\s+/g,'_')}.png`;
+    link.click();
+    btn.style.display = 'flex';
+  }).catch(e=>{
+    console.error(e);
+    alert('Download failed');
+    btn.style.display = 'flex';
+  });
+});
+</script>
 </body>
 </html>
