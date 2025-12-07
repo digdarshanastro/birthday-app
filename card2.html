@@ -2,40 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=600, user-scalable=no">
 <title>Compact Landscape Card</title>
 <link rel="stylesheet" href="card2-style.css">
-
-<!-- Auto-theme based on image -->
-<script>
-const params = new URLSearchParams(window.location.search);
-const type = params.get("type") || "birthday";
-const cardType = params.get("cardType") || "floral";
-
-let primary = "#8A1FA8";
-let secondary = "#E84393";
-
-if (type === "anniversary") {
-    primary = "#B20000";
-    secondary = "#FF6F6F";
-}
-
-document.documentElement.style.setProperty('--primary', primary);
-document.documentElement.style.setProperty('--secondary', secondary);
-</script>
 </head>
 
 <body>
 
-<div id="card" class="land-card">
+<div class="land-card">
 
+    <!-- LEFT SIDE IMAGE -->
     <div class="left-img">
-        <img id="cardImg" src="" alt="">
+        <img id="cardImg" src="" alt="card image">
     </div>
 
+    <!-- RIGHT SIDE TEXT -->
     <div class="right-text">
         <h2 class="title" id="titleText"></h2>
         <h3 class="name" id="nameText"></h3>
+
         <p class="msg" id="msgText"></p>
 
         <div class="offer-box">
@@ -55,32 +40,35 @@ document.documentElement.style.setProperty('--secondary', secondary);
 </div>
 
 <script>
+const params = new URLSearchParams(window.location.search);
+const type = params.get("type") || "birthday";
 const name = params.get("name") || "";
-const typeText = type === "birthday" ? "HAPPY BIRTHDAY" : "HAPPY ANNIVERSARY";
+const cardType = params.get("cardType") || "floral";
 
-document.getElementById("titleText").innerText = typeText;
+/* TEXTS */
+document.getElementById("titleText").innerText =
+  type === "birthday" ? "HAPPY BIRTHDAY" : "HAPPY ANNIVERSARY";
+
 document.getElementById("nameText").innerText = name;
 
 document.getElementById("msgText").innerText =
- type === "birthday"
- ? "May the stars bring you immense joy and success on your special day. Get cosmic guidance from Jyotish Devagya Amitsree."
- : "Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree.";
+  type === "birthday"
+  ? "May the stars bring you immense joy and success on your special day. Get cosmic guidance from Jyotish Devagya Amitsree."
+  : "Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree.";
 
 document.getElementById("offerTitle").innerText =
- type === "birthday"
- ? "Get a Special Discount on Your Birthday"
- : "Get a Special Discount on Your Anniversary";
+  type === "birthday"
+  ? "Get a Special Discount on Your Birthday"
+  : "Get a Special Discount on Your Anniversary";
 
 document.getElementById("offerDesc").innerText =
- type === "birthday"
- ? "Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc."
- : "Marriage Consultation / Family Problem Solutions / Vastu Tips etc.";
+  type === "birthday"
+  ? "Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc."
+  : "Marriage Consultation / Family Problem Solutions / Vastu Tips etc.";
 
-// IMAGE loader
-let imgFile = "birthday66.png";
-if (type === "anniversary") imgFile = "anniversary99.png";
-if (cardType === "cake") imgFile = "birthday77.png"; 
-if (cardType === "heart") imgFile = "anniversary88.png";
+/* IMAGE LOADER */
+let imgFile =
+  type === "birthday" ? "birthday66.png" : "anniversary99.png";
 
 document.getElementById("cardImg").src = imgFile;
 </script>
