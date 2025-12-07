@@ -1,177 +1,149 @@
+<!-- card.html - Portrait greeting card -->
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Astro — Portrait Card</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-
-<!-- shared stylesheet -->
-<link rel="stylesheet" href="card-style.css">
-
-<!-- html2canvas -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-<style>
-/* small override so portrait uses gold outer and accent inner (JS sets --accent) */
-.border-frame{ border:6px solid rgba(0,0,0,0.02); }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Greeting Card</title>
+  <link rel="stylesheet" href="card-style.css">
+  <style>
+    /* small per-page tweaks */
+    body{background:linear-gradient(180deg,#fbfbfd,#f2f1f6);}
+  </style>
 </head>
 <body>
+  <div class="page-wrap">
+    <div class="card-outer" role="article" aria-label="Greeting card">
+      <div class="card-frame" id="cardFrame">
+        <!-- gold corner folds -->
+        <div class="corner-fold tl" aria-hidden="true"></div>
+        <div class="corner-fold tr" aria-hidden="true"></div>
+        <div class="corner-fold bl" aria-hidden="true"></div>
+        <div class="corner-fold br" aria-hidden="true"></div>
 
-<div id="card" class="border-frame" role="img" aria-label="Greeting card">
-  <div id="downloadButton" title="Save card as PNG">⬇</div>
+        <div class="portrait" id="cardRoot">
+          <div class="top-img" id="imgWrap">
+            <img id="cardImg" alt="card image" src="">
+          </div>
 
-  <!-- gold corner pieces -->
-  <div class="corner-bl" aria-hidden="true"></div>
-  <div class="corner-br" aria-hidden="true"></div>
+          <h1 class="huge" id="titleText">HAPPY BIRTHDAY</h1>
+          <div class="name" id="nameText">Recipient Name</div>
 
-  <div class="card-inner">
-    <div class="top-section">
-      <img id="cardImage" src="" alt="card image" crossorigin="anonymous">
-    </div>
+          <p class="msg" id="msgText">
+            May the stars bring you immense joy and success on your special day. Get cosmic guidance from Jyotish Devagya Amitsree.
+          </p>
 
-    <h2 id="headerText" class="header-text"></h2>
-    <div id="nameText" class="name-text"></div>
-    <p id="greetingText" class="greeting"></p>
+          <div class="offer" id="offerBox">
+            <strong id="offerTitle">Get a Special Discount on Your Birthday</strong>
+            <p id="offerDesc">Chart Reading / Career Consultation / Gemstones / Rudraksha / Hoom-Hawan etc.</p>
+          </div>
 
-    <div class="offer-box" id="offerBox">
-      <strong id="offerHeader"></strong>
-      <div class="offer-services" id="offerDetails"></div>
-    </div>
-
-    <div class="footer" role="contentinfo">
-      <span class="line">With Best Wishes from</span>
-      <div class="brand">Digdarshan Astro</div>
-      <div class="address">47F Raja Rammohan Roy Road, Kolkata-8.<br>Jyotish Devagya Amitsree</div>
-      <div class="call">Call : 8697190840 / 9830637766</div>
+          <div class="footer" id="footer">
+            <div class="small">With Best Wishes from</div>
+            <div class="brand" id="brand">Digdarshan Astro</div>
+            <div class="small">47F Raja Rammohan Roy Road, Kolkata-8.<br>Jyotish Devagya Amitsree</div>
+            <div class="small" style="margin-top:8px;font-weight:700">Call : 8697190840 / 9830637766</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
 <script>
-/* card.html JS: supports ?type=birthday|anniversary&cardType=&name=... 
-   - loads image
-   - extracts dominant color and sets CSS var --accent
-   - fills texts
-   - download via html2canvas
+/*
+ card.html script:
+ - reads URL params: ?type=birthday|anniversary & name=... & cardType=...
+ - loads appropriate default image
+ - extracts dominant color (average) from image on load and sets CSS variables:
+    --accent (primary), --accent-2 (secondary/gold blend)
 */
 
-// helpers: simple dominant color extractor (downsamples for speed)
-async function getDominantColor(img) {
-  // draw to canvas small size then average
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
-  const W = 40, H = 40;
-  canvas.width = W; canvas.height = H;
-  try {
-    ctx.drawImage(img, 0, 0, W, H);
-  } catch (e) {
-    return '#9b28b8';
+(function(){
+  const params = new URLSearchParams(location.search);
+  const type = (params.get('type') || 'birthday').toLowerCase();
+  const name = params.get('name') || '';
+  const cardType = params.get('cardType') || 'floral';
+
+  // default images - change names if you use different files
+  const imageMap = {
+    birthday: 'birthday66.png',
+    anniversary: 'anniversary99.png'
+  };
+  const imgSrc = imageMap[type] || imageMap.birthday;
+  const imgEl = document.getElementById('cardImg');
+
+  // set texts depending on type
+  const titleText = document.getElementById('titleText');
+  const nameText = document.getElementById('nameText');
+  const msgText = document.getElementById('msgText');
+  const offerTitle = document.getElementById('offerTitle');
+  const offerDesc = document.getElementById('offerDesc');
+
+  if(type === 'anniversary'){
+    titleText.textContent = 'HAPPY ANNIVERSARY';
+    offerTitle.textContent = 'Get a Special Discount on Your Anniversary';
+    offerDesc.textContent = 'Marriage Consultation / Family Problem Solutions / Vastu Tips etc.';
+    msgText.textContent = 'Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree.';
   }
-  const data = ctx.getImageData(0,0,W,H).data;
-  const counts = {};
-  let maxCount = 0, dominant = [155,40,184];
-  for(let i=0;i<data.length;i+=4){
-    const r = Math.round(data[i]/8)*8;
-    const g = Math.round(data[i+1]/8)*8;
-    const b = Math.round(data[i+2]/8)*8;
-    const key = r+','+g+','+b;
-    counts[key] = (counts[key]||0)+1;
-    if(counts[key]>maxCount){ maxCount = counts[key]; dominant = [r,g,b]; }
+
+  if(name){ nameText.textContent = decodeURIComponent(name); }
+
+  imgEl.src = imgSrc;
+  imgEl.alt = (type === 'anniversary' ? 'Anniversary Image' : 'Birthday Image');
+
+  // dominant color extraction - simple average sample
+  function applyColors(rgb){
+    // rgb = {r,g,b}
+    const accent = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
+    document.documentElement.style.setProperty('--accent', accent);
+
+    // secondary: mix with gold-ish
+    const gold = {r:199,g:147,b:40};
+    const mix = (a,b,ratio)=> Math.round(a*(1-ratio)+b*ratio);
+    const sr = mix(rgb.r, gold.r, .35);
+    const sg = mix(rgb.g, gold.g, .35);
+    const sb = mix(rgb.b, gold.b, .35);
+    document.documentElement.style.setProperty('--accent-2', `rgb(${sr},${sg},${sb})`);
   }
-  return `rgb(${dominant[0]},${dominant[1]},${dominant[2]})`;
-}
 
-function setAccentColor(rgb){
-  // set accent and a secondary accent (slightly lighter/darker)
-  document.documentElement.style.setProperty('--accent', rgb);
-  // compute a second accent by lightening
-  function mix(c, amount){
-    // c = "rgb(r,g,b)"
-    const m = c.match(/(\d+),\s*(\d+),\s*(\d+)/);
-    if(!m) return '#ff5890';
-    let r = Math.min(255, Math.round(+m[1] + amount));
-    let g = Math.min(255, Math.round(+m[2] + amount));
-    let b = Math.min(255, Math.round(+m[3] + amount));
-    return `rgb(${r},${g},${b})`;
+  function extractAverageColor(img){
+    try {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const w = Math.min(200, img.naturalWidth);
+      const h = Math.min(200, img.naturalHeight);
+      canvas.width = w;
+      canvas.height = h;
+      ctx.drawImage(img, 0, 0, w, h);
+      const data = ctx.getImageData(0,0,w,h).data;
+      let r=0,g=0,b=0,count=0;
+      // sample every 4th pixel for speed
+      for(let i=0;i<data.length;i+=16){
+        const a = data[i+3];
+        if(a<125) continue;
+        r += data[i]; g += data[i+1]; b += data[i+2]; count++;
+      }
+      if(count===0) return {r:111,g:47,b:168};
+      return {r:Math.round(r/count), g:Math.round(g/count), b:Math.round(b/count)};
+    } catch(e){
+      return {r:111,g:47,b:168};
+    }
   }
-  const accent2 = mix(rgb, 40);
-  document.documentElement.style.setProperty('--accent-2', accent2);
-  // set download button background for visibility
-  const btn = document.getElementById('downloadButton');
-  if(btn) btn.style.background = rgb;
-}
 
-// read URL params, determine texts
-const params = new URLSearchParams(window.location.search);
-const type = params.get('type') || 'birthday';
-const cardType = params.get('cardType') || (type==='birthday' ? 'floral' : 'heart');
-const rawName = params.get('name') ? decodeURIComponent(params.get('name')) : 'Dear Client';
-
-const IMG = {
-  birthday: { floral: 'birthday66.png', simple: 'birthday77.png' },
-  anniversary: { cake: 'anniversary88.png', heart: 'anniversary99.png' }
-};
-
-const imgFile = IMG[type] && IMG[type][cardType] ? IMG[type][cardType] : IMG.birthday.floral;
-
-const imgEl = document.getElementById('cardImage');
-imgEl.src = imgFile;
-
-// texts
-const headerEl = document.getElementById('headerText');
-const nameEl = document.getElementById('nameText');
-const greetEl = document.getElementById('greetingText');
-const offerH = document.getElementById('offerHeader');
-const offerD = document.getElementById('offerDetails');
-
-if(type==='birthday'){
-  headerEl.innerHTML = 'HAPPY BIRTHDAY';
-  greetEl.textContent = 'May the stars bring you immense joy and success on your special day. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.';
-  offerH.innerHTML = 'Get a Special Discount on Your Birthday';
-  offerD.textContent = 'Chart Reading / Career Consultation / Gemstones / Rudraksha / Hoom-Hawan etc.';
-} else {
-  headerEl.innerHTML = 'HAPPY ANNIVERSARY';
-  greetEl.textContent = 'Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree.';
-  offerH.innerHTML = 'Get a Special Discount on Your Anniversary';
-  offerD.textContent = 'Relationship Solutions / Career Consultation / Gemstones / Rudraksha / Hoom-Hawan etc.';
-}
-nameEl.textContent = rawName;
-
-// once image loads (or error), extract colour and apply
-imgEl.addEventListener('load', async ()=> {
-  try{
-    const rgb = await getDominantColor(imgEl);
-    setAccentColor(rgb);
-  }catch(e){
-    setAccentColor(getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#9b28b8');
-  }
-});
-imgEl.addEventListener('error', ()=> {
-  // fallback accent
-  setAccentColor(getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#9b28b8');
-});
-
-// DOWNLOAD using html2canvas
-document.getElementById('downloadButton').addEventListener('click', ()=>{
-  const btn = document.getElementById('downloadButton');
-  btn.style.display = 'none';
-  // ensure white bg for download
-  const card = document.getElementById('card');
-  html2canvas(card, { scale: 2, backgroundColor: '#ffffff', useCORS: true }).then(canvas=>{
-    const link = document.createElement('a');
-    link.href = canvas.toDataURL('image/png');
-    link.download = `DigdarshanAstro_${rawName.replace(/\s+/g,'_')}.png`;
-    link.click();
-    btn.style.display = 'flex';
-  }).catch(err=>{
-    console.error(err);
-    alert('Download failed');
-    btn.style.display = 'flex';
+  imgEl.addEventListener('load', function(){
+    // small delay for CORS-safe images; if cross-origin without CORS it may throw; try/catch handled
+    setTimeout(()=>{
+      const avg = extractAverageColor(imgEl);
+      applyColors(avg);
+    }, 40);
   });
-});
+
+  imgEl.addEventListener('error', function(){
+    // fallback: hide image area
+    document.getElementById('imgWrap').style.display = 'none';
+  });
+
+})();
 </script>
 </body>
 </html>
