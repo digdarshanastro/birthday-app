@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Digdarshan Dashboard</title>
 
-  <!-- main site stylesheet (keep your existing style.css as well) -->
+  <!-- keep your existing main stylesheet -->
   <link rel="stylesheet" href="style.css">
 
   <style>
@@ -56,35 +56,55 @@
       width:100%;
   }
 
+  /* unified button style and sizing */
   .action-btn {
-      min-width:48px;
-      height:28px;
+      min-width:52px;
+      height:34px;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      border-radius:6px;
+      border-radius:8px;
       font-weight:800;
-      font-size:12px;
+      font-size:13px;
       text-decoration:none;
       color:#fff;
-      padding:6px 8px;
+      padding:6px 10px;
       transition: all .12s;
       line-height:1;
       cursor:pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
   }
-  .card-btn{background:#ff5a0f;border:1px solid #ff5a0f}
-  .wa-btn{background:#19c76b;border:1px solid #19c76b;color:#05260f}
-  .land-btn{background:#6f2fa8;border:1px solid #6f2fa8}
-  .action-btn:hover{opacity:.9; transform: translateY(-1px)}
+  .card-btn{
+      background:#ff5a0f;
+      border:1px solid #ff5a0f;
+  }
+  /* make land buttons same as card buttons (requested) */
+  .land-btn{
+      background:#ff5a0f;
+      border:1px solid #ff5a0f;
+  }
+  .wa-btn{
+      background:#19c76b;
+      border:1px solid #179e55;
+      color:#05260f;
+  }
 
-  .icon-btn{width:34px;height:34px;border-radius:6px;background:rgba(255,255,255,0.06);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+  .action-btn:hover{opacity:.95; transform: translateY(-2px)}
+
+  .icon-btn{
+      width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.06);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  }
   .icon-btn.edit{color:#ffb86b}
   .icon-btn.del{color:#ff5b6b}
 
+  /* ensure consistent gap & wrapping on small screens */
   @media (max-width:980px){
     #searchBar{width:92%}
     th,td{font-size:12px;padding:8px}
     .actions-container{min-width:240px}
+    .action-btn { min-width:44px; height:30px; font-size:12px; padding:6px 8px; border-radius:6px; }
+    .icon-btn{width:32px;height:32px}
   }
 
   @media (max-width:700px){
@@ -100,6 +120,8 @@
     .br-call { display:inline; }
   }
 
+  /* small visual tweak: keep action column aligned top */
+  td > .actions-container { align-items:flex-start; }
   </style>
 </head>
 <body>
@@ -238,7 +260,6 @@ async function loadData(){
     const bCount = rowsData.filter(r=> parseDMY(r.dob)?.month === thisM).length;
     const aCount = rowsData.filter(r=> parseDMY(r.anniv)?.month === thisM).length;
 
-    // use span with class "counter-break" which will become block on small screens
     counterBox.innerHTML = `🎂 Birthdays this month: ${bCount} <span class="counter-break"> &nbsp; 💍 Anniversaries this month: ${aCount}</span>`;
 
     // upcoming
