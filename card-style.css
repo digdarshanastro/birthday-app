@@ -1,200 +1,191 @@
-/* card-style.css — Shared portrait + landscape styles
-   Double gold fold corners + auto-color accent support
-*/
+/* card-style.css - shared stylesheet for card.html & card2.html */
 
 /* RESET */
-*{margin:0;padding:0;box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{
-  font-family:'Inter',sans-serif;
-  background:#f6f3ff;
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  padding:20px;
-}
 
-/* CSS variables: --accent set by JS after image analysis */
+/* Theme vars - will be updated by JS using image dominant color */
 :root{
-  --gold-1: #f5d68a;
-  --gold-2: #c79328;
-  --accent: #9b28b8; /* fallback */
-  --accent-2: #ff5890;
-  --card-bg: #ffffff;
+  --bg: #fff;
+  --card-bg: #fff;
+  --accent: #6f2fa8;      /* purple fallback */
+  --accent-2:#c79328;     /* secondary accent e.g. gold fallback */
+  --text:#222;
+  --soft:#f6f5f8;
+  --radius:18px;
+  --paper-pad:26px;
 }
 
-/* COMMON: download button */
-#downloadButton{
-  position:absolute;
-  top:-20px;
-  right:-20px;
-  width:48px;
-  height:48px;
-  background:var(--accent);
-  color:#fff;
-  border-radius:50%;
+/* Page-level centering */
+.page-wrap{
+  min-height:100vh;
   display:flex;
-  justify-content:center;
   align-items:center;
-  font-size:20px;
-  box-shadow:0 8px 30px rgba(0,0,0,0.25);
-  cursor:pointer;
-  z-index:60;
+  justify-content:center;
+  padding:28px;
+  background: linear-gradient(180deg, #faf8fb 0%, #f2f0f6 100%);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
-#downloadButton:active{transform:scale(.98)}
-/* hide on capture via inline script */
 
-/* ------------------ PORTRAIT (.border-frame) ------------------ */
-.border-frame{
+/* Card outer wrapper (gives double border and corner folds) */
+.card-outer{
+  width:100%;
+  max-width:720px;
+  background:var(--bg);
+  padding:14px;
+  border-radius:22px;
+  display:block;
+  box-shadow:0 12px 36px rgba(19,19,24,0.08);
+}
+
+/* double border container */
+.card-frame{
   position:relative;
-  width:95%;
-  max-width:440px;
-  padding:24px;
-  border-radius:20px;
-  background:var(--card-bg);
-  /* outer gold border */
-  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
-  border:6px solid transparent; /* space for double border via outline below */
-  outline: 4px solid linear-gradient(0deg, var(--gold-1), var(--gold-2));
-  /* since outline can't take gradient reliably everywhere, we emulate gold border with pseudo */
+  background: var(--card-bg);
+  border-radius:16px;
+  padding: var(--paper-pad);
+  border: 2px solid rgba(0,0,0,0.06);
 }
 
-/* emulate double border: inner border uses accent color */
-.border-frame::before{
+/* thin dynamic border (auto-color) */
+.card-frame::after{
   content:"";
+  pointer-events:none;
   position:absolute;
   inset:6px;
-  border-radius:14px;
-  pointer-events:none;
-  box-shadow: inset 0 0 0 3px var(--accent);
+  border-radius:12px;
+  border:2px solid var(--accent);
+  mix-blend-mode:normal;
+  box-shadow: 0 0 0 6px rgba(255,255,255,0.8) inset;
 }
 
-/* GOLD corner fold shapes */
-.border-frame::after,
-.corner-bl, .corner-br {
-  content:"";
+/* Gold corner folds - top-left/top-right/bottom-left/bottom-right */
+.corner-fold{
   position:absolute;
-  width:34px;
-  height:34px;
-  background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
-  z-index:55;
+  width:36px;height:36px;
+  z-index:6;
+  background: linear-gradient(180deg, #f7e2a8 0%, #c79328 100%);
+  border-radius:6px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
 }
-.border-frame::after{ top:-3px; right:-3px; clip-path: polygon(0 0, 100% 0, 100% 100%); border-radius:0 6px 0 0; }
-.border-frame::before { /* top-left small decorative (we'll add as second pseudo by using inner element) */ content:""; position:absolute; top:-3px; left:-3px; width:34px; height:34px; background:linear-gradient(135deg,var(--gold-1),var(--gold-2)); clip-path:polygon(0 0,100% 0,0 100%); z-index:55; border-radius:6px 0 0 0; }
+.corner-fold.tl{ left:8px; top:8px; transform: rotate(0deg); clip-path: polygon(0 0,100% 0,0 100%); }
+.corner-fold.tr{ right:8px; top:8px; transform: rotate(90deg); clip-path: polygon(0 0,100% 0,100% 100%); }
+.corner-fold.bl{ left:8px; bottom:8px; transform: rotate(-90deg); clip-path: polygon(0 0,100% 100%,0 100%); }
+.corner-fold.br{ right:8px; bottom:8px; transform: rotate(180deg); clip-path: polygon(100% 0,100% 100%,0 100%); }
 
-/* bottom corners */
-.corner-bl{ bottom:-3px; left:-3px; clip-path:polygon(0 0,100% 100%,0 100%); border-radius:0 6px 0 0; }
-.corner-br{ bottom:-3px; right:-3px; clip-path:polygon(100% 0,100% 100%,0 100%); border-radius:6px 0 0 0; }
-
-/* portrait inner layout */
-.card-inner{ position:relative; z-index:50; text-align:center; padding:6px 6px 18px 6px; }
-.top-section{ height:220px; display:flex; align-items:center; justify-content:center; padding:6px; background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00)); border-radius:12px; overflow:hidden; }
-.top-section img{ width:100%; height:100%; object-fit:contain; max-height:220px; }
-
-/* texts */
-.header-text{ font-family:'Playfair Display', serif; font-weight:900; font-size:30px; color:var(--accent); line-height:1.05; margin-top:10px; }
-.header-text span{ display:block; font-size:18px; color:#444; font-weight:600; margin-top:6px; }
-.name-text{ font-size:20px; font-weight:900; color:var(--accent-2); margin:8px 0 2px 0; }
-.greeting{ font-size:15px; color:#444; line-height:1.55; padding:0 14px; margin-top:8px; }
-
-/* offer */
-.offer-box{ margin:18px 14px; padding:14px; border-radius:12px; background: rgba(255,255,255,0.9); border:2px solid var(--accent); box-shadow: 0 6px 20px rgba(0,0,0,0.08); text-align:center; }
-.offer-box strong{ display:block; color:var(--accent); font-size:16px; margin-bottom:6px; }
-.offer-services{ font-size:13px; color:#333; }
-
-/* footer blocks compact and stacked */
-.footer{ margin-top:16px; text-align:center; color:#333; padding-bottom:6px; }
-.footer .brand{ font-family:'Playfair Display', serif; font-weight:900; color:var(--accent); font-size:18px; margin-top:6px; }
-.footer .address, .footer .astro, .footer .call{ font-size:13px; color:#444; margin-top:6px; }
-
-/* small devices */
-@media (max-width:520px){
-  .top-section{ height:160px; }
-  .header-text{ font-size:24px; }
-  .name-text{ font-size:18px; }
-  .offer-box{ padding:12px; margin:14px; }
-}
-
-/* ------------------ LANDSCAPE (card2.html) ------------------ */
-/* We'll keep compact 600x400 ratio by limiting container width/height; scalable */
-.landscape-wrap{
-  width:95%;
-  max-width:760px; /* desktop preview */
-  background:var(--card-bg);
-  border-radius:14px;
-  padding:12px;
-  position:relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.16);
-  border: 3px solid var(--accent); /* thin auto-color border */
+/* Portrait CARD layout */
+.portrait {
   display:flex;
-  gap:12px;
+  flex-direction:column;
+  gap:14px;
   align-items:center;
-  justify-content:flex-start;
-  overflow:hidden;
+  text-align:center;
+  color:var(--text);
 }
 
-/* left image area 30% */
-.land-left{
+/* image area */
+.portrait .top-img{
+  width:100%;
+  max-width:420px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01));
+  border-radius:12px;
+  padding:18px;
+}
+.portrait .top-img img{
+  display:block;
+  max-width:100%;
+  height:auto;
+  margin:0 auto;
+  object-fit:contain;
+}
+
+/* headings */
+.huge {
+  font-family: "Playfair Display", "Georgia", serif;
+  font-weight:900;
+  font-size:42px;
+  color:var(--accent);
+  letter-spacing:1px;
+  line-height:1;
+  margin-top:6px;
+}
+.name {
+  font-size:22px;
+  font-weight:800;
+  color:var(--accent-2);
+  margin-top:6px;
+}
+
+/* message block */
+.msg {
+  max-width:760px;
+  font-size:16px;
+  line-height:1.7;
+  color:#555;
+  padding: 0 10px;
+}
+
+/* offer box */
+.offer {
+  margin:8px 12px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.01), rgba(0,0,0,0.00));
+  border-radius:12px;
+  padding:18px;
+  border:2px solid var(--accent);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+  text-align:center;
+}
+.offer strong{ display:block; font-size:18px; color:var(--accent); margin-bottom:6px; font-weight:800; }
+.offer p { color:#333; line-height:1.6; font-size:15px; }
+
+/* footer */
+.footer {
+  margin-top:6px;
+  text-align:center;
+  color:#333;
+}
+.footer .brand { font-weight:800; font-family:"Playfair Display", serif; color:var(--accent); font-size:20px; }
+.footer .small { font-size:14px; color:#666; margin-top:6px; }
+
+/* Compact small card (for card2) - landscape 600x400 style */
+.landscape {
+  width:100%;
+  max-width:900px;
+  display:flex;
+  gap:16px;
+  align-items:center;
+  padding:18px;
+}
+.landscape .left{
   flex:0 0 30%;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:8px;
-  min-width:170px;
+  padding:6px;
 }
-.land-left img{
-  width:100%;
-  max-width:100%;
-  height:auto;
-  object-fit:cover;
-  border-radius:10px;
-  box-shadow: 0 8px 22px rgba(0,0,0,0.18);
-}
+.landscape .left img{ max-width:100%; height:auto; display:block; object-fit:contain; }
 
-/* right text 70% */
-.land-right{
+.landscape .right {
   flex:1;
-  padding:6px 12px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  min-height:220px;
-  justify-content:space-between;
+  padding:8px 12px;
 }
-.land-title{
-  font-family:'Playfair Display',serif;
-  font-weight:900;
-  font-size:26px;
-  color:var(--accent);
-  display:flex;
-  gap:8px;
-  align-items:baseline;
-}
-.land-name{ font-size:20px; color:var(--accent-2); font-weight:900; margin-left:6px; }
-.land-msg{ color:#333; font-size:14px; line-height:1.6; }
-.land-offer{ border-radius:10px; padding:10px; background:linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.98)); border:1px solid rgba(0,0,0,0.04); }
-.land-offer strong{ color:var(--accent); font-size:15px; display:block; margin-bottom:6px; }
-.land-footer{ font-size:13px; color:#333; margin-top:6px; }
+.landscape .right .h1{ font-family:"Playfair Display", serif; font-size:34px; color:var(--accent); font-weight:900; }
+.landscape .right .name{ font-size:20px; color:var(--accent-2); font-weight:800; margin:6px 0; }
+.landscape .right .msg{ color:#333; font-size:15px; line-height:1.6; margin-bottom:10px; }
+.landscape .right .offer { text-align:left; }
 
-/* make compact 600×400 feel on smaller widths */
-.landscape-wrap.compact{ max-width:600px; padding:10px; }
-.landscape-wrap.compact .land-left{ min-width:140px; }
-
-/* responsive: stack on narrow screens */
-@media (max-width:760px){
-  .landscape-wrap{ flex-direction:row; }
+/* responsive */
+@media (max-width:820px){
+  .card-outer{max-width:540px}
+  .huge{font-size:34px}
+  .name{font-size:20px}
+  .landscape{flex-direction:column; align-items:center}
+  .landscape .left{flex-basis:40%}
+  .landscape .right{text-align:center}
 }
-@media (max-width:520px){
-  .landscape-wrap{ flex-direction:column; align-items:stretch; gap:10px; }
-  .land-left{ order:0; width:100%; min-width:unset; }
-  .land-right{ order:1; }
-  .land-title{ font-size:22px; }
-  .land-name{ font-size:18px; }
-}
-
-/* small print-safe tweaks */
-@media print{
-  body{ background:#fff }
-  #downloadButton{ display:none !important }
-  .border-frame, .landscape-wrap{ box-shadow:none }
+@media (max-width:480px){
+  .card-outer{padding:10px}
+  .card-frame{padding:18px}
+  :root{--paper-pad:18px}
+  .huge{font-size:30px}
 }
