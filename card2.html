@@ -1,153 +1,143 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Landscape Card</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Landscape Auto-Color Card</title>
+
+<link rel="stylesheet" href="card-style.css">
 
 <style>
-body{
-    margin:0;
-    padding:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:#f4f0ff;
-    font-family:"Inter",sans-serif;
-}
-
-.card-wrap{
-    width:600px;
-    height:400px;
-    background:#fff;
-    display:flex;
-    border:4px solid #5e1b8b;
-    border-radius:18px;
-    position:relative;
-    overflow:hidden;
-}
-
-/* DOUBLE BORDER EFFECT */
-.card-wrap:before, .card-wrap:after{
-    content:"";
-    position:absolute;
-    border:3px solid #b77bff;
-    border-radius:14px;
-}
-.card-wrap:before{
-    inset:6px;
-}
-.card-wrap:after{
-    inset:12px;
+/* Container */
+.land-card {
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+    display: flex;
+    background: #ffffff;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 6px solid var(--auto-border, #999);
 }
 
 /* LEFT IMAGE */
-.left-box{
-    width:35%;
-    height:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:10px;
-    background:#faf4ff;
-    border-right:3px solid #e5ccff;
+.left-img {
+    width: 32%;
+    background: #fafafa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
 }
-.left-box img{
-    width:100%;
-    height:auto;
-    object-fit:contain;
-}
-
-/* RIGHT TEXT */
-.right-box{
-    width:65%;
-    padding:16px 22px;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    color:#333;
+.left-img img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
 }
 
-.title{
-    font-size:26px;
-    font-weight:900;
-    color:#5e1b8b;
-    margin-bottom:4px;
+/* RIGHT SECTION */
+.right-text {
+    width: 68%;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.name{
-    font-size:20px;
-    font-weight:800;
-    color:#ff4f7c;
-    margin-bottom:8px;
+/* Heading */
+.title {
+    font-size: 36px;
+    font-family: "Playfair Display", serif;
+    font-weight: 900;
+    margin: 0;
+    color: var(--auto-border);
 }
 
-.msg{
-    font-size:14px;
-    line-height:1.5;
-    margin-bottom:10px;
+/* Name beside heading */
+.title span {
+    font-size: 28px;
+    font-weight: 700;
 }
 
-.offer{
-    border:2px solid #5e1b8b;
-    background:#fce8ff;
-    padding:10px 12px;
-    border-radius:12px;
-    font-size:13px;
-    text-align:left;
-    margin-bottom:10px;
-}
-.offer strong{
-    display:block;
-    font-size:15px;
-    color:#5e1b8b;
-    margin-bottom:4px;
+/* Message */
+.msg {
+    font-size: 16px;
+    line-height: 1.52;
+    margin: 18px 0;
+    color: #444;
 }
 
-.footer{
-    font-size:12px;
-    margin-top:auto;
+/* Offer box */
+.offer-box {
+    background: #fff8ff;
+    padding: 18px 16px;
+    border-radius: 12px;
+    border: 2px solid var(--auto-border);
+    margin: 14px 0;
 }
-.brand{
-    font-size:16px;
-    font-weight:900;
-    color:#5e1b8b;
+.offer-box strong {
+    font-size: 18px;
+    color: var(--auto-border);
 }
-.call{
-    margin-top:4px;
-    font-weight:900;
-    color:#5e1b8b;
+
+/* Footer */
+.footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #333;
+}
+.footer .brand {
+    font-family: "Playfair Display", serif;
+    font-size: 20px;
+    font-weight: 900;
+    margin-top: 10px;
+    color: var(--auto-border);
+}
+.footer .call {
+    font-weight: 700;
+    margin-top: 4px;
+    color: var(--auto-border);
+}
+
+/* Responsive */
+@media(max-width:650px){
+    .land-card { flex-direction: column; }
+    .left-img { width: 100%; }
+    .right-text { width: 100%; padding: 22px; }
+    .title { font-size: 30px; }
 }
 </style>
-</head>
 
+</head>
 <body>
 
-<div class="card-wrap">
+<div class="land-card" id="cardBox">
 
-    <!-- LEFT IMAGE -->
-    <div class="left-box">
-        <img id="cardImg" src="">
+    <div class="left-img">
+        <img id="cardImg" src="" alt="">
     </div>
 
-    <!-- RIGHT CONTENT -->
-    <div class="right-box">
+    <div class="right-text">
         <div>
-            <div class="title" id="titleText"></div>
-            <div class="name" id="nameText"></div>
-            <div class="msg" id="msgText"></div>
+            <h1 class="title" id="titleText">
+                Happy Birthday! <span id="nameText"></span>
+            </h1>
 
-            <div class="offer">
-                <strong id="offerTitle"></strong>
-                <span id="offerDesc"></span>
+            <p class="msg" id="msgText">
+                Wishing you joy, success and cosmic blessings on your special day.
+            </p>
+
+            <div class="offer-box">
+                <strong id="offerTitle">Special Discount on Your Birthday</strong>
+                <p id="offerDesc">Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc.</p>
             </div>
         </div>
 
         <div class="footer">
-            With Best Wishes from<br>
-            <span class="brand">Digdarshan Astro</span><br>
-            Jyotish Devagya Amitsree
-            47F Raja Rammohan Roy Road, Kolkata-8.<br>
+            <span>With Best Wishes from</span>
+            <div class="brand">Digdarshan Astro</div>
+            <div>Jyotish Devagya Amitsree</div>
             <div class="call">Call : 8697190840 / 9830637766</div>
         </div>
     </div>
@@ -155,36 +145,50 @@ body{
 </div>
 
 <script>
-// Collect params
-const p = new URLSearchParams(window.location.search);
+/* Read URL Params */
+const p = new URLSearchParams(location.search);
 const type = p.get("type") || "birthday";
 const name = p.get("name") || "";
+document.getElementById("nameText").textContent = name;
 
-// Dynamic Set
-document.getElementById("nameText").innerText = name;
+/* Image Select */
+const img = document.getElementById("cardImg");
+img.src = (type === "anniversary") ? "anniversary99.png" : "birthday66.png";
 
-// Birthday
-if(type === "birthday"){
-    document.getElementById("titleText").innerText = "HAPPY BIRTHDAY";
-    document.getElementById("msgText").innerText =
-        "May the stars bring you immense joy and success on your special day. Get cosmic guidance from Jyotish Devagya Amitsree.";
-    document.getElementById("offerTitle").innerText =
-        "Get a Special Discount on Your Birthday";
-    document.getElementById("offerDesc").innerText =
-        "Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc.";
-    document.getElementById("cardImg").src = "birthday66.png";
-}
+/* Auto border color detection */
+img.onload = function () {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
 
-// Anniversary
-else{
-    document.getElementById("titleText").innerText = "HAPPY ANNIVERSARY";
-    document.getElementById("msgText").innerText =
-        "Wishing you endless happiness and continued success in your journey together. Get cosmic blessings.";
-    document.getElementById("offerTitle").innerText =
-        "Get a Special Discount on Your Anniversary";
-    document.getElementById("offerDesc").innerText =
-        "Marriage Consultation / Family Problem Solutions / Vastu Tips etc.";
-    document.getElementById("cardImg").src = "anniversary99.png";
+    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    let r=0, g=0, b=0;
+
+    for (let i=0; i < data.length; i+=4) {
+        r += data[i];
+        g += data[i+1];
+        b += data[i+2];
+    }
+
+    const count = data.length/4;
+    r = Math.round(r/count);
+    g = Math.round(g/count);
+    b = Math.round(b/count);
+
+    const domColor = `rgb(${r},${g},${b})`;
+    document.documentElement.style.setProperty("--auto-border", domColor);
+};
+
+/* Override text for Anniversary */
+if (type === "anniversary") {
+    document.getElementById("titleText").innerHTML =
+        `Happy Anniversary! <span>${name}</span>`;
+    document.getElementById("offerTitle").textContent =
+        "Special Discount on Your Anniversary";
+    document.getElementById("offerDesc").textContent =
+        "Marriage Consultation / Family Solutions / Vastu Tips etc.";
 }
 </script>
 
