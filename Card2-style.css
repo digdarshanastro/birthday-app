@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=600, user-scalable=no">
+<title>Compact Landscape Card</title>
+<link rel="stylesheet" href="card2-style.css">
+</head>
+
+<body>
+
+<div class="land-card">
+
+    <!-- LEFT SIDE IMAGE -->
+    <div class="left-img">
+        <img id="cardImg" src="" alt="card image">
+    </div>
+
+    <!-- RIGHT SIDE TEXT -->
+    <div class="right-text">
+        <h2 class="title" id="titleText"></h2>
+        <h3 class="name" id="nameText"></h3>
+
+        <p class="msg" id="msgText"></p>
+
+        <div class="offer-box">
+            <strong id="offerTitle"></strong>
+            <p id="offerDesc"></p>
+        </div>
+
+        <div class="footer">
+            <span>With Best Wishes from</span>
+            <div class="brand">Digdarshan Astro</div>
+            <div class="addr">47F Raja Rammohan Roy Road, Kolkata-8.</div>
+            <div class="astro">Jyotish Devagya Amitsree</div>
+            <div class="call">Call : 8697190840 / 9830637766</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const type = params.get("type") || "birthday";
+const name = params.get("name") || "";
+const cardType = params.get("cardType") || "floral";
+
+/* TEXTS */
+document.getElementById("titleText").innerText =
+  type === "birthday" ? "HAPPY BIRTHDAY" : "HAPPY ANNIVERSARY";
+
+document.getElementById("nameText").innerText = name;
+
+document.getElementById("msgText").innerText =
+  type === "birthday"
+  ? "May the stars bring you immense joy and success on your special day. Get cosmic guidance from Jyotish Devagya Amitsree."
+  : "Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree.";
+
+document.getElementById("offerTitle").innerText =
+  type === "birthday"
+  ? "Get a Special Discount on Your Birthday"
+  : "Get a Special Discount on Your Anniversary";
+
+document.getElementById("offerDesc").innerText =
+  type === "birthday"
+  ? "Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc."
+  : "Marriage Consultation / Family Problem Solutions / Vastu Tips etc.";
+
+/* IMAGE LOADER */
+let imgFile =
+  type === "birthday" ? "birthday66.png" : "anniversary99.png";
+
+document.getElementById("cardImg").src = imgFile;
+</script>
+
+</body>
+</html>
