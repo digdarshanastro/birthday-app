@@ -1,0 +1,222 @@
+/* ============================================================
+   ULTRA PRO PREMIUM CARD DESIGN (Digdarshan Astro)
+   ============================================================ */
+
+/* -------------------- BASE RESET -------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    font-family: 'Inter', sans-serif;
+    background: #ede9f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* -------------------- CARD WRAPPER -------------------- */
+#card {
+    width: 95%;
+    max-width: 440px;
+    background: transparent;
+    position: relative;
+    overflow: visible;
+}
+
+/* -------------------- OUTER PREMIUM BORDER -------------------- */
+.colored-frame {
+    padding: 0;
+    border-radius: 16px;
+
+    /* Luxury white-glass gradient */
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.85),
+        rgba(245,245,255,0.35) 40%,
+        rgba(255,255,255,0.95)
+    );
+
+    /* Double Border with Auto Theme Color */
+    border: 6px solid var(--theme-border);
+
+    box-shadow:
+        0 0 0 4px rgba(255,255,255,0.5),
+        0 8px 25px rgba(0,0,0,0.25),
+        inset 0 0 15px rgba(255,255,255,0.45);
+
+    position: relative;
+}
+
+/* -------------------- INNER CONTENT -------------------- */
+.card-content {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.05);
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* -------------------- IMAGE SECTION -------------------- */
+.top-section {
+    height: 240px;
+    padding: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* Soft radial background */
+    background: radial-gradient(circle at top, #fafafa, #e6e6e6);
+}
+
+.top-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* -------------------- TEXT SECTION -------------------- */
+.bottom-section {
+    padding: 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main Heading */
+.header-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    line-height: 1.1;
+    font-weight: 900;
+    color: #1b1b1b;
+    margin-bottom: 10px;
+}
+
+.header-text span {
+    display: block;
+    font-size: 20px;
+    margin-top: 6px;
+    color: #4a4a4a;
+}
+
+/* Message */
+.main-message {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.55;
+    margin-top: 6px;
+    margin-bottom: 16px;
+}
+
+/* -------------------- OFFER HIGHLIGHT BOX -------------------- */
+.offer-highlight {
+    background: rgba(255,255,255,0.55);
+    border-radius: 12px;
+    border: 2px solid var(--theme-border);
+    padding: 14px 18px;
+    margin-bottom: 20px;
+
+    /* Premium glass effect */
+    backdrop-filter: blur(6px);
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,0.08),
+        inset 0 0 8px rgba(255,255,255,0.7);
+}
+
+.offer-highlight strong {
+    font-size: 15px;
+    display: block;
+    margin-bottom: 4px;
+    color: #222;
+}
+
+.offer-services {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.45;
+}
+
+/* -------------------- FOOTER -------------------- */
+.footer-section {
+    border-top: 1px solid #ddd;
+    padding-top: 14px;
+    margin-top: 16px;
+    text-align: center;
+    line-height: 1.45;
+    color: #555;
+}
+
+.footer-line {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 3px;
+}
+
+.company-name {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 900;
+    margin: 6px 0;
+    color: #000;
+}
+
+.call-number {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--theme-border); /* auto-color highlight */
+}
+
+/* -------------------- DOWNLOAD BUTTON -------------------- */
+#downloadButton {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+
+    background: var(--theme-border);
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+    font-size: 20px;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    z-index: 10;
+}
+
+#downloadButton:hover {
+    transform: scale(1.08);
+    transition: 0.2s;
+}
+
+/* Hide WhatsApp Button */
+#whatsappButton {
+    display: none !important;
+}
+
+/* -------------------- RESPONSIVE -------------------- */
+@media (max-width: 500px) {
+    .header-text {
+        font-size: 28px;
+    }
+    .top-section {
+        height: 200px;
+    }
+}
