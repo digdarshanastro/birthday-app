@@ -1,0 +1,294 @@
+/* card-style.css - shared stylesheet for card.html & card2.html (FINAL & COMPLETE UPDATE) */
+
+/* RESET */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+
+/* Theme vars - will be updated by JS using image dominant color */
+:root{
+  --bg: #fff;
+  --card-bg: #fff;
+  --accent: #6f2fa8;      /* Primary accent color (purple fallback) */
+  --accent-2:#c79328;     /* Secondary accent e.g. Gold fallback */
+  --text:#222;
+  --soft:#f6f5f8;
+  --radius:18px;
+  --paper-pad:26px;
+  
+  /* NEW VARIABLES FOR DARK THEME (Design 1) */
+  --dark-bg: #121218;
+  --dark-card: #1E1E28;
+  --dark-text: #EAEAEA;
+  --dark-soft-text: #B0B0C4;
+}
+
+/* Page-level centering (Modified for Dark Theme in Card 1) */
+.page-wrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px;
+  background: var(--bg); /* Controlled by JS/HTML for theme */
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Card outer wrapper (gives double border and corner folds) */
+.card-outer{
+  width:100%;
+  max-width:720px;
+  background:var(--card-bg);
+  padding:14px;
+  border-radius:var(--radius);
+  display:block;
+  box-shadow:0 12px 36px rgba(19, 19, 19, 0.4);
+  position:relative;
+}
+
+/* Corner Folds (Design 1) */
+.corner-fold{
+  position:absolute;
+  width:30px;
+  height:30px;
+  background:var(--accent-2);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  z-index:10;
+  opacity:0.85;
+}
+.tr{top:14px; right:14px; transform:rotate(90deg)}
+.br{bottom:14px; right:14px; transform:rotate(180deg)}
+.bl{bottom:14px; left:14px; transform:rotate(270deg)}
+.tl{top:14px; left:14px}
+
+/* Card Inner Frame */
+.card-frame{
+  background:var(--card-bg);
+  padding:var(--paper-pad);
+  border-radius:calc(var(--radius) - 8px);
+  position:relative;
+  z-index:5;
+  color:var(--text);
+  min-height:300px;
+  overflow:hidden;
+}
+
+/* ----------------------------------------------------
+   DESIGN 1: Portrait (card.html) - DEEP SPACE ELEGANCE
+   ---------------------------------------------------- */
+.portrait{
+  text-align:center;
+}
+.top-img{
+  width:100%;
+  max-height:300px;
+  overflow:hidden;
+  border-radius:calc(var(--radius) - 10px);
+  margin-bottom:18px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.2);
+}
+.top-img img{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:cover;
+}
+
+.huge{ 
+  font-family:"Playfair Display", serif; 
+  font-size:36px; 
+  color:var(--accent-2); 
+  font-weight:900; 
+  margin-bottom:4px;
+  letter-spacing:1px;
+}
+.name{ 
+  font-size:24px; 
+  color:var(--accent); 
+  font-weight:800;
+  margin-bottom:12px;
+}
+.msg{
+  font-size:16px;
+  color:var(--text);
+  line-height:1.6;
+  padding:0 10px;
+}
+.offer{
+  margin:20px 0 10px;
+  padding:12px 18px;
+  background:var(--accent);
+  color:var(--soft);
+  border-radius:8px;
+}
+.offer h3{ font-size:16px; font-weight:800; color:var(--accent-2); }
+.offer p{ color:var(--soft); line-height:1.4; font-size:14px; margin-top:4px; }
+
+/* footer - Design 1 */
+.footer{
+  margin-top:20px;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,0.1); /* Dark theme separator */
+  text-align:center;
+  color:var(--dark-soft-text);
+}
+.footer .brand{ font-weight:800; font-family:"Playfair Display", serif; color:var(--accent-2); font-size:20px; }
+.footer .small{ font-size:13px; color:var(--dark-soft-text); margin-top:6px; }
+
+/* ----------------------------------------------------
+   DESIGN 2: Landscape (card2.html) - MODERN SPLIT-TONE
+   ---------------------------------------------------- */
+
+.landscape{
+  width:100%;
+  max-width:900px;
+  display:block; /* Block here, use flex on content-area */
+  gap:0;
+  height:400px; 
+  padding:0;
+  position: relative; 
+  overflow: hidden; 
+}
+
+/* Background Pattern Layer (Birthday/Anniversary Icons) */
+._bg-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.05; 
+    z-index: 1;
+    background-image: url('placeholder_icon.png'); /* Set by JS */
+    background-size: 150px;
+    background-repeat: repeat;
+    transform: rotate(5deg);
+}
+
+/* Card Content above the pattern */
+.landscape .content-area {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    height: 100%;
+    /* No gap on content-area */
+}
+
+/* LEFT SECTION (IMAGE AREA - LIGHT BACKGROUND) */
+.landscape .left{
+  flex:0 0 40%; 
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--soft); /* Light background */
+  padding:10px;
+  border-radius:var(--radius) 0 0 var(--radius);
+  position: relative;
+  z-index: 5;
+}
+
+/* NEW: Oval Highlight Outline for Image */
+.landscape .left .img-oval-wrap {
+    width: 90%;
+    height: 90%;
+    border: 4px solid var(--accent); /* Primary accent color border */
+    border-radius: 50%; /* Oval/Circle effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2), 0 0 0 8px rgba(255, 255, 255, 0.2); /* Soft inner glow */
+}
+.landscape .left img{ 
+  max-width: 100%; 
+  max-height: 100%;
+  height:auto; 
+  display:block; 
+  object-fit: contain; 
+  border-radius: 0; 
+  box-shadow: none;
+}
+
+/* RIGHT SECTION (TEXT AREA - DARK BACKGROUND - ACCENTED) */
+.landscape .right {
+  flex:1; 
+  background:var(--dark-card); /* Dark background */
+  color:var(--dark-text);
+  padding:24px 30px;
+  border-radius:0 var(--radius) var(--radius) 0;
+  position:relative;
+}
+
+.landscape .right .h1{ 
+  font-family:"Playfair Display", serif; 
+  font-size:38px; 
+  color:var(--accent-2); 
+  font-weight:900; 
+  line-height:1.1;
+  margin-bottom:4px;
+}
+.landscape .right .name{ 
+  font-size:22px; 
+  color:var(--accent); 
+  font-weight:700; 
+  margin-bottom:12px;
+}
+.landscape .right .msg{
+  font-size:15px;
+  line-height:1.5;
+  color:var(--dark-soft-text);
+  border-left:3px solid var(--accent); 
+  padding-left:15px;
+  margin-bottom:18px;
+}
+.landscape .right .offer-compact{
+    font-size:13px;
+    font-weight: bold;
+    color: var(--accent-2);
+}
+
+/* MODIFIED: Footer Position - Shifted Down and Right */
+.landscape .right .footer {
+    position: absolute; 
+    bottom: 25px; 
+    right: 30px; 
+    padding-top: 0; 
+    border-top: none;
+    text-align: right; 
+    line-height: 1.4;
+    max-width: 70%; 
+    margin-top: 0; /* Override default margin */
+}
+.landscape .right .footer .brand, .landscape .right .footer .small {
+    display: block; 
+    text-align: right;
+    margin: 0;
+}
+.landscape .right .footer .small {
+    line-height: 1.2;
+    color: var(--dark-soft-text);
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .portrait { padding: 0 10px; }
+  .huge { font-size: 30px; }
+  .name { font-size: 20px; }
+  .landscape { flex-direction: column; height: auto; }
+  .landscape .content-area { flex-direction: column; height: auto; }
+  .landscape .left, .landscape .right { 
+    flex: 100%; 
+    border-radius: var(--radius);
+  }
+  .landscape .left { margin-bottom: 10px; background:var(--card-bg); }
+  .landscape .right { padding: 20px; }
+  .landscape .right .h1 { font-size: 30px; }
+  .landscape .right .footer {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    text-align: left;
+    max-width: 100%;
+    margin-top: 15px;
+  }
+  .landscape .right .footer .brand, .landscape .right .footer .small {
+    text-align: left;
+  }
+}
