@@ -1,5 +1,5 @@
-/* ============================================================
-   ULTRA PRO PREMIUM CARD DESIGN (Digdarshan Astro)
+/* ============================================================\
+   ULTRA PRO PREMIUM CARD DESIGN (Digdarshan Astro) - SQUARE (FINAL COMPACT - Reduced Padding)
    ============================================================ */
 
 /* -------------------- BASE RESET -------------------- */
@@ -17,6 +17,13 @@ html, body {
     align-items: center;
     min-height: 100vh;
 }
+
+/* --- Theme Variables (Set dynamically by JS) --- */
+:root {
+    --theme-border: #7868e6; /* Primary Accent Fallback */
+    --theme-accent-2: #ffb400; /* Secondary Accent (Gold) Fallback */
+}
+
 
 /* -------------------- CARD WRAPPER -------------------- */
 #card {
@@ -45,178 +52,215 @@ html, body {
 
     box-shadow:
         0 0 0 4px rgba(255,255,255,0.5),
-        0 8px 25px rgba(0,0,0,0.25),
-        inset 0 0 15px rgba(255,255,255,0.45);
-
-    position: relative;
-}
-
-/* -------------------- INNER CONTENT -------------------- */
-.card-content {
-    background: #ffffff;
-    border-radius: 12px;
-    overflow: hidden;
-
-    box-shadow: inset 0 0 40px rgba(0,0,0,0.05);
-
+        0 8px 30px rgba(0, 0, 0, 0.2);
+    
+    height: 100%;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
-/* -------------------- IMAGE SECTION -------------------- */
-.top-section {
-    height: 240px;
-    padding: 14px;
+
+/* -------------------- CONTENT LAYOUT -------------------- */
+.card-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    /* ✅ প্যাডিং কমানো হলো */
+    padding-top: 5px; 
+}
+
+/* -------------------- IMAGE SECTION (Oval/Round) -------------------- */
+.image-section {
+    width: 100%;
+    flex: 0 0 38%; 
     display: flex;
     justify-content: center;
     align-items: center;
-
-    /* Soft radial background */
-    background: radial-gradient(circle at top, #fafafa, #e6e6e6);
+    padding: 0 10px;
+    /* ✅ মার্জিন কমানো হলো */
+    margin-bottom: 2px; 
 }
 
-.top-section img {
+.img-oval-wrap {
+    width: 150px; 
+    height: 110px; 
+    border-radius: 50% / 40%; 
+    overflow: hidden;
+    
+    border: 4px solid var(--theme-border); 
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.5), 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.img-oval-wrap img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    display: block;
+    object-fit: cover; 
 }
 
-/* -------------------- TEXT SECTION -------------------- */
-.bottom-section {
-    padding: 24px;
+/* -------------------- TEXT SECTIONS -------------------- */
+.header-section, .message-section {
     text-align: center;
-    display: flex;
-    flex-direction: column;
+    /* ✅ হরাইজন্টাল প্যাডিং সামান্য কমানো হলো */
+    padding: 0 18px; 
 }
 
-/* Main Heading */
+.header-section {
+    flex: 0 0 auto;
+    /* ✅ মার্জিন কমানো হলো */
+    margin-bottom: 3px;
+}
+
 .header-text {
     font-family: 'Playfair Display', serif;
-    font-size: 32px;
-    line-height: 1.1;
+    font-size: 28px; 
     font-weight: 900;
-    color: #1b1b1b;
-    margin-bottom: 10px;
+    color: var(--theme-accent-2); 
+    line-height: 1.1;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
 
-.header-text span {
-    display: block;
-    font-size: 20px;
-    margin-top: 6px;
-    color: #4a4a4a;
+.message-section {
+    flex-grow: 1;
+    /* ✅ প্যাডিং কমানো হলো */
+    padding-top: 1px;
 }
 
-/* Message */
 .main-message {
-    font-size: 15px;
-    color: #555;
-    line-height: 1.55;
-    margin-top: 6px;
-    margin-bottom: 16px;
+    font-size: 13px; 
+    color: #444;
+    line-height: 1.4; 
+    /* ✅ মার্জিন কমানো হলো */
+    margin-bottom: 5px;
+}
+.main-message strong {
+    font-weight: 800;
+    color: var(--theme-border); 
 }
 
-/* -------------------- OFFER HIGHLIGHT BOX -------------------- */
+/* **HIGHLIGHT: Offer Text** */
 .offer-highlight {
-    background: rgba(255,255,255,0.55);
-    border-radius: 12px;
-    border: 2px solid var(--theme-border);
-    padding: 14px 18px;
-    margin-bottom: 20px;
-
-    /* Premium glass effect */
-    backdrop-filter: blur(6px);
-
-    box-shadow:
-        0 4px 10px rgba(0,0,0,0.08),
-        inset 0 0 8px rgba(255,255,255,0.7);
-}
-
-.offer-highlight strong {
-    font-size: 15px;
     display: block;
-    margin-bottom: 4px;
-    color: #222;
+    /* ✅ মার্জিন কমানো হলো */
+    margin: 4px auto 0; 
+    /* ✅ প্যাডিং কমানো হলো */
+    padding: 4px 8px; 
+    border-radius: 4px;
+    background: #fff; 
+    font-weight: 700;
+    font-style: italic;
+    
+    color: var(--theme-border) !important; 
+    border: 1px dashed var(--theme-border) !important; 
+
+    font-size: 11px; 
+    max-width: 90%;
+}
+.offer-highlight strong {
+    font-size: 1.05em; 
+    color: var(--theme-accent-2) !important; 
 }
 
+/* Offer Service Details */
 .offer-services {
-    font-size: 13px;
+    display: block;
+    font-size: 10px; 
     color: #555;
-    line-height: 1.45;
+    line-height: 1.4;
+    /* ✅ মার্জিন কমানো হলো */
+    margin-top: 2px; 
+    padding: 0 10px;
 }
+
 
 /* -------------------- FOOTER -------------------- */
 .footer-section {
     border-top: 1px solid #ddd;
-    padding-top: 14px;
-    margin-top: 16px;
+    /* ✅ টপ ও বটম প্যাডিং কমানো হলো */
+    padding: 8px 20px 10px; 
     text-align: center;
-    line-height: 1.45;
+    line-height: 1.4;
     color: #555;
+    flex: 0 0 auto; 
 }
 
+/* ⭐⭐⭐ ফুটার বিন্যাস (অপরিবর্তিত, শুধুমাত্র প্যাডিং কমানো হয়েছে) ⭐⭐⭐ */
+/* With Best Wishes from Jyotish Devagya Amitsree (Semi Bold, 1 line) */
 .footer-line {
-    display: block;
-    font-size: 12px;
-    margin-bottom: 3px;
+    display: inline; 
+    font-size: 11px; 
+    margin: 0;
+    font-weight: 600; 
+}
+/* Jyotish Devagya Amitsree-এর পর নতুন লাইন */
+.footer-line:last-of-type {
+    display: block; 
+    margin-bottom: 2px;
+}
+/* With Best Wishes from - এর পর স্পেস নিশ্চিত করা */
+.footer-line:first-of-type::after {
+    content: " ";
 }
 
+/* Digdarshan Astro - (বোল্ড) */
 .company-name {
-    display: block;
+    display: block; 
     font-family: 'Playfair Display', serif;
-    font-size: 16px;
-    font-weight: 900;
-    margin: 6px 0;
+    font-size: 15px;
+    font-weight: 900; 
+    /* ✅ মার্জিন কমানো হলো */
+    margin: 3px 0 2px; 
     color: #000;
 }
 
+/* Address line */
+.address-text {
+    display: block; 
+    font-size: 11px;
+    color: #666;
+    /* ✅ মার্জিন কমানো হলো */
+    margin-bottom: 1px;
+}
+
+/* Call Number */
 .call-number {
     display: block;
-    margin-top: 6px;
-    font-size: 13px;
+    /* ✅ মার্জিন কমানো হলো */
+    margin-top: 3px;
+    font-size: 12px; 
     font-weight: 900;
-    color: var(--theme-border); /* auto-color highlight */
+    color: var(--theme-border); 
 }
+/* ⭐⭐⭐ ফুটার বিন্যাস শেষ ⭐⭐⭐ */
 
 /* -------------------- DOWNLOAD BUTTON -------------------- */
 #downloadButton {
     position: absolute;
     top: -20px;
     right: -20px;
+    z-index: 100;
 
     width: 48px;
     height: 48px;
     border-radius: 50%;
-
+    border: none;
     background: var(--theme-border);
     color: white;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    cursor: pointer;
     font-size: 20px;
-
-    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-    z-index: 10;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    transition: transform 0.2s;
 }
-
 #downloadButton:hover {
-    transform: scale(1.08);
-    transition: 0.2s;
+    transform: scale(1.05);
 }
 
-/* Hide WhatsApp Button */
-#whatsappButton {
-    display: none !important;
-}
 
 /* -------------------- RESPONSIVE -------------------- */
-@media (max-width: 500px) {
-    .header-text {
-        font-size: 28px;
+@media (max-width: 480px) {
+    #card {
+        max-width: 95vw;
     }
-    .top-section {
-        height: 200px;
-    }
+    /* ... অন্যান্য রেসপনসিভ স্টাইল ... */
 }
