@@ -1,122 +1,131 @@
-<!-- card2.html - Landscape compact (small shareable) -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Landscape Card (Compact)</title>
-  <link rel="stylesheet" href="card-style.css">
+  <link rel="stylesheet" href="card-style2.css">
   <style>
-    /* Small override to make card compact and 3:2 ratio visual */
-    .page-wrap{ padding:18px; background:transparent }
-    .card-outer{ max-width:760px; }
-    .card-frame{ padding:12px; }
-    .landscape{ max-width:900px; }
-    /* force approximate 600x400 look on share by limiting height */
-    .card-outer{ max-width:760px; }
+    /* Design 2 Overrides */
+    body{
+      background: #f0f0f8; 
+    }
+    .page-wrap{ 
+      padding:18px; 
+      background:transparent;
+    }
+    .card-outer{ 
+      max-width:760px; 
+      padding:0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    .card-frame{ 
+      padding:0; 
+      background:transparent; 
+      border-radius:var(--radius);
+      min-height:400px;
+    }
+    .corner-fold{ display:none; }
+    
+    /* Ensure the landscape wrapper has the desired height */
+    .landscape { height: 400px; }
+    
+    /* Override for Image Background in Left Section */
+    .landscape .left{
+        background: #fdfdfd; /* Lighter white for the image section */
+    }
   </style>
 </head>
 <body>
   <div class="page-wrap">
     <div class="card-outer">
       <div class="card-frame" id="cardFrame2">
-        <div class="corner-fold tl" aria-hidden="true"></div>
-        <div class="corner-fold tr" aria-hidden="true"></div>
-        <div class="corner-fold bl" aria-hidden="true"></div>
-        <div class="corner-fold br" aria-hidden="true"></div>
 
         <div class="landscape" id="landRoot">
-          <div class="left">
-            <img id="landImg" src="" alt="image">
-          </div>
-          <div class="right">
-            <div class="h1" id="landTitle">HAPPY BIRTHDAY</div>
-            <div class="name" id="landName">Recipient</div>
-            <div class="msg" id="landMsg">May the stars bring you immense joy and success on your special day. Get cosmic guidance from Jyotish Devagya Amitsree.</div>
-
-            <div class="offer" id="landOffer">
-              <strong id="landOfferTitle">Get a Special Discount on Your Birthday</strong>
-              <p id="landOfferDesc">Chart Reading / Career Consultation / Gemstones / Rudraksha / Hoom-Hawan etc.</p>
-            </div>
-
-            <div class="footer">
-              <div class="small">With Best Wishes from</div>
-              <div class="brand">Digdarshan Astro</div>
-              <div class="small">47F Raja Rammohan Roy Road, Kolkata-8. — Jyotish Devagya Amitsree</div>
-              <div class="small" style="margin-top:8px;font-weight:700">Call : 8697190840 / 9830637766</div>
-            </div>
+          <div class="_bg-pattern" id="bgPattern"></div>
+          
+          <div class="content-area">
+              <div class="left">
+                <div class="img-oval-wrap">
+                  <img id="landImg" src="" alt="image">
+                </div>
+              </div>
+              
+              <div class="right">
+                <h1 class="h1" id="titleText">HAPPY ANNIVERSARY</h1>
+                <div class="name" id="nameText"></div>
+    
+                <p class="msg" id="msgText">
+                  Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree on this special day.
+                </p>
+                
+                <div class="offer-compact">
+                  <span id="offerHeader">Get a Special Discount on Your Anniversary:</span>
+                  <br><small id="offerDetails">Marriage Consultation / Family Problem Solutions / Vastu Tips etc.</small>
+                </div>
+    
+                <div class="footer">
+                  <div class="small">With Best Wishes from</div>
+                  <div class="brand">Digdarshan Astro</div>
+                  <div class="small">Jyotish Devagya Amitsree</div>
+                  <div class="small">47F Raja Rammohan Roy Road, Kolkata-8.</div>
+                  <div class="small" id="callNumber">Call : 8697190840 / 9830637766</div>
+                </div>
+              </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 
 <script>
-(function(){
-  const params = new URLSearchParams(location.search);
-  const type = (params.get('type') || 'birthday').toLowerCase();
-  const name = params.get('name') || '';
-  const imageMap = {
-    birthday: 'birthday66.png',
-    anniversary: 'anniversary99.png'
+  // --- JS Logic for Theme & Content ---
+  const url = new URLSearchParams(window.location.search);
+  const type = url.get("type") || 'anniversary';
+  let name = url.get("name");
+  name = name ? decodeURIComponent(name) : "Dear Client";
+  
+  // Placeholder images for background pattern
+  const patternIcons = {
+      birthday: 'birthday_icon_pattern.png', // Assume you have a small, repeating birthday cake/balloon icon
+      anniversary: 'anniversary_icon_pattern.png' // Assume you have a small, repeating heart/ring icon
   };
 
-  const img = document.getElementById('landImg');
-  const title = document.getElementById('landTitle');
-  const nm = document.getElementById('landName');
-  const msg = document.getElementById('landMsg');
-  const offerT = document.getElementById('landOfferTitle');
-  const offerD = document.getElementById('landOfferDesc');
-
-  if(type === 'anniversary'){
-    title.textContent = 'HAPPY ANNIVERSARY';
-    offerT.textContent = 'Get a Special Discount on Your Anniversary';
-    offerD.textContent = 'Relationship Solutions / Career Consultation / Gemstones / Rudraksha / Hoom/Hawan etc.';
-    msg.textContent = 'Wishing you endless happiness and continued success in your journey together. Get cosmic blessings from Jyotish Devagya Amitsree.';
-  }
-
-  if(name) nm.textContent = decodeURIComponent(name);
-
-  const src = imageMap[type] || imageMap.birthday;
-  img.src = src;
-  img.addEventListener('load',()=>{
-    // average color extraction (same as portrait)
-    function extractAverageColor(imgEl){
-      try {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const w = Math.min(160, imgEl.naturalWidth);
-        const h = Math.min(160, imgEl.naturalHeight);
-        canvas.width = w; canvas.height = h;
-        ctx.drawImage(imgEl,0,0,w,h);
-        const data = ctx.getImageData(0,0,w,h).data;
-        let r=0,g=0,b=0,cnt=0;
-        for(let i=0;i<data.length;i+=12){
-          const a=data[i+3]; if(a<125) continue;
-          r+=data[i]; g+=data[i+1]; b+=data[i+2]; cnt++;
-        }
-        if(cnt===0) return {r:111,g:47,b:168};
-        return {r:Math.round(r/cnt), g:Math.round(g/cnt), b:Math.round(b/cnt)};
-      } catch(e){
-        return {r:111,g:47,b:168};
+  const themes = {
+      birthday: {
+          img: 'birthday66.png', 
+          pattern: patternIcons.birthday,
+          accentColor: '#C62828', // Red
+          secondaryAccent: '#FFC107' // Gold/Yellow
+      },
+      anniversary: {
+          img: 'anniversary88.png', 
+          pattern: patternIcons.anniversary,
+          accentColor: '#6D4C41', // Brown
+          secondaryAccent: '#FFA000' // Deep Amber
       }
-    }
-    const avg = extractAverageColor(img);
-    // set CSS variables (accent and accent-2)
-    const root = document.documentElement;
-    root.style.setProperty('--accent', `rgb(${avg.r},${avg.g},${avg.b})`);
-    // mix with gold
-    const gold = {r:199,g:147,b:40};
-    const mix=(a,b,ratio)=> Math.round(a*(1-ratio)+b*ratio);
-    root.style.setProperty('--accent-2', `rgb(${mix(avg.r,gold.r,.35)},${mix(avg.g,gold.g,.35)},${mix(avg.b,gold.b,.35)})`);
-  });
+  };
 
-  img.addEventListener('error',()=>{
-    img.style.display='none';
-  });
+  const currentTheme = themes[type] || themes.anniversary;
 
-})();
+  if (currentTheme) {
+      document.getElementById('landImg').src = currentTheme.img;
+      document.getElementById('nameText').textContent = name;
+      
+      if (type === 'birthday') {
+          document.getElementById('titleText').textContent = 'HAPPY BIRTHDAY';
+          document.getElementById('msgText').textContent = 'May the stars bring you immense joy and success on your special day. Start your new personal year with cosmic guidance from Jyotish Devagya Amitsree.';
+          document.getElementById('offerHeader').textContent = 'Get a Special Discount on Your Birthday:';
+          document.getElementById('offerDetails').textContent = 'Chart Reading / Gemstones / Rudraksha / Hoom / Hawan etc.';
+      }
+
+      // 1. Set CSS variables for theme colors
+      document.documentElement.style.setProperty('--accent', currentTheme.accentColor);
+      document.documentElement.style.setProperty('--accent-2', currentTheme.secondaryAccent);
+      
+      // 2. Set Background Pattern
+      document.getElementById('bgPattern').style.backgroundImage = `url('${currentTheme.pattern}')`;
+  }
 </script>
 </body>
 </html>
