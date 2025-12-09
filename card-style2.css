@@ -1,4 +1,4 @@
-/* card-style.css - shared stylesheet for card.html & card2.html (FINAL & COMPLETE UPDATE) */
+/* card-style.css - shared stylesheet for card.html & card2.html (FINAL & COMPLETE CODE) */
 
 /* RESET */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -15,25 +15,25 @@ html,body{height:100%}
   --radius:18px;
   --paper-pad:26px;
   
-  /* NEW VARIABLES FOR DARK THEME (Design 1) */
+  /* VARIABLES FOR DARK THEME (Design 1 & Design 2 Right side) */
   --dark-bg: #121218;
   --dark-card: #1E1E28;
   --dark-text: #EAEAEA;
   --dark-soft-text: #B0B0C4;
 }
 
-/* Page-level centering (Modified for Dark Theme in Card 1) */
+/* Page-level centering */
 .page-wrap{
   min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:28px;
-  background: var(--bg); /* Controlled by JS/HTML for theme */
+  background: var(--bg);
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-/* Card outer wrapper (gives double border and corner folds) */
+/* Card outer wrapper */
 .card-outer{
   width:100%;
   max-width:720px;
@@ -127,7 +127,7 @@ html,body{height:100%}
 .footer{
   margin-top:20px;
   padding-top:10px;
-  border-top:1px solid rgba(255,255,255,0.1); /* Dark theme separator */
+  border-top:1px solid rgba(255,255,255,0.1); 
   text-align:center;
   color:var(--dark-soft-text);
 }
@@ -141,7 +141,7 @@ html,body{height:100%}
 .landscape{
   width:100%;
   max-width:900px;
-  display:block; /* Block here, use flex on content-area */
+  display:block; 
   gap:0;
   height:400px; 
   padding:0;
@@ -167,7 +167,6 @@ html,body{height:100%}
     z-index: 5;
     display: flex;
     height: 100%;
-    /* No gap on content-area */
 }
 
 /* LEFT SECTION (IMAGE AREA - LIGHT BACKGROUND) */
@@ -176,7 +175,7 @@ html,body{height:100%}
   display:flex;
   align-items:center;
   justify-content:center;
-  background:var(--soft); /* Light background */
+  background:var(--soft); 
   padding:10px;
   border-radius:var(--radius) 0 0 var(--radius);
   position: relative;
@@ -187,13 +186,13 @@ html,body{height:100%}
 .landscape .left .img-oval-wrap {
     width: 90%;
     height: 90%;
-    border: 4px solid var(--accent); /* Primary accent color border */
-    border-radius: 50%; /* Oval/Circle effect */
+    border: 4px solid var(--accent); 
+    border-radius: 50%; 
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2), 0 0 0 8px rgba(255, 255, 255, 0.2); /* Soft inner glow */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2), 0 0 0 8px rgba(255, 255, 255, 0.2); 
 }
 .landscape .left img{ 
   max-width: 100%; 
@@ -208,12 +207,30 @@ html,body{height:100%}
 /* RIGHT SECTION (TEXT AREA - DARK BACKGROUND - ACCENTED) */
 .landscape .right {
   flex:1; 
-  background:var(--dark-card); /* Dark background */
+  background:var(--dark-card); 
   color:var(--dark-text);
   padding:24px 30px;
   border-radius:0 var(--radius) var(--radius) 0;
-  position:relative;
+  position:relative; 
 }
+
+/* NEW: Download Icon Position and Style */
+.download-icon {
+    position: absolute;
+    top: 25px; 
+    right: 30px;
+    color: var(--dark-soft-text);
+    cursor: pointer;
+    font-size: 20px;
+    opacity: 0.7;
+    transition: opacity 0.2s, color 0.2s;
+    z-index: 10;
+}
+.download-icon:hover {
+    opacity: 1;
+    color: var(--accent-2); 
+}
+
 
 .landscape .right .h1{ 
   font-family:"Playfair Display", serif; 
@@ -253,7 +270,7 @@ html,body{height:100%}
     text-align: right; 
     line-height: 1.4;
     max-width: 70%; 
-    margin-top: 0; /* Override default margin */
+    margin-top: 0; 
 }
 .landscape .right .footer .brand, .landscape .right .footer .small {
     display: block; 
@@ -280,6 +297,8 @@ html,body{height:100%}
   .landscape .left { margin-bottom: 10px; background:var(--card-bg); }
   .landscape .right { padding: 20px; }
   .landscape .right .h1 { font-size: 30px; }
+  
+  /* Responsive Footer Reset */
   .landscape .right .footer {
     position: relative;
     bottom: auto;
@@ -290,5 +309,11 @@ html,body{height:100%}
   }
   .landscape .right .footer .brand, .landscape .right .footer .small {
     text-align: left;
+  }
+  /* Responsive Download Icon Reset */
+  .download-icon {
+      top: 15px;
+      right: 15px;
+      font-size: 18px;
   }
 }
