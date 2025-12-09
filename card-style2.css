@@ -1,4 +1,4 @@
-/* card-style.css - shared stylesheet for card.html & card2.html (FINAL & COMPLETE CODE) */
+/* card-style.css - shared stylesheet for card.html & card2.html (FINAL & COMPLETE CODE with !important fix) */
 
 /* RESET */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -254,22 +254,21 @@ html,body{height:100%}
   padding-left:15px;
   margin-bottom:18px;
 }
-/* ... in card-style.css, under the DESIGN 2: Landscape section ... */
 
+/* MODIFIED: Offer Text Color FIX for PNG Download */
 .landscape .right .offer-compact{
     font-size:13px;
     font-weight: bold;
-    /* ⭐ নিশ্চিত করুন: কালারটি --accent-2 ব্যবহার করছে ⭐ */
-    color: var(--accent-2); 
-    padding: 8px 0; /* একটু প্যাডিং যোগ করুন */
-    margin-top: 15px; /* একটু উপরে জায়গা তৈরি করুন */
+    /* FIX: Added !important to force the color for html2canvas */
+    color: var(--accent-2) !important; 
+    padding: 8px 0; 
+    margin-top: 15px; 
 }
 
-/* অফার ডিটেইলস যদি `<small>` ট্যাগে থাকে */
 .landscape .right .offer-compact small {
-    /* ডিটেইলস টেক্সটও যেন দেখা যায়, তাই অ্যাকসেন্ট কালার ব্যবহার করা হলো */
-    color: var(--accent-2); 
-    font-weight: normal; /* হেডার থেকে একটু আলাদা দেখাতে */
+    /* FIX: Added !important to force the color for html2canvas */
+    color: var(--accent-2) !important; 
+    font-weight: normal; 
     display: block;
     line-height: 1.4;
     margin-top: 4px;
