@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Landscape Card (Compact)</title>
   <link rel="stylesheet" href="card-style2.css">
+  
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  
   <style>
     /* Design 2 Overrides */
     body{
@@ -27,12 +30,10 @@
     }
     .corner-fold{ display:none; }
     
-    /* Ensure the landscape wrapper has the desired height */
     .landscape { height: 400px; }
     
-    /* Override for Image Background in Left Section */
     .landscape .left{
-        background: #fdfdfd; /* Lighter white for the image section */
+        background: #fdfdfd; 
     }
   </style>
 </head>
@@ -52,6 +53,9 @@
               </div>
               
               <div class="right">
+                <span class="download-icon" id="downloadCardBtn" title="Download Card as PNG">
+                    &#x2b07; </span>
+                
                 <h1 class="h1" id="titleText">HAPPY ANNIVERSARY</h1>
                 <div class="name" id="nameText"></div>
     
@@ -61,7 +65,7 @@
                 
                 <div class="offer-compact">
                   <span id="offerHeader">Get a Special Discount on Your Anniversary:</span>
-                  <br><small id="offerDetails">Marriage Consultation / Family Problem Solutions / Vastu Tips etc.</small>
+                  <br><small id="offerDetails">Family Problem Solutions / Vastu Tips / Gemstone / Hawan etc.</small>
                 </div>
     
                 <div class="footer">
@@ -79,30 +83,29 @@
   </div>
 
 <script>
-  // --- JS Logic for Theme & Content ---
+  // --- Setup and Theme Logic ---
   const url = new URLSearchParams(window.location.search);
   const type = url.get("type") || 'anniversary';
   let name = url.get("name");
   name = name ? decodeURIComponent(name) : "Dear Client";
   
-  // Placeholder images for background pattern
   const patternIcons = {
-      birthday: 'birthday_icon_pattern.png', // Assume you have a small, repeating birthday cake/balloon icon
-      anniversary: 'anniversary_icon_pattern.png' // Assume you have a small, repeating heart/ring icon
+      birthday: 'birthday_icon_pattern.png', 
+      anniversary: 'anniversary_icon_pattern.png'
   };
 
   const themes = {
       birthday: {
           img: 'birthday66.png', 
           pattern: patternIcons.birthday,
-          accentColor: '#C62828', // Red
-          secondaryAccent: '#FFC107' // Gold/Yellow
+          accentColor: '#C62828', 
+          secondaryAccent: '#FFC107' 
       },
       anniversary: {
           img: 'anniversary88.png', 
           pattern: patternIcons.anniversary,
-          accentColor: '#6D4C41', // Brown
-          secondaryAccent: '#FFA000' // Deep Amber
+          accentColor: '#6D4C41', 
+          secondaryAccent: '#FFA000' 
       }
   };
 
@@ -124,8 +127,37 @@
       document.documentElement.style.setProperty('--accent-2', currentTheme.secondaryAccent);
       
       // 2. Set Background Pattern
+      // Ensure 'birthday_icon_pattern.png' or 'anniversary_icon_pattern.png' files are available
       document.getElementById('bgPattern').style.backgroundImage = `url('${currentTheme.pattern}')`;
   }
+
+
+  // --- Download Button Functionality (Requires html2canvas) ---
+
+  document.getElementById('downloadCardBtn').addEventListener('click', function() {
+      
+      const cardElement = document.getElementById('landRoot'); // Target the main landscape div
+      
+      // Check if html2canvas is loaded
+      if (typeof html2canvas === 'undefined') {
+          alert('Error: html2canvas library not found. Please add the script tag to the <head> section.');
+          return;
+      }
+      
+      // Actual Image Generation Logic
+      html2canvas(cardElement, { 
+          scale: 2, 
+          useCORS: true 
+      }).then(canvas => {
+          const link = document.createElement('a');
+          link.download = `digdarshan_card_${type}_${name.replace(/\s/g, '_')}.png`;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+      }).catch(err => {
+          console.error("Image generation failed:", err);
+          alert("Could not generate image. Please check console for details (e.g., Cross-Origin image issues).");
+      });
+  });
 </script>
 </body>
 </html>
